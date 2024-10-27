@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OCBC Lite - Scan to Pay</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>OCBC Lite Scan to Pay</h1>
+    </header>
+    <main>
+        <div id="camera-container">
+            <video id="qr-video" autoplay playsinline></video>
+            <canvas id="qr-canvas"></canvas>
+        </div>
+        <div id="scan-overlay">
+            <p>Align QR code within the frame</p>
+        </div>
+        <button id="scan-btn">Scan QR Code</button>
+        <div id="result-container">
+            <p id="scan-result"></p>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 OCBC</p>
+    </footer>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
