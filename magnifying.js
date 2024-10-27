@@ -1,10 +1,11 @@
 //defaults - not recommended to change
 
 const SCALE = 1.3; //magnification
-const SIZE = 300; // diameter
-const SSSIZE = 100;
+const SIZE = 100; // diameter
+const SSSIZE = 120;
 const LENSE_OFFSET_X = SIZE / 10.2;
 const LENSE_OFFSET_Y = SIZE / 10.2;
+const items = ["Glass", "Magnify","Click","remove","Paynow"];
 var magnifying = false;
 
 document.documentElement.style.setProperty("--scale", SCALE);
@@ -16,8 +17,8 @@ handle.classList.add("handle");
 
 const magnifyingGlass = document.createElement("div");
 magnifyingGlass.classList.add("magnifying-glass");
-magnifyingGlass.style.top = LENSE_OFFSET_Y + "px";
-magnifyingGlass.style.left = LENSE_OFFSET_X + "px";
+magnifyingGlass.style.top = LENSE_OFFSET_Y+10 + "px";
+magnifyingGlass.style.left = LENSE_OFFSET_X-20 + "px";
 
 handle.append(magnifyingGlass);
 
@@ -43,8 +44,8 @@ const moveMagnifyingGlass = (event) => {
   handle.style.top = pointerY - SIZE / 1.7 + "px";
   if (magnifyingGlass.children[0]) {
     //align magnified document
-    let offsetX = (SIZE * Math.pow(SCALE, 2)) / 2 - pointerX * SCALE;
-    let offsetY = (SIZE * Math.pow(SCALE, 2)) / 2 - pointerY * SCALE;
+    let offsetX = (SIZE * Math.pow(SCALE, 2)) / 2 - pointerX * SCALE +55;
+    let offsetY = (SIZE * Math.pow(SCALE, 2)) / 2 - pointerY * SCALE +95;
     magnifyingGlass.children[0].style.left = offsetX + "px";
     magnifyingGlass.children[0].style.top = offsetY + "px";
   }
@@ -61,16 +62,18 @@ const removeMagnifiyingGlass = (event) => {
 magnifyingGlass.addEventListener("dblclick", removeMagnifiyingGlass);
 
 const captureScreenshot = (x, y) => {
-    const captureSize = SSSIZE; // Increased capture size
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    
-    canvas.width = captureSize;
-    canvas.height = captureSize;
+  const clonedBody = document.querySelector('.body-clone');
+  const captureSize = SSSIZE; // Increased capture size
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
   
-    const startX = x - captureSize / 2;
-    const startY = y - captureSize / 2;
-  
+  // canvas.width = captureSize * 1.2;
+  // canvas.height = captureSize * 0.8;
+
+  const startX = x - captureSize / 2;
+  const startY = y - captureSize / 2;
+
+  if(!clonedBody){
     html2canvas(document.body).then((fullCanvas) => {
       ctx.drawImage(fullCanvas, startX, startY, captureSize, captureSize, 0, 0, captureSize, captureSize);
       
@@ -83,15 +86,28 @@ const captureScreenshot = (x, y) => {
   
       performOCR(imageData); 
     });
-  };
+  }
+  else{
+    html2canvas(clonedBody).then((fullCanvas) => {
+      ctx.drawImage(fullCanvas, startX, startY, captureSize, captureSize, 0, 0, captureSize, captureSize);
+      
+      const imageData = canvas.toDataURL();
+      
+      // Display the captured image for debugging
+      const imgElement = document.createElement('img');
+      imgElement.src = imageData;
+      document.body.appendChild(imgElement);
+  
+      performOCR(imageData); 
+    });
+  }
+};
 
 document.addEventListener('click', (event) => {
   
-    if(!magnifying){
-        const pointerX = event.pageX;
-        const pointerY = event.pageY;
-        captureScreenshot(pointerX, pointerY);
-    }
+  const pointerX = event.pageX;
+  const pointerY = event.pageY;
+  captureScreenshot(pointerX, pointerY);
 });
 
 const performOCR = (imageData) => {
@@ -103,16 +119,21 @@ const performOCR = (imageData) => {
     }
   ).then(({ data: { text } }) => {
     console.log("Extracted Text:\n", text);
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US'; // Set the language (optional)
+    items.forEach(element => {
+      if(text.includes(element)){
+        const utterance = new SpeechSynthesisUtterance(element);
+        utterance.lang = 'en-US'; // Set the language (optional)
+    
+        // Optional: Set additional properties
+        utterance.pitch = 1; // Range: 0 to 2
+        utterance.rate = 1; // Range: 0.1 to 10
+        utterance.volume = 1; // Range: 0 to 1
+    
+        // Speak the text
+        speechSynthesis.speak(utterance);
+      }
+    });
 
-    // Optional: Set additional properties
-    utterance.pitch = 1; // Range: 0 to 2
-    utterance.rate = 1; // Range: 0.1 to 10
-    utterance.volume = 1; // Range: 0 to 1
-
-    // Speak the text
-    speechSynthesis.speak(utterance);
 
   });
 };
