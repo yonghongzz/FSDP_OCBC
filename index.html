@@ -8,25 +8,58 @@
 </head>
 <body>
     <header>
-        <h1>OCBC Lite Scan to Pay</h1>
+        <button onclick="history.back()">◄</button>
     </header>
     <main>
-        <div id="camera-container">
-            <video id="qr-video" autoplay playsinline></video>
-            <canvas id="qr-canvas"></canvas>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="scan">Scan & Pay</button>
+            <button class="tab-btn" data-tab="receive">Receive Payment</button>
         </div>
-        <div id="scan-overlay">
-            <p>Align QR code within the frame</p>
+
+        <div id="scan-section" class="tab-content active">
+            <div id="camera-container">
+                <video id="qr-video" autoplay playsinline></video>
+                <canvas id="qr-canvas"></canvas>
+                <div id="scan-overlay">
+                    <div class="scan-frame"></div>
+                    <p>Align QR code within the frame</p>
+                </div>
+            </div>
+            
+            <button id="scan-btn" class="primary-btn">Scan QR Code</button>
         </div>
-        <button id="scan-btn">Scan QR Code</button>
-        <div id="result-container">
-            <p id="scan-result"></p>
+
+        <div id="receive-section" class="tab-content">
+            <h2>Your Payment QR Code</h2>
+            <div id="qr-display">
+                <div id="user-qr"></div>
+                <p>Your ID: <span id="user-id">USER123</span></p>
+                <p class="qr-instructions">Share this QR code with others to receive payment</p>
+            </div>
+            <button id="generate-qr" class="primary-btn">Show My QR Code</button>
+        </div>
+        
+        <!-- Update the amount-input div in the scan section -->
+        <div id="amount-input" class="hidden">
+            <div class="input-group">
+                <span>Pay with:</span>
+                <select id="payment-method" style="flex: 1; border: none; font-size: 1.2rem; outline: none; background: transparent;">
+                    <option value="balance">PayLah!/ NETS QR</option>
+                    <option value="credit">PayNow QR</option>
+                </select>
+            </div>
+            <h2>Enter Amount</h2>
+            <p class="payment-to">Paying to: <span id="payment-recipient"></span></p>
+            <div class="input-group">
+                <span>S$</span>
+                <input type="number" id="payment-amount" placeholder="0.00" step="0.01">
+            </div>
+            <button id="confirm-payment" class="primary-btn">Confirm Payment</button>
         </div>
     </main>
-    <footer>
-        <p>&copy; 2024 OCBC</p>
-    </footer>
+    
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
