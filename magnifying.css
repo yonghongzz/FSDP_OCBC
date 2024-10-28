@@ -1,3 +1,9 @@
+html, body {
+  width: 430px; /* Set to 100% to fill the viewport */
+  height: 932px; /* Set to 100% to fill the viewport */
+  margin: 0; /* Remove default margin */
+}
+
 :root {
     --scale: 1;
     --size: 200px;

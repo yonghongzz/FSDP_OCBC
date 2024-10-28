@@ -1,4 +1,5 @@
-//defaults - not recommended to change
+document.addEventListener('DOMContentLoaded',() => {
+  //defaults - not recommended to change
 
 const SCALE = 1.3; //magnification
 const SIZE = 100; // diameter
@@ -44,8 +45,8 @@ const moveMagnifyingGlass = (event) => {
   handle.style.top = pointerY - SIZE / 1.7 + "px";
   if (magnifyingGlass.children[0]) {
     //align magnified document
-    let offsetX = (SIZE * Math.pow(SCALE, 2)) / 2 - pointerX * SCALE +55;
-    let offsetY = (SIZE * Math.pow(SCALE, 2)) / 2 - pointerY * SCALE +95;
+    let offsetX = (SIZE * Math.pow(SCALE, 2)) / 2 - pointerX * SCALE +20;
+    let offsetY = (SIZE * Math.pow(SCALE, 2)) / 2 - pointerY * SCALE +60;
     magnifyingGlass.children[0].style.left = offsetX + "px";
     magnifyingGlass.children[0].style.top = offsetY + "px";
   }
@@ -63,45 +64,92 @@ magnifyingGlass.addEventListener("dblclick", removeMagnifiyingGlass);
 
 const captureScreenshot = (x, y) => {
   const clonedBody = document.querySelector('.body-clone');
-  const captureSize = SSSIZE; // Increased capture size
+  const baseSize = SSSIZE;
   const canvas = document.createElement('canvas');
+  canvas.width = baseSize;
+  canvas.height = baseSize;
   const ctx = canvas.getContext('2d');
-  
-  // canvas.width = captureSize * 1.2;
-  // canvas.height = captureSize * 0.8;
 
-  const startX = x - captureSize / 2;
-  const startY = y - captureSize / 2;
-
-  if(!clonedBody){
-    html2canvas(document.body).then((fullCanvas) => {
-      ctx.drawImage(fullCanvas, startX, startY, captureSize, captureSize, 0, 0, captureSize, captureSize);
+  if (!clonedBody) {
+    // Regular view capture
+    html2canvas(document.body, {
+      // Add html2canvas options to ensure accurate capture
+      scrollX: window.pageXOffset,
+      scrollY: window.pageYOffset,
+      windowWidth: document.documentElement.offsetWidth,
+      windowHeight: document.documentElement.offsetHeight,
+      scale: window.devicePixelRatio // Account for device pixel ratio
+    }).then((fullCanvas) => {
+      // Get scroll position and canvas scaling factor
+      const scrollX = window.pageXOffset;
+      const scrollY = window.pageYOffset;
+      const canvasScale = fullCanvas.width / document.documentElement.offsetWidth;
+      
+      // Calculate capture coordinates accounting for scroll and canvas scale
+      const captureX = (x + scrollX) * canvasScale;
+      const captureY = (y + scrollY) * canvasScale;
+      
+      // Calculate start position for capture
+      const startX = Math.max(0, captureX - (baseSize * canvasScale / 2));
+      const startY = Math.max(0, captureY - (baseSize * canvasScale / 2));
+      
+      // Show debug box at original coordinates
+      const debugX = x - baseSize/2;
+      const debugY = y - baseSize/2;
+      
+      // Draw scaled section to output canvas
+      ctx.drawImage(
+        fullCanvas,
+        startX,
+        startY,
+        baseSize * canvasScale,
+        baseSize * canvasScale,
+        0,
+        0,
+        baseSize,
+        baseSize
+      );
       
       const imageData = canvas.toDataURL();
-      
-      // Display the captured image for debugging
       const imgElement = document.createElement('img');
       imgElement.src = imageData;
       document.body.appendChild(imgElement);
-  
-      performOCR(imageData); 
+      performOCR(imageData);
+      
     });
-  }
-  else{
+  } else {
+    // Capturing from magnified view
     html2canvas(clonedBody).then((fullCanvas) => {
-      ctx.drawImage(fullCanvas, startX, startY, captureSize, captureSize, 0, 0, captureSize, captureSize);
+      // Account for magnification scale when calculating coordinates
+      const scaledSize = baseSize * SCALE;
+      const startX = (x * SCALE) - (scaledSize/2) -(22 * SCALE);
+      const startY = (y * SCALE) - (scaledSize/2);
       
+      // Adjust for magnifying glass offset
+      const magOffsetX = parseFloat(magnifyingGlass.style.left);
+      const magOffsetY = parseFloat(magnifyingGlass.style.top);
+      
+      ctx.drawImage(
+        fullCanvas,
+        startX - magOffsetX,
+        startY - magOffsetY,
+        scaledSize,
+        scaledSize,
+        0,
+        0,
+        baseSize,
+        baseSize
+      );
+
       const imageData = canvas.toDataURL();
-      
-      // Display the captured image for debugging
       const imgElement = document.createElement('img');
       imgElement.src = imageData;
       document.body.appendChild(imgElement);
-  
-      performOCR(imageData); 
+      performOCR(imageData);
     });
   }
 };
+
 
 document.addEventListener('click', (event) => {
   
@@ -113,10 +161,10 @@ document.addEventListener('click', (event) => {
 const performOCR = (imageData) => {
   Tesseract.recognize(
     imageData,
-    'eng',
-    {
-      logger: (info) => console.log(info) // Log progress
-    }
+    // 'eng',
+    // {
+    //   logger: (info) => console.log(info) // Log progress
+    // }
   ).then(({ data: { text } }) => {
     console.log("Extracted Text:\n", text);
     items.forEach(element => {
@@ -142,3 +190,4 @@ const performOCR = (imageData) => {
 //issues 
 //- lots of magin numbers for alignment
 //- background gradient doesn't show over images
+})
