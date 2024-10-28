@@ -68,7 +68,7 @@ const captureScreenshot = (x, y) => {
   const canvas = document.createElement('canvas');
   canvas.width = baseSize;
   canvas.height = baseSize;
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d');  
 
   if (!clonedBody) {
     // Regular view capture
@@ -93,9 +93,6 @@ const captureScreenshot = (x, y) => {
       const startX = Math.max(0, captureX - (baseSize * canvasScale / 2));
       const startY = Math.max(0, captureY - (baseSize * canvasScale / 2));
       
-      // Show debug box at original coordinates
-      const debugX = x - baseSize/2;
-      const debugY = y - baseSize/2;
       
       // Draw scaled section to output canvas
       ctx.drawImage(
