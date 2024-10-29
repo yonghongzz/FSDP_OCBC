@@ -78,84 +78,41 @@ const removeMagnifiyingGlass = (event) => {
 
 magnifyingGlass.addEventListener("dblclick", removeMagnifiyingGlass);
 
-const captureScreenshot = (x, y) => {
-  const clonedBody = document.querySelector('.body-clone');
-  const captureSize = SSSIZE; // Increased capture size
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-  
-  // canvas.width = captureSize * 1.2;
-  // canvas.height = captureSize * 0.8;
+document.addEventListener('click', (event) => {
+  // Identify the clicked element
+  const clickedElement = document.elementFromPoint(event.clientX, event.clientY);
+  const parentElement = clickedElement.parentElement.parentElement;
+  let textContent = '';
+    // Check if the element contains any text content
+  if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'card-body' && clickedElement.classList[0] !== 'card'){
 
-  const startX = x - captureSize / 2;
-  const startY = y - captureSize / 2;
-
-  if(!clonedBody){
-    html2canvas(document.body).then((fullCanvas) => {
-      ctx.drawImage(fullCanvas, startX, startY, captureSize, captureSize, 0, 0, captureSize, captureSize);
-      
-      const imageData = canvas.toDataURL();
-      
-      // Display the captured image for debugging
-      const imgElement = document.createElement('img');
-      imgElement.src = imageData;
-      document.body.appendChild(imgElement);
-  
-      performOCR(imageData); 
-    });
+    textContent = clickedElement.innerText.trim();
   }
   else{
-    html2canvas(clonedBody).then((fullCanvas) => {
-      ctx.drawImage(fullCanvas, startX, startY, captureSize, captureSize, 0, 0, captureSize, captureSize);
-      
-      const imageData = canvas.toDataURL();
-      
-      // Display the captured image for debugging
-      const imgElement = document.createElement('img');
-      imgElement.src = imageData;
-      document.body.appendChild(imgElement);
-  
-      performOCR(imageData); 
-    });
+    if(parentElement && parentElement.innerText.trim() && parentElement.tagName !== 'BODY' && parentElement.tagName !== 'HTML'){
+      console.log(parentElement.innerText.trim());
+      textContent = parentElement.innerText.trim();
+    }
   }
-};
 
-document.addEventListener('click', (event) => {
-  
-  const pointerX = event.pageX;
-  const pointerY = event.pageY;
-  captureScreenshot(pointerX, pointerY);
+
+    // For debugging or use
+    console.log("Captured Text:", textContent);
+
+    // You could also pass this text to any function, e.g., performOCR(textContent);
+    performOCR(textContent); // or any function handling the text
 });
 
-const performOCR = (imageData) => {
-  Tesseract.recognize(
-    imageData,
-    'eng',
-    {
-      logger: (info) => console.log(info) // Log progress
-    }
-  ).then(({ data: { text } }) => {
-    console.log("Extracted Text:\n", text);
-    items.forEach(element => {
-      if(text.includes(element)){
-        const utterance = new SpeechSynthesisUtterance(element);
-        utterance.lang = 'en-US'; // Set the language (optional)
-    
-        // Optional: Set additional properties
-        utterance.pitch = 1; // Range: 0 to 2
-        utterance.rate = 1; // Range: 0.1 to 10
-        utterance.volume = 1; // Range: 0 to 1
-    
-        // Speak the text
-        speechSynthesis.speak(utterance);
-      }
-    });
+const performOCR = (textContent) => {
+  const utterance = new SpeechSynthesisUtterance(textContent);
+  utterance.lang = 'en-US'; // Set the language (optional)
 
+  // Optional: Set additional properties
+  utterance.pitch = 1; // Range: 0 to 2
+  utterance.rate = 1; // Range: 0.1 to 10
+  utterance.volume = 1; // Range: 0 to 1
 
-  });
+  // Speak the text
+  speechSynthesis.speak(utterance);
 };
 
-
-//issues 
-//- lots of magin numbers for alignment
-//- background gradient doesn't show over images
