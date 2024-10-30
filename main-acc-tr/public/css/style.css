@@ -1,7 +1,12 @@
+body{
+    overflow: hidden;
+}
+
 .button-magnify {
     font-size: x-large;
     margin-left: -0.5rem;
     color: white;
+    cursor: pointer;
 }
 
 .button-volume, .button-person {
@@ -518,19 +523,6 @@ a {
     height: 100vh;
     width: calc(100vw - var(--scrollbar-width));
     transform: scale(var(--scale));
+    overflow: hidden;
   }
   
-  /* #magnify {
-    font-size: 2rem;
-    padding: 3% 5% 3%;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: #fcc203;
-    box-shadow: 1px 1px 5px 3px rgba(0, 0, 0, 0.5);
-  }
-  
-  #magnify:hover {
-    color: white;
-    background-color: black;
-    box-shadow: none;
-  } */

@@ -1,7 +1,8 @@
 html, body {
-  width: 430px; /* Set to 100% to fill the viewport */
-  height: 932px; /* Set to 100% to fill the viewport */
+  width: 288px; /* Set to 100% to fill the viewport */
+  height: 605px; /* Set to 100% to fill the viewport */
   margin: 0; /* Remove default margin */
+  overflow: hidden;
 }
 
 :root {
@@ -78,3 +79,27 @@ html, body {
     background-color: black;
     box-shadow: none;
   }
+
+  .magnifying-glass {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 6px solid #333;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 80%);
+    box-shadow: 0 0 20px 5px rgba(0,0,0,0.4);
+    pointer-events: none;
+    z-index: 9999;
+    transform: scale(1);
+    transition: transform 0.2s ease-out;
+}
+
+.magnifier-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform-origin: center;
+    pointer-events: none;
+}

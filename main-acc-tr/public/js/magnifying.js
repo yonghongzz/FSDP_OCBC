@@ -1,12 +1,14 @@
-//defaults - not recommended to change
-
+document.addEventListener('DOMContentLoaded',(e)=>{
+  //defaults - not recommended to change
+e.preventDefault();
 const SCALE = 1.3; //magnification
 const SIZE = 100; // diameter
-const SSSIZE = 120;
 const LENSE_OFFSET_X = SIZE / 10.2;
 const LENSE_OFFSET_Y = SIZE / 10.2;
-const items = ["Glass", "Magnify","Click","remove","Paynow","Pay Bills","Scan"];
-var magnifying = false;
+let items = [];
+const accountNumber = document.querySelector('.account-number').textContent;
+items.push(accountNumber);
+let magnifying = false;
 
 // document.querySelectorAll('img').forEach(image => { image.crossOrigin = 'Anonymous'; image.src += ' '; });
 
@@ -27,7 +29,7 @@ handle.append(magnifyingGlass);
 const magnifyButton = document.getElementById("magnify");
 
 const addMagnifyingGlass = () => {
-    magnifying = true;
+  document.addEventListener("pointermove", moveMagnifyingGlass);
   const bodyClone = document.body.cloneNode(true);
   bodyClone.classList.add("body-clone");
   bodyClone.style.top = "0px";
@@ -36,7 +38,15 @@ const addMagnifyingGlass = () => {
   document.body.append(handle);
 };
 
-magnifyButton.addEventListener("click", addMagnifyingGlass);
+magnifyButton.addEventListener("click", ()=>{
+  magnifying = !magnifying;
+  if(magnifying){
+    addMagnifyingGlass();
+  }
+  else{
+    removeMagnifyingGlass();
+  }
+});
 
 const moveMagnifyingGlass = (event) => {
   let pointerX = event.pageX;
@@ -59,8 +69,8 @@ const moveMagnifyingGlass = (event) => {
     const baseOffsetY = (SIZE * Math.pow(SCALE, 2)) / 2;
     
     // Apply viewport-relative adjustments
-    let offsetX = baseOffsetX - pointerX * SCALE + 55 * (viewportWidth / 1920); // Normalized to 1920px width
-    let offsetY = baseOffsetY - pointerY * SCALE + 95 * (viewportHeight / 1080); // Normalized to 1080px height
+    let offsetX = baseOffsetX - pointerX * SCALE +10 * (viewportWidth / 288); // Normalized to 1920px width
+    let offsetY = baseOffsetY - pointerY * SCALE +30 * (viewportHeight / 605); // Normalized to 1080px height
     
     // Apply position with scaling compensation
     magnifyingGlass.children[0].style.left = `${offsetX}px`;
@@ -68,15 +78,16 @@ const moveMagnifyingGlass = (event) => {
   }
 };
 
-document.addEventListener("pointermove", moveMagnifyingGlass);
 
-const removeMagnifiyingGlass = (event) => {
-    magnifying = false;
-  magnifyingGlass.children[0].remove();
+const removeMagnifyingGlass = () => {
+  document.removeEventListener("pointermove", moveMagnifyingGlass);
+  if (magnifyingGlass.children.length > 0) {
+    magnifyingGlass.children[0].remove();
+  }
   handle.remove();
 };
 
-magnifyingGlass.addEventListener("dblclick", removeMagnifiyingGlass);
+
 
 document.addEventListener('click', (event) => {
   // Identify the clicked element
@@ -84,16 +95,16 @@ document.addEventListener('click', (event) => {
   const parentElement = clickedElement.parentElement.parentElement;
   let textContent = '';
     // Check if the element contains any text content
-  if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'card-body' && clickedElement.classList[0] !== 'card'){
-
+  if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('blockquote')){
     textContent = clickedElement.innerText.trim();
   }
-  else{
-    if(parentElement && parentElement.innerText.trim() && parentElement.tagName !== 'BODY' && parentElement.tagName !== 'HTML'){
-      console.log(parentElement.innerText.trim());
-      textContent = parentElement.innerText.trim();
-    }
-  }
+  // else{
+  //   if(parentElement && parentElement.innerText.trim() && parentElement.tagName !== 'BODY' && parentElement.tagName !== 'HTML'){
+  //     console.log(clickedElement.classList[0]);
+  //     const txtAround = "Text around is, ";
+  //     textContent = txtAround + parentElement.innerText.trim();
+  //   }
+  // }
 
 
     // For debugging or use
@@ -104,7 +115,21 @@ document.addEventListener('click', (event) => {
 });
 
 const performOCR = (textContent) => {
-  const utterance = new SpeechSynthesisUtterance(textContent);
+  let utterance;
+  let sentiveInfo = false;
+  const splitText = textContent.split('\n');
+  splitText.forEach(element => {
+    if(items.includes(element.trim())){
+      sentiveInfo = true;
+    }
+  });
+  if(sentiveInfo){
+    utterance = new SpeechSynthesisUtterance("Sensitive Information");
+  }
+  else{
+    utterance = new SpeechSynthesisUtterance(textContent);
+  }
+
   utterance.lang = 'en-US'; // Set the language (optional)
 
   // Optional: Set additional properties
@@ -115,4 +140,4 @@ const performOCR = (textContent) => {
   // Speak the text
   speechSynthesis.speak(utterance);
 };
-
+});
