@@ -45,7 +45,7 @@ CREATE TABLE Account (
     FOREIGN KEY (user_id) REFERENCES [User](user_id)
 );
 
-CREATE TABLE [Transaction] (
+CREATE TABLE AccTransaction (
     transaction_id INT PRIMARY KEY IDENTITY(1,1),
     account_id INT,
     transaction_type VARCHAR(50) CHECK (transaction_type IN ('deposit', 'withdrawal')) NOT NULL,
@@ -63,4 +63,9 @@ CREATE TABLE Card (
     cvv VARCHAR(4) NOT NULL,
     card_type VARCHAR(50) NOT NULL,
     FOREIGN KEY (account_id) REFERENCES Account(account_id)
+);
+
+CREATE TABLE RefreshTokens (
+    token_id INT PRIMARY KEY IDENTITY(1,1),
+    refreshToken VARCHAR(255) NOT NULL UNIQUE
 );
