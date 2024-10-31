@@ -1,3 +1,4 @@
+
 html,body{
     overflow: hidden;
     touch-action: none;
@@ -479,7 +480,9 @@ a {
     background-color: white;
     color: black;
     font-weight: 600;
+
 }
+
 
 .handle {
     position: absolute;

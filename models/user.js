@@ -263,6 +263,50 @@ class User {
         }
       }
 
+      // for checking create account
+    static async getUserByEmail(email) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM User WHERE email = @email`;
+
+        const request = connection.request();
+        request.input("email", email);
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new User(
+                result.recordset[0].user_id,
+                result.recordset[0].username,
+                result.recordset[0].password_hash,
+                result.recordset[0].email,
+                result.recordset[0].phone_number
+            )
+            : null;
+    }
+
+    static async getUserByName(name) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM User WHERE username = @username`;
+
+        const request = connection.request();
+        request.input("username", name);
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new User(
+                result.recordset[0].user_id,
+                result.recordset[0].username,
+                result.recordset[0].password_hash,
+                result.recordset[0].email,
+                result.recordset[0].phone_number
+            )
+            : null;
+    }
 }
 
 module.exports = User;
