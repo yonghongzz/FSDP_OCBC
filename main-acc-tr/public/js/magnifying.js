@@ -9,6 +9,7 @@ let items = [];
 const accountNumber = document.querySelector('.account-number').textContent;
 items.push(accountNumber);
 let magnifying = false;
+let speaking = true;
 
 // document.querySelectorAll('img').forEach(image => { image.crossOrigin = 'Anonymous'; image.src += ' '; });
 
@@ -91,28 +92,30 @@ const removeMagnifyingGlass = () => {
 
 
 document.addEventListener('click', (event) => {
-  // Identify the clicked element
-  const clickedElement = document.elementFromPoint(event.clientX, event.clientY);
-  const parentElement = clickedElement.parentElement.parentElement;
-  let textContent = '';
-    // Check if the element contains any text content
-  if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('blockquote')){
-    textContent = clickedElement.innerText.trim();
+  if(speaking){
+    // Identify the clicked element
+    const clickedElement = document.elementFromPoint(event.clientX, event.clientY);
+    const parentElement = clickedElement.parentElement.parentElement;
+    let textContent = '';
+      // Check if the element contains any text content
+    if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('blockquote')){
+      textContent = clickedElement.innerText.trim();
+    }
+    else{
+      if(parentElement && parentElement.innerText.trim() && parentElement.tagName !== 'BODY' && parentElement.tagName !== 'HTML'){
+        console.log(clickedElement.classList[0]);
+        const txtAround = "Text around is, ";
+        textContent = txtAround + parentElement.innerText.trim();
+      }
+    }
+
+
+      // For debugging or use
+      console.log("Captured Text:", textContent);
+
+      // You could also pass this text to any function, e.g., performOCR(textContent);
+      performOCR(textContent); // or any function handling the text
   }
-  // else{
-  //   if(parentElement && parentElement.innerText.trim() && parentElement.tagName !== 'BODY' && parentElement.tagName !== 'HTML'){
-  //     console.log(clickedElement.classList[0]);
-  //     const txtAround = "Text around is, ";
-  //     textContent = txtAround + parentElement.innerText.trim();
-  //   }
-  // }
-
-
-    // For debugging or use
-    console.log("Captured Text:", textContent);
-
-    // You could also pass this text to any function, e.g., performOCR(textContent);
-    performOCR(textContent); // or any function handling the text
 });
 
 const performOCR = (textContent) => {
