@@ -49,6 +49,7 @@ magnifyButton.addEventListener("click", ()=>{
 });
 
 const moveMagnifyingGlass = (event) => {
+  event.preventDefault();
   let pointerX = event.pageX;
   let pointerY = event.pageY;
   
@@ -140,4 +141,9 @@ const performOCR = (textContent) => {
   // Speak the text
   speechSynthesis.speak(utterance);
 };
+document.addEventListener('pointerdown', (event) => {
+  if (magnifying) {
+    event.preventDefault(); // Prevent default action when magnifying
+  }
+});
 });
