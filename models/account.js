@@ -22,7 +22,7 @@ class Account {
         connection.close();
 
         return result.recordset.map(
-        (row) => new Post(row.account_id, row.user_id, row.account_type, row.balance, row.transaction_limit)
+        (row) => new Account(row.account_id, row.user_id, row.account_type, row.balance, row.transaction_limit)
         ); 
     }
 
