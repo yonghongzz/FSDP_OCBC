@@ -95,6 +95,11 @@ class User {
                 params.push({ name: 'email', type: sql.VarChar, value: newUserData.email });
             }
 
+            if (newUserData.phone_number) {
+                sqlQuery += 'phone_number = @phone_number, ';
+                params.push({ name: 'phone_number', type: sql.VarChar, value: newUserData.phone_number });
+            }
+
             if (newUserData.password_hash) {
                 const salt = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash(newUserData.password_hash, salt);
