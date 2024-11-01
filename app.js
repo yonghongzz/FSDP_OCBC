@@ -3,11 +3,14 @@ const accountController = require("./controllers/accountController");
 const acctransactionController = require("./controllers/acctransactionController");
 const cardController = require("./controllers/cardController");
 const userController = require("./controllers/userController");
+const staffController = require("./controllers/staffController");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser");
 const authenticate = require("./middlewares/authenticate");
 const validateUser = require("./middlewares/validateUser");
+const validateStaff = require("./middlewares/validateStaff");
+const validateAccTransaction = require("./middlewares/validateAccTransaction");
 const validateAccTransaction = require("./middlewares/validateAccTransaction")
 
 const app = express();
@@ -41,6 +44,15 @@ app.post("/users/login", validateUser.validateLoginUser, userController.loginUse
 app.post("/users/check", authenticate.verifyJWT, userController.checkPassword);
 app.post("/token", userController.refreshAccessToken);
 app.delete("/logout", userController.logout);
+
+// staff
+app.get("/staffs", staffController.getAllStaffs);
+app.get("/staffs/:id", staffController.getStaffById);
+app.post("/staffs/login", validateStaff.validateLoginStaff, staffController.loginStaff);
+app.post("/staffs/check", authenticate.verifyJWT, staffController.checkPassword);
+app.post("/token", staffController.refreshAccessToken);
+app.delete("/logout", staffController.logout);
+
 
 app.listen(port, async () => {
     try {
