@@ -26,6 +26,10 @@ GO
 IF OBJECT_ID('dbo.Card', 'U') IS NOT NULL
     DROP TABLE dbo.Card;
 GO
+
+IF OBJECT_ID('dbo.Staff', 'U') IS NOT NULL
+    DROP TABLE dbo.Staff;
+GO
 */
 
 CREATE TABLE [User] (
@@ -67,7 +71,8 @@ CREATE TABLE Card (
 
 CREATE TABLE Staff (
     staff_id INT PRIMARY KEY IDENTITY(1,1),
-    username VARCHAR(50) NOT NULL UNIQUE
+    username VARCHAR(50) NOT NULL UNIQUE,
+	password_hash VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE RefreshTokens (
