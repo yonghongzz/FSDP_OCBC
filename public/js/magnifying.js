@@ -28,6 +28,7 @@ magnifyingGlass.style.left = LENSE_OFFSET_X-20 + "px";
 handle.append(magnifyingGlass);
 
 const magnifyButton = document.getElementById("magnify");
+const voiceButton = document.getElementById("voice");
 
 const addMagnifyingGlass = () => {
   document.addEventListener("pointermove", moveMagnifyingGlass);
@@ -48,6 +49,10 @@ magnifyButton.addEventListener("click", ()=>{
     removeMagnifyingGlass();
   }
 });
+
+voiceButton.addEventListener("click",()=>{
+  speaking = !speaking;
+})
 
 const moveMagnifyingGlass = (event) => {
   event.preventDefault();
@@ -101,13 +106,13 @@ document.addEventListener('click', (event) => {
     if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('blockquote')){
       textContent = clickedElement.innerText.trim();
     }
-    else{
-      if(parentElement && parentElement.innerText.trim() && parentElement.tagName !== 'BODY' && parentElement.tagName !== 'HTML'){
-        console.log(clickedElement.classList[0]);
-        const txtAround = "Text around is, ";
-        textContent = txtAround + parentElement.innerText.trim();
-      }
-    }
+    // else{
+    //   if(parentElement && parentElement.innerText.trim() && parentElement.tagName !== 'BODY' && parentElement.tagName !== 'HTML'){
+    //     console.log(clickedElement.classList[0]);
+    //     const txtAround = "Text around is, ";
+    //     textContent = txtAround + parentElement.innerText.trim();
+    //   }
+    // }
 
 
       // For debugging or use
