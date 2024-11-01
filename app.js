@@ -11,6 +11,7 @@ const authenticate = require("./middlewares/authenticate");
 const validateUser = require("./middlewares/validateUser");
 const validateStaff = require("./middlewares/validateStaff");
 const validateAccTransaction = require("./middlewares/validateAccTransaction");
+const validateAccTransaction = require("./middlewares/validateAccTransaction")
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -51,6 +52,7 @@ app.post("/staffs/login", validateStaff.validateLoginStaff, staffController.logi
 app.post("/staffs/check", authenticate.verifyJWT, staffController.checkPassword);
 app.post("/token", staffController.refreshAccessToken);
 app.delete("/logout", staffController.logout);
+
 
 app.listen(port, async () => {
     try {
