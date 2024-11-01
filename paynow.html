@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayNow Interface</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="top-header">
+            <div class="icon zoom"><i class="bi bi-zoom-in"></i></div>
+            <div class="mode">
+                <span>Lite</span>
+                <span class="dropdown"><i class="bi bi-caret-down-fill"></i></span>
+            </div>
+            <div class="icon sound"><i class="bi bi-volume-up-fill"></i></div>
+            <div class="icon profile"><i class="bi bi-person-fill"></i></div>
+        </div>
+        <div class="content">
+            <header class="header">
+                <div class="icon back">X</div>
+                <div class="help">
+                    <u>Need help?</u>
+                </div>
+            </header>
+            <div class="titlep">PayNow</div>
+            <div class="selection">
+                <a href="paynow.html"><div class="option active">Mobile</div></a>
+                <a href="#"><div class="option">NRIC/FIN</div></a>
+                <a href="#"><div class="option">UEN</div></a>
+                <a href="#"><div class="option">VPA</div></a>
+            </div>
+
+            <div class="alert">
+                <p>Be aware of scams</p>
+                <p>Do not make unknown transactions</p>
+            </div>
+
+            <form class="form">
+                <div class="form-group">
+                    <label for="mobile">Mobile no.</label>
+                    <input type="text" id="mobile" placeholder="Enter mobile number">
+                    <div class="icon contact"><i class="bi bi-person-fill"></i></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Amount (SGD)</label>
+                    <input type="number" id="amount" placeholder="Enter amount">
+                    <small>Transfer limit left: 1,000 SGD</small>
+                    <small>Want to change your transfer limit? Manage your limits here.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="comments">Comments (optional)</label>
+                    <input type="text" id="comments" placeholder="Comments(optional)">
+                </div>
+
+                <a href="reviewconf.html"><div class="next-button">Next</div></a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
