@@ -441,4 +441,57 @@
     #camera-toggle, #screen-share {
         background: #161617;
     }
+
+    .login-container {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .login-input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    /* Staff dashboard styles */
+    .call-request {
+        background: white;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .call-request .user-info {
+        font-size: 14px;
+    }
+
+    .call-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .accept-call {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .reject-call {
+        background: #666;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 }

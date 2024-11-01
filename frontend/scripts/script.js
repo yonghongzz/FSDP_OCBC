@@ -76,14 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.type === 'receive') {
                 // Show amount input for payment to scanned user
                 amountInput.classList.remove('hidden');
-                scanSection.style.display = 'none';
+                scanSection.classList.add('hidden');
                 document.getElementById('payment-recipient').textContent = data.userId;
                 paymentAmount.value = '';  // Clear any previous amount
                 paymentAmount.focus();  // Focus the input field
             } else if (data.userId && data.amount) {
                 // Handle legacy format or other QR types
                 amountInput.classList.remove('hidden');
-                scanSection.style.display = 'none';
+                scanSection.classList.add('hidden');
                 paymentAmount.value = data.amount;
             }
         } catch (e) {
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isScanning = false;
         } else {
             amountInput.classList.add('hidden');
-            scanSection.style.display = 'block';
+            scanSection.classList.remove('hidden');
             startScanner();
             scanBtn.textContent = 'Stop Scanning';
             isScanning = true;
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const recipient = document.getElementById('payment-recipient').textContent;
             window.location.href = `paymentDetails.html?amount=${amount}&recipient=${recipient}`;
             amountInput.classList.add('hidden');
-            scanSection.style.display = 'block';
+            scanSection.classList.remove('hidden');
             paymentAmount.value = '';
         } else {
             alert('Please enter a valid amount');

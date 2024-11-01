@@ -86,6 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Done button handler
     document.getElementById('done-btn').addEventListener('click', () => {
-        window.location.href = 'index.html';
+        window.location.href = '/index.html';
     });
 });
