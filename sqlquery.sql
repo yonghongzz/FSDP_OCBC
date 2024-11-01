@@ -65,6 +65,11 @@ CREATE TABLE Card (
     FOREIGN KEY (account_id) REFERENCES Account(account_id)
 );
 
+CREATE TABLE Staff (
+    staff_id INT PRIMARY KEY IDENTITY(1,1),
+    username VARCHAR(50) NOT NULL UNIQUE
+);
+
 CREATE TABLE RefreshTokens (
     token_id INT PRIMARY KEY IDENTITY(1,1),
     refreshToken VARCHAR(255) NOT NULL UNIQUE
