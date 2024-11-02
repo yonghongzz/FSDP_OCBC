@@ -11,7 +11,7 @@ const authenticate = require("./middlewares/authenticate");
 const validateUser = require("./middlewares/validateUser");
 const validateStaff = require("./middlewares/validateStaff");
 const validateAccTransaction = require("./middlewares/validateAccTransaction");
-const validateAccTransaction = require("./middlewares/validateAccTransaction")
+const seedDatabase = require("./seed");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -60,7 +60,7 @@ app.listen(port, async () => {
       await sql.connect(dbConfig);
   
       // Seed DB with initial data
-      // seedDatabase();
+      seedDatabase();
   
       console.log("Database connection established successfully");
     } catch (err) {
@@ -70,5 +70,14 @@ app.listen(port, async () => {
     }
   
     console.log(`Server listening on port ${port}`);
+});
+
+// Gracefully handle shutdown by closing DB connection pool on SIGINT signal
+process.on("SIGINT", async () => {
+  console.log("Server is gracefully shutting down");
+  // Perform cleanup tasks (e.g., close database connections)
+  await sql.close();
+  console.log("Database connection closed");
+  process.exit(0); // Exit with code 0 indicating successful shutdown
 });
   

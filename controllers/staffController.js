@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const getAllStaffs = async (req, res) => {
     try {
-      const staffs = await User.getAllStaffs();
+      const staffs = await Staff.getAllStaffs();
       res.json(staffs);
     } catch (error) {
       console.error(error);

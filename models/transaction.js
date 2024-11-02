@@ -15,7 +15,7 @@ class AccTransaction {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM AccTransaction`;
+        const sqlQuery = `SELECT * FROM AccTransactions`;
 
         const request = connection.request();
         const result = await request.query(sqlQuery);
@@ -31,7 +31,7 @@ class AccTransaction {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM AccTransaction WHERE transaction_id = @id`;
+        const sqlQuery = `SELECT * FROM AccTransactions WHERE transaction_id = @id`;
 
         const request = connection.request(); 
         request.input("id", id);
@@ -55,7 +55,7 @@ class AccTransaction {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `INSERT INTO AccTransaction (account_id, transaction_type, amount, transaction_datetime, name) VALUES (@account_id, @transaction_type, @amount, GETDATE()); SELECT SCOPE_IDENTITY() AS transaction_id;`; 
+        const sqlQuery = `INSERT INTO AccTransactions (account_id, transaction_type, amount, transaction_datetime, name) VALUES (@account_id, @transaction_type, @amount, GETDATE()); SELECT SCOPE_IDENTITY() AS transaction_id;`; 
 
         const request = connection.request();
         request.input("account_id", newAccTransactionData.account_id);

@@ -14,7 +14,7 @@ class Account {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Account`;
+        const sqlQuery = `SELECT * FROM Accounts`;
 
         const request = connection.request();
         const result = await request.query(sqlQuery);
@@ -30,7 +30,7 @@ class Account {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Account WHERE account_id = @id`;
+        const sqlQuery = `SELECT * FROM Accounts WHERE account_id = @id`;
 
         const request = connection.request(); 
         request.input("id", id);

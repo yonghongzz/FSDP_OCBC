@@ -17,7 +17,7 @@ class User {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM User`;
+        const sqlQuery = `SELECT * FROM Users`;
 
         const request = connection.request();
         const result = await request.query(sqlQuery);
@@ -33,7 +33,7 @@ class User {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM User WHERE user_id = @id`;
+        const sqlQuery = `SELECT * FROM Users WHERE user_id = @id`;
 
         const request = connection.request();
         request.input("id", id); // Add parameter for user ID
@@ -59,7 +59,7 @@ class User {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `INSERT INTO User (username, password_hash, email, phone_number) VALUES (@username, @password_hash, @email, @phone_number); SELECT SCOPE_IDENTITY() AS user_id;`; 
+        const sqlQuery = `INSERT INTO Users (username, password_hash, email, phone_number) VALUES (@username, @password_hash, @email, @phone_number); SELECT SCOPE_IDENTITY() AS user_id;`; 
 
         const request = connection.request();
         request.input("username", newUserData.username);
@@ -82,7 +82,7 @@ class User {
         try {
             connection = await sql.connect(dbConfig);
 
-            let sqlQuery = 'UPDATE User SET ';
+            let sqlQuery = 'UPDATE Users SET ';
             const params = [];
 
             if (newUserData.username) {
@@ -137,7 +137,7 @@ class User {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM User WHERE username = @username`;
+        const sqlQuery = `SELECT * FROM Users WHERE username = @username`;
 
         const request = connection.request();
         request.input("username", loginUserData.username);
@@ -272,7 +272,7 @@ class User {
     static async getUserByEmail(email) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM User WHERE email = @email`;
+        const sqlQuery = `SELECT * FROM Users WHERE email = @email`;
 
         const request = connection.request();
         request.input("email", email);
@@ -294,7 +294,7 @@ class User {
     static async getUserByName(name) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM User WHERE username = @username`;
+        const sqlQuery = `SELECT * FROM Users WHERE username = @username`;
 
         const request = connection.request();
         request.input("username", name);
