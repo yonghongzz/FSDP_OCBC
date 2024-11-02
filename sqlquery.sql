@@ -10,7 +10,7 @@ GO
 USE FSDPAssignment;
 GO
 
-
+/*
 IF OBJECT_ID('dbo.Users', 'U') IS NOT NULL
     DROP TABLE dbo.Users;
 GO
@@ -30,6 +30,7 @@ GO
 IF OBJECT_ID('dbo.Staffs', 'U') IS NOT NULL
     DROP TABLE dbo.Staffs;
 GO
+*/
 
 
 CREATE TABLE Users (
