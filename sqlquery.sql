@@ -10,7 +10,7 @@ GO
 USE FSDPAssignment;
 GO
 
-/*
+
 IF OBJECT_ID('dbo.User', 'U') IS NOT NULL
     DROP TABLE dbo.[User];
 GO
@@ -19,8 +19,8 @@ IF OBJECT_ID('dbo.Account', 'U') IS NOT NULL
     DROP TABLE dbo.Account;
 GO
 
-IF OBJECT_ID('dbo.Transaction', 'U') IS NOT NULL
-    DROP TABLE dbo.[Transaction];
+IF OBJECT_ID('dbo.AccTransaction', 'U') IS NOT NULL
+    DROP TABLE dbo.AccTransaction;
 GO
 
 IF OBJECT_ID('dbo.Card', 'U') IS NOT NULL
@@ -30,7 +30,7 @@ GO
 IF OBJECT_ID('dbo.Staff', 'U') IS NOT NULL
     DROP TABLE dbo.Staff;
 GO
-*/
+
 
 CREATE TABLE [User] (
     user_id INT PRIMARY KEY IDENTITY(1,1),
@@ -52,7 +52,7 @@ CREATE TABLE Account (
 CREATE TABLE AccTransaction (
     transaction_id INT PRIMARY KEY IDENTITY(1,1),
     account_id INT,
-    transaction_type VARCHAR(50) CHECK (transaction_type IN ('deposit', 'withdrawal')) NOT NULL,
+    transaction_type VARCHAR(50) CHECK (transaction_type IN ('deposit', 'withdrawal', 'transfer', 'payment', 'refund')) NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     transaction_datetime DATETIME DEFAULT GETDATE(),
     name VARCHAR(100),

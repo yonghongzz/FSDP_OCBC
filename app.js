@@ -11,6 +11,7 @@ const authenticate = require("./middlewares/authenticate");
 const validateUser = require("./middlewares/validateUser");
 const validateStaff = require("./middlewares/validateStaff");
 const validateAccTransaction = require("./middlewares/validateAccTransaction");
+const seedDatabase = require("./seed");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -58,7 +59,7 @@ app.listen(port, async () => {
       await sql.connect(dbConfig);
   
       // Seed DB with initial data
-      // seedDatabase();
+      seedDatabase();
   
       console.log("Database connection established successfully");
     } catch (err) {
