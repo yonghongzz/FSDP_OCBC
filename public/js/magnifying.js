@@ -11,7 +11,26 @@ items.push(accountNumber);
 let magnifying = false;
 let speaking = false;
 
-// document.querySelectorAll('img').forEach(image => { image.crossOrigin = 'Anonymous'; image.src += ' '; });
+const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+
+recognition.onstart=()=>{
+  console.log("Listening..");
+}
+
+recognition.onresult=(event)=>{
+  const speech = event.results[0][0].transcript.toLowerCase();
+  console.log(speech);
+  if(speech.includes("back")){
+    window.history.back();
+  }
+}
+
+recognition.onend=()=>{
+  console.log("End");
+  recognition.start();
+}
+
+recognition.start();
 
 document.documentElement.style.setProperty("--scale", SCALE);
 document.documentElement.style.setProperty("--size", SIZE + "px");
