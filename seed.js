@@ -9,29 +9,29 @@ async function seedDatabase() {
         // Drop existing tables (optional if you want to recreate them entirely)
         await sql.query(`
             if exists (SELECT * FROM sysobjects 
-            WHERE id = object_id('dbo.AccTransaction') and sysstat & 0xf = 3)
-            DROP TABLE dbo.AccTransaction;
+            WHERE id = object_id('dbo.AccTransactions') and sysstat & 0xf = 3)
+            DROP TABLE dbo.AccTransactions;
 
             if exists (SELECT * FROM sysobjects 
-            WHERE id = object_id('dbo.Card') and sysstat & 0xf = 3)
-            DROP TABLE dbo.Card;
+            WHERE id = object_id('dbo.Cards') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Cards;
 
             if exists (SELECT * FROM sysobjects 
-            WHERE id = object_id('dbo.Account') and sysstat & 0xf = 3)
-            DROP TABLE dbo.Account;
+            WHERE id = object_id('dbo.Accounts') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Accounts;
 
             if exists (SELECT * FROM sysobjects 
-            WHERE id = object_id('dbo.Staff') and sysstat & 0xf = 3)
-            DROP TABLE dbo.Staff;
+            WHERE id = object_id('dbo.Staffs') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Staffs;
 
             if exists (SELECT * FROM sysobjects 
-            WHERE id = object_id('dbo.[User]') and sysstat & 0xf = 3)
-            DROP TABLE dbo.[User];
+            WHERE id = object_id('dbo.Users') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Users;
         `);
 
         // Create tables
         await sql.query(`
-            CREATE TABLE [User] (
+            CREATE TABLE Users (
                 user_id INT PRIMARY KEY IDENTITY(1,1),
                 username VARCHAR(50) NOT NULL UNIQUE,
                 password_hash VARCHAR(255) NOT NULL,
@@ -39,36 +39,36 @@ async function seedDatabase() {
                 phone_number VARCHAR(20)
             );
 
-            CREATE TABLE Account (
+            CREATE TABLE Accounts (
                 account_id INT PRIMARY KEY IDENTITY(1,1),
                 user_id INT,
                 account_type VARCHAR(50) NOT NULL,
                 balance DECIMAL(10, 2) DEFAULT 0.00,
                 transaction_limit DECIMAL(10, 2) DEFAULT 1000.00,
-                FOREIGN KEY (user_id) REFERENCES [User](user_id)
+                FOREIGN KEY (user_id) REFERENCES Users(user_id)
             );
 
-            CREATE TABLE AccTransaction (
+            CREATE TABLE AccTransactions (
                 transaction_id INT PRIMARY KEY IDENTITY(1,1),
                 account_id INT,
                 transaction_type VARCHAR(50) CHECK (transaction_type IN ('deposit', 'withdrawal', 'transfer', 'payment', 'refund')) NOT NULL,
                 amount DECIMAL(10, 2) NOT NULL,
                 transaction_datetime DATETIME DEFAULT GETDATE(),
                 name VARCHAR(100),
-                FOREIGN KEY (account_id) REFERENCES Account(account_id)
+                FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
             );
 
-            CREATE TABLE Card (
+            CREATE TABLE Cards (
                 card_id INT PRIMARY KEY IDENTITY(1,1),
                 account_id INT,
                 card_number VARCHAR(16) NOT NULL,
                 expiration_date DATE NOT NULL,
                 cvv VARCHAR(4) NOT NULL,
                 card_type VARCHAR(50) NOT NULL,
-                FOREIGN KEY (account_id) REFERENCES Account(account_id)
+                FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
             );
 
-            CREATE TABLE Staff (
+            CREATE TABLE Staffs (
                 staff_id INT PRIMARY KEY IDENTITY(1,1),
                 username VARCHAR(50) NOT NULL UNIQUE,
                 password_hash VARCHAR(255) NOT NULL
@@ -91,7 +91,7 @@ async function seedDatabase() {
 
         // Insert data into User table
         await sql.query(`
-            INSERT INTO [User](username, password_hash, email, phone_number)
+            INSERT INTO Users(username, password_hash, email, phone_number)
             VALUES ('Anna', '${hashedPassword1}', 'anna@gmail.com', '12345678'),  
                    ('Brian','${hashedPassword2}', 'brian@gmail.com', '23456789'),
                    ('Charlie', '${hashedPassword3}', 'charlie@gmail.com', '34567890');
@@ -99,7 +99,7 @@ async function seedDatabase() {
 
         // Insert data into Account table
         await sql.query(`
-            INSERT INTO Account(user_id, account_type, balance, transaction_limit)
+            INSERT INTO Accounts(user_id, account_type, balance, transaction_limit)
             VALUES (1, 'Savings Account', 500.00, 1000.00),  
                    (1, 'Current Account', 1000.00, 1000.00),
                    (2, 'Savings Account', 2000.00, 1000.00),
@@ -108,7 +108,7 @@ async function seedDatabase() {
 
         // Insert data into Card table
         await sql.query(`
-            INSERT INTO Card(account_id, card_number, expiration_date, cvv, card_type)
+            INSERT INTO Cards(account_id, card_number, expiration_date, cvv, card_type)
             VALUES (1, '1234567812345678', '2026-12-31', '123', 'Visa'),  
                    (2, '2345678923456789', '2025-05-15', '456', 'MasterCard'),
                    (3, '3456789034567890', '2027-08-20', '789', 'Visa'),
@@ -117,7 +117,7 @@ async function seedDatabase() {
 
         // Insert data into AccTransaction table
         await sql.query(`
-            INSERT INTO AccTransaction(account_id, transaction_type, amount, transaction_datetime, name)
+            INSERT INTO AccTransactions(account_id, transaction_type, amount, transaction_datetime, name)
             VALUES (1, 'deposit', 100.00, '2024-05-25 17:43:00', 'ATM'),  
                    (1, 'transfer', 200.00, '2024-05-26 13:12:19', 'Sarah Ng'),
                    (2, 'withdrawal', 50.00, '2024-05-26 16:32:43', 'ATM'),
@@ -130,7 +130,7 @@ async function seedDatabase() {
 
         // Insert data into Staff table
         await sql.query(`
-            INSERT INTO Staff(username, password_hash)
+            INSERT INTO Staffs(username, password_hash)
             VALUES ('John', '${hashedPassword4}'),  
                    ('Jane','${hashedPassword5}'),
                    ('Jim', '${hashedPassword6}');

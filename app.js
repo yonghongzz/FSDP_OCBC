@@ -11,11 +11,7 @@ const authenticate = require("./middlewares/authenticate");
 const validateUser = require("./middlewares/validateUser");
 const validateStaff = require("./middlewares/validateStaff");
 const validateAccTransaction = require("./middlewares/validateAccTransaction");
-<<<<<<< HEAD
 const seedDatabase = require("./seed");
-=======
-const validateAccTransaction = require("./middlewares/validateAccTransaction")
->>>>>>> 0a3af74ba07650c10c5674fcd0f274ea2759b8bc
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -74,5 +70,14 @@ app.listen(port, async () => {
     }
   
     console.log(`Server listening on port ${port}`);
+});
+
+// Gracefully handle shutdown by closing DB connection pool on SIGINT signal
+process.on("SIGINT", async () => {
+  console.log("Server is gracefully shutting down");
+  // Perform cleanup tasks (e.g., close database connections)
+  await sql.close();
+  console.log("Database connection closed");
+  process.exit(0); // Exit with code 0 indicating successful shutdown
 });
   

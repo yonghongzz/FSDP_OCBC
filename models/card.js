@@ -15,7 +15,7 @@ class Card {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Card`;
+        const sqlQuery = `SELECT * FROM Cards`;
 
         const request = connection.request();
         const result = await request.query(sqlQuery);
@@ -31,7 +31,7 @@ class Card {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Card WHERE card_id = @id`;
+        const sqlQuery = `SELECT * FROM Cards WHERE card_id = @id`;
 
         const request = connection.request(); 
         request.input("id", id);

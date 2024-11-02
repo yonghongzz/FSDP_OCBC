@@ -12,7 +12,7 @@ class Staff {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Staff`;
+        const sqlQuery = `SELECT * FROM Staffs`;
 
         const request = connection.request();
         const result = await request.query(sqlQuery);
@@ -28,7 +28,7 @@ class Staff {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Staff WHERE staff_id = @id`;
+        const sqlQuery = `SELECT * FROM Staffs WHERE staff_id = @id`;
 
         const request = connection.request();
         request.input("id", id); // Add parameter for staff ID
@@ -134,7 +134,7 @@ class Staff {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Staff WHERE username = @username`;
+        const sqlQuery = `SELECT * FROM Staffs WHERE username = @username`;
 
         const request = connection.request();
         request.input("username", loginStaffData.username);
