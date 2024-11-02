@@ -16,7 +16,7 @@
         <!--bankapp header-->
         <div class="bankapp-header">
             <div class="header-content card-header d-flex justify-content-between align-items-center">
-                <button class="btn btn-link button-back" type="button">
+                <button class="btn btn-link button-back" id="back" type="button">
                     <i class="bi bi-caret-left-fill"></i>
                 </button>
                 <button class="btn btn-link button-magnify" type="button">
@@ -37,13 +37,13 @@
 
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle dropdown-limitselect" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  select transaction limit (sgd)
+                  Select transaction limit (SGD)
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">1000</a></li>
-                  <li><a class="dropdown-item" href="#">3000</a></li>
-                  <li><a class="dropdown-item" href="#">5000</a></li>
-                  <li><a class="dropdown-item" href="#">10000</a></li>
+                  <li><a class="dropdown-item limit-1" href="#">1000.00</a></li>
+                  <li><a class="dropdown-item limit-2" href="#">3000.00</a></li>
+                  <li><a class="dropdown-item limit-3" href="#">5000.00</a></li>
+                  <li><a class="dropdown-item limit-4" href="#">10000.00</a></li>
                 </ul>
             </div>
 
@@ -54,6 +54,7 @@
     <!-- Bootstrap Bundle (includes Popper) -->
     <script src="js/bootstrap/bootstrap.min.js"></script>
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <script src="js/change-transaction-limit.js"></script>
 </body>
 
 </html>
