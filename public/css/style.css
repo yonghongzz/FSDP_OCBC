@@ -425,6 +425,11 @@ a {
     font-weight: bold;
 }
 
+.tr-info {
+    font-size: large;
+    font-weight: 600;
+}
+
 .button-back {
     font-size: x-large;
     margin-left: -0.8rem;
