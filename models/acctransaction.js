@@ -11,7 +11,7 @@ class AccTransaction {
         this.name = name;
     }
 
-    static async getAllAccTransations() {
+    static async getAllAccTransactions() {
 
         const connection = await sql.connect(dbConfig);
 

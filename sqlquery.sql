@@ -45,6 +45,7 @@ CREATE TABLE Accounts (
     account_id INT PRIMARY KEY IDENTITY(1,1),
     user_id INT,
     account_type VARCHAR(50) NOT NULL,
+    account_number VARCHAR(20) NOT NULL UNIQUE,
     balance DECIMAL(10, 2) DEFAULT 0.00,
     transaction_limit DECIMAL(10, 2) DEFAULT 1000.00,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)

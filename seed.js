@@ -43,6 +43,7 @@ async function seedDatabase() {
                 account_id INT PRIMARY KEY IDENTITY(1,1),
                 user_id INT,
                 account_type VARCHAR(50) NOT NULL,
+                account_number VARCHAR(20) NOT NULL UNIQUE,
                 balance DECIMAL(10, 2) DEFAULT 0.00,
                 transaction_limit DECIMAL(10, 2) DEFAULT 1000.00,
                 FOREIGN KEY (user_id) REFERENCES Users(user_id)
@@ -99,11 +100,11 @@ async function seedDatabase() {
 
         // Insert data into Account table
         await sql.query(`
-            INSERT INTO Accounts(user_id, account_type, balance, transaction_limit)
-            VALUES (1, 'Savings Account', 500.00, 1000.00),  
-                   (1, 'Current Account', 1000.00, 1000.00),
-                   (2, 'Savings Account', 2000.00, 1000.00),
-                   (3, 'Savings Account', 3000.00, 1000.00);
+            INSERT INTO Accounts(user_id, account_type, account_number, balance, transaction_limit)
+            VALUES (1, 'Savings Account', '1111111111111111', 500.00, 1000.00),  
+                   (1, 'Current Account', '2222222222222222', 1000.00, 1000.00),
+                   (2, 'Savings Account', '3333333333333333', 2000.00, 1000.00),
+                   (3, 'Savings Account', '4444444444444444', 3000.00, 1000.00);
         `);
 
         // Insert data into Card table

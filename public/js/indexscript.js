@@ -3,66 +3,21 @@ const token = sessionStorage.getItem('token');
 const loginUserId = sessionStorage.getItem('loginUserId');
 const rToken = getCookie('rToken'); // refresh token
 
-document.getElementById('back').addEventListener('click', function() {
-    window.location.href = 'index.html';
-});
+function displayAccount(account, card) {
 
-// only getting the first account
-// implement dynamic search in the future (using getUrlParams)
-document.addEventListener('DOMContentLoaded', async () => {
-    const accounts = await fetchUserAccounts(loginUserId); // Fetch user accounts
-    const currentAccount = accounts[0];
-    const accId = currentAccount.account_id;
-    console.log(accId)
+    const accountType = document.querySelector('.account-type');
+    const accountNumber = document.querySelector('.account-number');
+    const balanceAmount = document.querySelector('.balance-amount');
+    const debitCardnum = document.querySelector('.debit-cardnum');
+    const transactionAmount = document.querySelector('.tc-amt');
 
-    // Function to handle transaction limit confirmation
-    document.querySelector('.confirm-limit').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default anchor click behavior
-
-        // Get the selected limit from the dropdown
-        const selectedLimit = document.querySelector('.dropdown-menu .dropdown-item.active');
-        if (selectedLimit) {
-            const limitValue = selectedLimit.textContent;
-
-            //console.log(currentAccount.accId)
-            console.log(limitValue)
-
-            // Update the transaction amount (you can implement the actual logic here)
-            updateTransactionLimit(accId, limitValue);
-
-            // Show a confirmation message (optional)
-            alert(`Transaction limit updated to ${limitValue} SGD.`);
-            
-            // Redirect to index.html after a short delay
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000); // Adjust the delay time as needed
-        } else {
-            alert('Please select a transaction limit before confirming.');
-        }
-    });
-
-    // Adding event listeners to dropdown items
-    const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', function() {
-            // Remove 'active' class from all items
-            dropdownItems.forEach(i => i.classList.remove('active'));
-            
-            // Add 'active' class to the selected item
-            this.classList.add('active');
-
-            // Update the dropdown button text to reflect the selected limit
-            const dropdownButton = document.querySelector('.dropdown-toggle');
-            dropdownButton.textContent = `${this.textContent} SGD`;
-        });
-    });
-});
-
-// get the latest transaction amt
-// update the account transaction amt when press confirm
-// bring them back to index.html
-
+    // Set the text content
+    accountType.textContent = `${account.account_type}`;
+    accountNumber.textContent = `${account.account_number}`;
+    balanceAmount.textContent = `${account.balance.toFixed(2)} SGD`;
+    debitCardnum.textContent = `${card.card_number}`;
+    transactionAmount.textContent = `${account.transaction_limit.toFixed(2)} SGD`;
+}
 
 async function fetchUserAccounts(user_id) {
     try {
@@ -71,6 +26,18 @@ async function fetchUserAccounts(user_id) {
             throw new Error('Network response was not ok');
         }
         const accounts = await response.json();
+        console.log(accounts)
+        console.log(user_id);
+
+        /*
+        const userAccounts = [];
+        for (const account of accounts) {
+            const userId = account.user_id;
+            if (userId == loginUserId) {
+                userAccounts.push(account);
+            }
+        }
+        */
 
         // Filter accounts that match the loginUserId
         const userAccounts = accounts.filter(account => account.user_id == loginUserId);
@@ -82,35 +49,35 @@ async function fetchUserAccounts(user_id) {
     }
 }
 
-async function updateTransactionLimit(accId, limit) {
-    accId = parseInt(accId);
-
-    const newTransactionLimit = {
-        transaction_limit: parseFloat(limit)
-    };
-
+async function fetchCards(account_id) {
     try {
-        const response = await fetch(`/accounts/${accId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(newTransactionLimit)
-        });
-
+        const response = await fetch(`/cards?accountId=${account_id}`);
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Failed to update limit: ${errorText}`); // Log the response error
+            throw new Error('Network response was not ok');
         }
-
-        const updatedAccount = await response.json(); // Get updated account
-        console.log('Updated account:', updatedAccount); // Log updated account
+        const cards = await response.json();
+        return cards;
     } catch (error) {
-        console.error('Error updating transaction limit:', error);
+        console.error('Error fetching cards:', error);
     }
 }
 
+async function fetchUsername(user_id) {
+    try {
+        const response = await fetch(`/users/${user_id}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const user = await response.json();
+        const username = user.username;
+
+        const welcomeBackDiv = document.querySelector('.welcome-back');
+        const paragraph = welcomeBackDiv.querySelector('p');
+        paragraph.textContent = `Welcome back, ${username}!`;
+    } catch (error) {
+        console.error('Error fetching username:', error);
+    }
+}
 
 function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
@@ -192,3 +159,34 @@ async function refreshToken(rToken) {
         location.reload();
     }
 }
+
+document.getElementById('person').addEventListener('click', function() {
+    window.location.href = 'login.html';
+});
+
+// currently only looks at the first account and card it encounters
+document.addEventListener('DOMContentLoaded', async () => {
+    fetchUsername(loginUserId); // Fetch username
+
+    const accounts = await fetchUserAccounts(loginUserId); // Fetch user accounts
+    if (accounts && accounts.length > 0) {
+        // Store the accounts in session storage for later use
+        sessionStorage.setItem('userAccounts', JSON.stringify(accounts));
+        console.log("useracc:", sessionStorage)
+
+        const accId = accounts[0].acc_id;
+        const cards = await fetchCards(accId);
+
+        if (cards && cards.length > 0) {
+            // Store the cards in session storage for later use
+            sessionStorage.setItem('userCards', JSON.stringify(cards));
+            console.log("usercards:", sessionStorage);
+
+        } else {
+            console.log("No cards found for this account.");
+        }
+
+        // Display the first account by default
+        displayAccount(accounts[0], cards[0]); // Create a function to display account details
+    }
+});

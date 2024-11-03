@@ -24,7 +24,37 @@ const getAccountById = async (req, res) => {
     }
 };
 
+const updateTransactionLimit = async (req, res) => {
+  const id = parseInt(req.params.id);
+  const newLimitData = req.body;
+
+  try {
+    //console.log('Request account:', req.account);
+
+    const account = await Account.getAccountById(id);
+    if (!account) {
+        return res.status(404).send("Account not found");
+    }
+
+    /*
+    if (account.user_id != req.account.user_id) {
+      return res.status(403).json({ message: "You are not authorized to update this account" });
+    }
+    */
+
+    const updatedAccount = await Account.updateTransactionLimit(id, newLimitData);
+    if (!updatedAccount) {
+      return res.status(404).send("Account not found");
+    }
+    res.json(updatedAccount);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating account");
+  }
+};
+
 module.exports = {
     getAllAccounts,
-    getAccountById
+    getAccountById,
+    updateTransactionLimit
 };

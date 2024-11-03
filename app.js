@@ -25,6 +25,7 @@ app.use(staticMiddleware);
 // account
 app.get("/accounts", accountController.getAllAccounts);
 app.get("/accounts/:id", accountController.getAccountById);
+app.put("/accounts/:id", accountController.updateTransactionLimit);
 
 // acctransaction
 app.get("/transactions", acctransactionController.getAllAccTransactions);
