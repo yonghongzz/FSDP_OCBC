@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const accountController = require("./controllers/accountController");
 const acctransactionController = require("./controllers/acctransactionController");
 const cardController = require("./controllers/cardController");
@@ -16,11 +17,13 @@ const seedDatabase = require("./seed");
 const app = express();
 const port = process.env.PORT || 3000;
 
-const staticMiddleware = express.static("public");
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(staticMiddleware);
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "login.html"));
+});
 
 // account
 app.get("/accounts", accountController.getAllAccounts);
@@ -81,4 +84,3 @@ process.on("SIGINT", async () => {
   console.log("Database connection closed");
   process.exit(0); // Exit with code 0 indicating successful shutdown
 });
-  
