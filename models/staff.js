@@ -1,5 +1,7 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 class Staff {
     constructor(staff_id, username, password_hash) {
