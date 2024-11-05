@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    <link href="../public/css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="../public/css/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="../public/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+      <!-- nav bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                OurFoodSG
+              </a>  
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="discussionforum.html">Discussion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="quizquestion.html">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" id="login-profile-link" href="loginreg.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="go-credit" href="credit.html">Credit&ensp;</a>
+                    </li>
+            </div>
+        </div>
+    </nav>
+    <div class="pad-nav vertical">
+        <!-- nav pills -->
+        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+              <!-- login toggle -->
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#pills-login"
+                    type="button" role="tab" aria-controls="pills-login" aria-selected="true">Login</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+            <!-- login -->
+            <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab"
+                tabindex="0">
+                <form id="login" novalidate>
+                    <div class="inputs">
+                        <div class="form-group">
+                            <label for="loginUsername" class="form-label">E-mail Address</label>
+                            <input type="email" id="loginUsername" class="form-control"
+                                placeholder="Enter username...">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" id="loginPassword" class="form-control"
+                                placeholder="Enter password...">
+                        </div>
+                    </div>
+                    <button id="login-button" type="submit" class="btn btn-danger">Login</button>
+                    <div id="loginError"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="../public/js/bootstrap/bootstrap.js"></script>
+    <script src="js/login-staff-script.js"></script>
+</body>
+
+</html>
