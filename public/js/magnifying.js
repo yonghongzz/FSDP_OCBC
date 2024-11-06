@@ -9,9 +9,28 @@ let items = [];
 const accountNumber = document.querySelector('.account-number').textContent;
 items.push(accountNumber);
 let magnifying = false;
-let speaking = false;
+let canSpeak = false;
+let isSpeaking = false;
+const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
 
-// document.querySelectorAll('img').forEach(image => { image.crossOrigin = 'Anonymous'; image.src += ' '; });
+recognition.onstart=()=>{
+  console.log("Listening..");
+}
+
+recognition.onresult=(event)=>{
+  const speech = event.results[0][0].transcript.toLowerCase();
+  console.log(speech);
+  if(speech.includes("back")){
+    window.history.back();
+  }
+}
+
+recognition.onend=()=>{
+  console.log("End");
+  recognition.start();
+}
+
+recognition.start();
 
 document.documentElement.style.setProperty("--scale", SCALE);
 document.documentElement.style.setProperty("--size", SIZE + "px");
@@ -51,7 +70,7 @@ magnifyButton.addEventListener("click", ()=>{
 });
 
 voiceButton.addEventListener("click",()=>{
-  speaking = !speaking;
+  canSpeak = !canSpeak;
 })
 
 const moveMagnifyingGlass = (event) => {
@@ -97,13 +116,14 @@ const removeMagnifyingGlass = () => {
 
 
 document.addEventListener('click', (event) => {
-  if(speaking){
+  if(canSpeak){
     // Identify the clicked element
     const clickedElement = document.elementFromPoint(event.clientX, event.clientY);
     const parentElement = clickedElement.parentElement.parentElement;
     let textContent = '';
       // Check if the element contains any text content
-    if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('blockquote')){
+    console.log(clickedElement.classList[0]);
+    if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('card-body')){
       textContent = clickedElement.innerText.trim();
     }
     // else{
@@ -117,9 +137,14 @@ document.addEventListener('click', (event) => {
 
       // For debugging or use
       console.log("Captured Text:", textContent);
+      
 
       // You could also pass this text to any function, e.g., performOCR(textContent);
-      performOCR(textContent); // or any function handling the text
+      if(!isSpeaking){
+        isSpeaking = true;
+        performOCR(textContent); // or any function handling the text
+      }
+      
   }
 });
 
@@ -148,6 +173,9 @@ const performOCR = (textContent) => {
 
   // Speak the text
   speechSynthesis.speak(utterance);
+  setTimeout(function() {
+    isSpeaking = false;
+  }, 1000);
 };
 document.addEventListener('pointerdown', (event) => {
   if (magnifying) {
