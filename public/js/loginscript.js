@@ -1,36 +1,29 @@
-// Wait for the DOM to be fully loaded before executing the script
 document.addEventListener('DOMContentLoaded', function () {
-    // Retrieve authentication token and user ID from session storage
     const token = sessionStorage.getItem('token');
     const loginUserId = sessionStorage.getItem('loginUserId');
     const rToken = getCookie('rToken');
 
-    // Check token validity and handle accordingly
     if (token && !isTokenExpired(token)) {
-        // If token is valid, redirect to profile page
         window.location.href = `index.html`;
         console.log("Logged in");
     } else if (rToken) {
-        // If refresh token exists, attempt to refresh the token
         refreshToken(rToken);
     } else if (token && isTokenExpired(token)){
-        // If token is expired, clear session and cookies
         sessionStorage.clear();
         deleteCookie('rToken');
         location.reload();
     }
 
-    // Add event listener for login form submission
     document.getElementById('login').addEventListener('submit', async function (e) {
         e.preventDefault();
-        // Gather login data from form
+        const userType = document.getElementById('userType').value;
         const loginData = {
             username: document.getElementById('loginUsername').value,
             password_hash: document.getElementById('loginPassword').value
         };
         try {
-            // Send POST request to login endpoint
-            const response = await fetch('/users/login', {
+            const endpoint = userType === 'staff' ? '/staffs/login' : '/users/login';
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -44,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const result = await response.json();
             alert('Login successful');
 
-            // Parse token and store relevant information in session storage
             const token = result.token;
             const decodedToken = parseJwt(token);
             const loginUserId = decodedToken.user_id;
@@ -55,18 +47,16 @@ document.addEventListener('DOMContentLoaded', function () {
             sessionStorage.setItem('loginUserId', loginUserId);
             setCookie('rToken', refreshToken, 7);
 
-            // Redirect to home page
-            window.location.href = 'index.html';
+            const redirectUrl = userType === 'staff' ? 'staff-video-calls.html' : 'index.html';
+            window.location.href = redirectUrl;
         } catch (err) {
-            // Display error message
             const errorField = document.getElementById('loginError');
-            errorField.textContent = ''; // Clear previous error messages
+            errorField.textContent = '';
             errorField.textContent = 'Login failed: Invalid e-mail or password';
         }
     });
 });
 
-// Function to parse JWT token
 function parseJwt(token) {
     try {
         const base64Url = token.split('.')[1];
@@ -82,14 +72,12 @@ function parseJwt(token) {
     }
 }
 
-// Function to check if token is expired
 function isTokenExpired(token) {
-    const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
-    const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
-    return Date.now() > expiry; // Check if the current time is past the expiry time
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const expiry = payload.exp * 1000;
+    return Date.now() > expiry;
 }
 
-// Function to set a cookie
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -97,7 +85,6 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-// Function to get a cookie by name
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -114,15 +101,12 @@ function getCookie(cname) {
     return "";
 }
 
-// Function to delete a cookie
 function deleteCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
-// Function to refresh the authentication token
 async function refreshToken(rToken) {
     try {
-        // Send POST request to refresh token
         const response = await fetch('/token', {
             method: 'POST',
             headers: {
@@ -136,7 +120,6 @@ async function refreshToken(rToken) {
 
         const result = await response.json();
 
-        // Parse new token and update session storage
         const token = result.token;
         const decodedToken = parseJwt(token);
         const loginUserId = decodedToken.user_id;
@@ -144,12 +127,10 @@ async function refreshToken(rToken) {
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('loginUserId', loginUserId);
         
-        // Reload the page
         location.reload();
     } catch {
         console.log("error");
         alert('Login timed out.');
-        // Clear session and cookies, then reload the page
         sessionStorage.clear();
         deleteCookie('rToken');   
         location.reload();

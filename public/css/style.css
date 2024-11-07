@@ -1,4 +1,3 @@
-
 html,body{
     overflow: hidden;
     touch-action: none;
@@ -524,6 +523,34 @@ a {
     overflow: hidden;
   }
 
+.dropdown-menu {
+    min-width: 120px;
+    padding: 0.5rem 0;
+    margin: 0;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 0.25rem;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    color: #1e2125;
+    background-color: #f8f9fa;
+}
 .guide-selectone {
     font-size: medium;
     color: grey;

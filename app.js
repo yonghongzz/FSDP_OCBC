@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const accountController = require("./controllers/accountController");
 const acctransactionController = require("./controllers/acctransactionController");
 const cardController = require("./controllers/cardController");
@@ -12,15 +13,26 @@ const validateUser = require("./middlewares/validateUser");
 const validateStaff = require("./middlewares/validateStaff");
 const validateAccTransaction = require("./middlewares/validateAccTransaction");
 const seedDatabase = require("./seed");
+const http = require('http');
+const { Server } = require('socket.io');
+const { RTCPeerConnection, RTCSessionDescription } = require('wrtc');
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-const staticMiddleware = express.static("public");
+const server = http.createServer(app);
+const io = new Server(server);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(staticMiddleware);
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "login.html"));
+});
+
+app.get('/', (req, res) => {
+    res.send('Node-WebRTC Server is running');
+});
 
 // account
 app.get("/accounts", accountController.getAllAccounts);
@@ -54,8 +66,43 @@ app.post("/staffs/check", authenticate.verifyJWT, staffController.checkPassword)
 app.post("/token", staffController.refreshAccessToken);
 app.delete("/logout", staffController.logout);
 
+let peers = {};
 
-app.listen(port, async () => {
+//extension
+io.on('connection', socket => {
+    console.log('A user connected:', socket.id);
+
+    const peer = new RTCPeerConnection();
+    peers[socket.id] = peer;
+
+    peer.onicecandidate = event => {
+      if (event.candidate) {
+        socket.emit('candidate', socket.id, event.candidate);
+      }
+    };
+
+    socket.on('offer', async (id, description) => {
+      await peer.setRemoteDescription(new RTCSessionDescription(description));
+      const answer = await peer.createAnswer();
+      await peer.setLocalDescription(answer);
+      socket.emit('answer', id, peer.localDescription);
+    });
+
+    socket.on('answer', async (id, description) => {
+      await peer.setRemoteDescription(new RTCSessionDescription(description));
+    });
+
+    socket.on('candidate', async (id, candidate) => {
+      await peer.addIceCandidate(new RTCIceCandidate(candidate));
+    });
+
+    socket.on('disconnect', () => {
+      delete peers[socket.id];
+      console.log('A user disconnected:', socket.id);
+    });
+});
+
+server.listen(port, async () => {
     try {
       // Connect to DB using mssql
       await sql.connect(dbConfig);
@@ -81,4 +128,3 @@ process.on("SIGINT", async () => {
   console.log("Database connection closed");
   process.exit(0); // Exit with code 0 indicating successful shutdown
 });
-  

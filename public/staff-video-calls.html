@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Video Calls</title>
+    <link rel="stylesheet" href="css/staff-calls.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="staff-container">
+        <div class="calls-section">
+            <h2><i class="fas fa-phone-alt"></i> Incoming Calls</h2>
+            <div id="calls-list"></div>
+        </div>
+        
+        <div id="current-call" style="display:none">
+            <div class="video-area">
+                <video id="remote-video" autoplay playsinline></video>
+                <div class="local-video-container">
+                    <video id="local-video" autoplay muted playsinline></video>
+                    <div class="camera-off-indicator hidden">
+                        <i class="fas fa-video-slash"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-bar">
+                <button class="control-button" id="camera-toggle">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button class="control-button end" onclick="endCurrentCall()">
+                    <i class="fas fa-phone-slash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/staff-video-calls.js"></script>
+</body>
+</html> 
