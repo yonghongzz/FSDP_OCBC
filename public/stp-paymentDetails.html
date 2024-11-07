@@ -12,7 +12,14 @@
         <h1>Confirm Payment</h1>
     </header>
     <main>
-        <div class="payment-details">
+        <div class="card steps" id="step1">
+            <div class="steps-body">
+                <p>4. You can check your payment details here.</p>
+                <p>Drag the red circle below to the right to <strong>confirm payment</strong>.</p>
+                <button class="okay-button" style="margin-top: 2px;" onclick="showNextStep('step1', 'step2')">Okay</button>
+            </div>
+        </div>
+        <div class="payment-details" style="margin-top: -10px;">
             <h2>Payment Details</h2>
             <div class="detail-item">
                 <span class="label">Paying to:</span>
@@ -57,4 +64,5 @@
     </main>
 </body>
 <script src="js/paymentDetails.js"></script>
+<script src="js/stp-scanQRscript.js"></script>
 </html>
