@@ -534,3 +534,24 @@ a {
     transform: scale(var(--scale));
     overflow: hidden;
   }
+
+.guide-selectone {
+    font-size: medium;
+    color: grey;
+    font-weight: 500;
+    margin-top: -13px;
+}
+
+.guide-choices {
+    margin-right: 3px;
+}
+
+.guide-btns {
+    display: block;          /* Make each button a block-level element */
+    margin-bottom: 20px;     /* Space between buttons */
+    width: 100%;             /* Make the button take up the full width of its parent */
+}
+
+.guide-btns .card {
+    width: 100%;             /* Ensure the card itself also takes up the full width */
+}
