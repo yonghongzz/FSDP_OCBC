@@ -30,9 +30,12 @@
                 <button class="btn btn-link button-volume" id="voice" type="button">
                     <i class="bi bi-volume-up-fill"></i>
                 </button>
-                <button class="btn btn-link button-person" id="person" type="button">
+                <button class="btn btn-link button-person" id="person" type="button" data-bs-toggle="dropdown">
                     <i class="bi bi-person-fill"></i>
                 </button>
+                <div class="dropdown-menu" id="profileMenu">
+                    <button class="dropdown-item" id="logoutBtn">Logout</button>
+                </div>
             </div>
         </div>
 
@@ -153,7 +156,7 @@
             </div>
 
             <div class="needhelp">
-                <a href="#">
+                <a href="video-call.html">
                     <div class="needhelp-icon">
                         <i class="bi bi-question-circle-fill"></i>
                     </div>
@@ -171,6 +174,7 @@
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
     <script src="js/indexscript.js"></script>
     <script src="./js/magnifying.js"></script>
+    <script src="js/profile.js"></script>
 
 </body>
 
