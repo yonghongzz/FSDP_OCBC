@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded',(e)=>{
+document.addEventListener('DOMContentLoaded',async (e)=>{
   //defaults - not recommended to change
 e.preventDefault();
 const SCALE = 1.3; //magnification
@@ -14,33 +14,106 @@ if (accountNumberElement) {
 let magnifying = false;
 let canSpeak = false;
 let isSpeaking = false;
+
+
+const accessToken = 'IPXX73SWZKQ5S6QNJVYQIRKY6WXWW2LR';
+
+async function sendToWitAi(utterance) {
+    const url = `https://api.wit.ai/message?v=20240901&q=${encodeURIComponent(utterance)}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Accept': 'application/json'
+            }
+        });
+        const data = await response.json();
+        console.log(data);  // Process data here
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
+if(window.location.pathname.endsWith("paynow.html")){
+  if(localStorage.getItem("number")){
+    console.log(localStorage.getItem("number"));
+    document.getElementById("mobile").value = localStorage.getItem("number");
+  }
+  if(localStorage.getItem("amount")){
+    document.getElementById("amount").value = localStorage.getItem("amount");
+  }
+}
+
+
 const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+recognition.lang = 'en-US';
 
 recognition.onstart=()=>{
   console.log("Listening..");
 }
 
-recognition.onresult=(event)=>{
+// let amount;
+// let receiver;
+// let text = "transfer two hundred";
+// let data = await sendToWitAi(text);
+// localStorage.clear();
+// if (data.entities['wit$number:amount']) {
+//     amount = data.entities['wit$number:amount'][0].value;
+//     console.log(amount);
+// }
+// else if (data.entities['wit$amount_of_money:amount_of_money']) {
+//   amount = data.entities['wit$amount_of_money:amount_of_money'][0].value;
+// }
+// if(data.entities['wit$phone_number:phone_number']){
+//   receiver = data.entities['wit$phone_number:phone_number'][0].value;
+// }
+// if(amount){
+//   localStorage.setItem("amount",amount);
+// }
+// if(receiver){
+//   localStorage.setItem("number",receiver);
+// }
+// console.log(amount);
+// window.location.href = "paynow.html";
+
+recognition.onresult=async(event)=>{
   const speech = event.results[0][0].transcript.toLowerCase();
   console.log(speech);
-  if(speech.includes("back")){
-    window.history.back();
+  let data;
+  data = await sendToWitAi(speech);
+
+  if(data.intents[0].name === 'CheckBalance'){
+    window.location.href = "account.html";
   }
-  if(speech.includes("change") && speech.includes("limit")){
-    window.location.href = "change-transaction-limit.html";
-  }
-  else if(speech.includes("scan")){
-    window.location.href = "scanQR.html";
-  }
-  else if(speech.includes("paynow")){
+  else if(data.intents[0].name == 'PayNow'){
+    let amount;
+    let receiver;
+    localStorage.clear();
+    if (data.entities['wit$number:amount']) {
+        amount = data.entities['wit$number:amount'][0].value;
+    }
+    else if (data.entities['wit$amount_of_money:amount_of_money']) {
+      amount = data.entities['wit$amount_of_money:amount_of_money'][0].value;
+    }
+    if(data.entities['wit$phone_number:phone_number']){
+      receiver = data.entities['wit$phone_number:phone_number'][0].value;
+    }
+    if(amount){
+      localStorage.setItem("amount",amount);
+    }
+    if(receiver){
+      localStorage.setItem("number",receiver);
+    }
     window.location.href = "paynow.html";
   }
-  else if(speech.includes("account")){
-    window.location.href = "account.html"
+  else if(data.intents[0].name == "Limit"){
+    window.location.href = "change-transcation-limit.html";
   }
-
-
-}
+};
 
 recognition.onend=()=>{
   console.log("End");
