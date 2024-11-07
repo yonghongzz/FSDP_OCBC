@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mainpage</title>
+    <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <!--entire thing-->
+    <div class="card bankapp">
+        <!--bankapp header-->
+        <div class="bankapp-header">
+            <div class="header-content card-header d-flex justify-content-between align-items-center">
+                <button class="btn btn-link button-magnify" id="magnify" type="button">
+                    <i class="bi bi-zoom-in"></i>
+                </button>
+                <div class="card normal-lite">
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                        Lite
+                    </div>
+                    <button class="btn btn-link lite-downarrow" type="button">
+                        <i class="bi bi-caret-down-fill"></i>
+                    </button>
+                </div>
+                <button class="btn btn-link button-volume" id="voice" type="button">
+                    <i class="bi bi-volume-up-fill"></i>
+                </button>
+                <button class="btn btn-link button-person" id="person" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-fill"></i>
+                </button>
+                <div class="dropdown-menu" id="profileMenu">
+                    <button class="dropdown-item" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!--bankapp content area-->
+        <div class="card-body bankapp-content">
+          <blockquote class="blockquote mb-0">
+            <div class="card steps" id="step1">
+                <div class="steps-body">
+                    <p>1. Press <strong>"Scan QR"</strong> to begin.</p>
+                    <button class="okay-button" style="margin-top: 2px;" onclick="showNextStep('step1', 'step2')">Okay</button>
+                </div>
+            </div>
+            <div class="welcome-back" style="margin-bottom: -6px; margin-top: -4px; font-weight: bold">
+                <p><!--something should be here--></p>
+            </div>
+
+            <div class="payment">
+                <a href="#" class="payment-button" style="margin-left: 10px;">
+                    <div class="payment-button-icon">
+                        <img src="https://thewhisky.sg/wp-content/uploads/2021/10/paynow-logo-2-01.png" alt="PayNow">
+                    </div>
+                    <div class="payment-button-text" style="margin-top: -2.2rem;">
+                        PayNow
+                    </div>
+                </a>
+                <a href="stp-scanQR.html" class="payment-button">
+                    <div class="payment-button-icon">
+                        <i class="bi bi-qr-code-scan"></i>
+                    </div>
+                    <div class="payment-button-text">
+                        Scan QR
+                    </div>
+                </a>
+                <a href="#" class="payment-button" style="margin-right: 10px;">
+                    <div class="payment-button-icon">
+                        <i class="bi bi-journals"></i>
+                    </div>
+                    <div class="payment-button-text">
+                        Pay Bills
+                    </div>
+                </a>
+            </div>
+
+            <div class="account">
+                <a href="account.html" class="account-details">
+                    <div class="pfp">
+                        <i class="bi bi-person-circle"></i>
+                    </div>
+                    <div class="account-details-text">
+                        <div class="account-type"><!--something here--></div>
+                        <div class="account-number"><!--something here too--></div>
+                    </div>
+                    <div class="account-expand">
+                        <i class="bi bi-caret-right-fill"></i>
+                    </div>
+                </a>
+                
+                <div class="account-balance">
+                    <div class="balance-text">
+                        A/C Balance
+                    </div>
+
+                    <div class="balance-amount">
+                        <!--something here-->
+                    </div>
+                </div>
+
+                <div class="account-debit">
+                    <div class="debit-text">
+                        Debit
+                    </div>
+
+                    <div class="debit-cardnum">
+                        <!--something here-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="transaction">
+                <div class="transaction-current">
+                    <div class="tc-text">
+                        Daily transaction limit
+                    </div>
+                    
+                    <div class="tc-amt">
+                        <!--something here-->
+                    </div>
+                </div>
+
+                <a href="change-transaction-limit.html" class="transaction-change">
+                    <div class="tchange-text">
+                        Change transaction limit
+                    </div>
+                    <div class="tchange-arrow">
+                        <i class="bi bi-caret-right-fill"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="bottom-nav">
+            <div class="walkthrough">
+                <a href="guide.html">
+                    <div class="walkthrough-icon">
+                        <i class="bi bi-person-walking"></i>
+                    </div>
+    
+                    <div class="walkthrough-text">
+                        guide
+                    </div>
+                </a>
+            </div>
+
+            <div class="payandtransfer">
+                <div class="pat-icon">
+                    <a href="#">
+                        <img src="img/pay-icon.png" >
+                    </a>
+                </div>
+
+                <div class="pat-text">
+                    pay and transfer
+                </div>
+            </div>
+
+            <div class="needhelp">
+                <a href="video-call.html">
+                    <div class="needhelp-icon">
+                        <i class="bi bi-question-circle-fill"></i>
+                    </div>
+    
+                    <div class="needhelp-text">
+                        help
+                    </div>
+                </a>
+                
+            </div>
+        </div>
+        
+    </div>
+    <!-- Bootstrap Bundle (includes Popper) -->
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <script src="js/indexscript.js"></script>
+    <script src="./js/magnifying.js"></script>
+    <script src="js/profile.js"></script>
+
+</body>
+
+</html>
