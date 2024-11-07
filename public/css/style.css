@@ -555,3 +555,7 @@ a {
 .guide-btns .card {
     width: 100%;             /* Ensure the card itself also takes up the full width */
 }
+
+.stp-s1 {
+    font-size: medium;
+}
