@@ -6,8 +6,11 @@ const SIZE = 100; // diameter
 const LENSE_OFFSET_X = SIZE / 10.2;
 const LENSE_OFFSET_Y = SIZE / 10.2;
 let items = [];
-const accountNumber = document.querySelector('.account-number').textContent;
-items.push(accountNumber);
+const accountNumberElement = document.querySelector('.account-number');
+if (accountNumberElement) {
+    const accountNumber = accountNumberElement.textContent;
+    items.push(accountNumber);
+}
 let magnifying = false;
 let canSpeak = false;
 let isSpeaking = false;
@@ -23,6 +26,20 @@ recognition.onresult=(event)=>{
   if(speech.includes("back")){
     window.history.back();
   }
+  if(speech.includes("change") && speech.includes("limit")){
+    window.location.href = "change-transaction-limit.html";
+  }
+  else if(speech.includes("scan")){
+    window.location.href = "scanQR.html";
+  }
+  else if(speech.includes("paynow")){
+    window.location.href = "paynow.html";
+  }
+  else if(speech.includes("account")){
+    window.location.href = "account.html"
+  }
+
+
 }
 
 recognition.onend=()=>{
@@ -69,9 +86,11 @@ magnifyButton.addEventListener("click", ()=>{
   }
 });
 
-voiceButton.addEventListener("click",()=>{
-  canSpeak = !canSpeak;
-})
+if(location.pathname.endsWith("index.html")){
+  voiceButton.addEventListener("click",()=>{
+    canSpeak = !canSpeak;
+  });
+}
 
 const moveMagnifyingGlass = (event) => {
   event.preventDefault();
@@ -142,13 +161,13 @@ document.addEventListener('click', (event) => {
       // You could also pass this text to any function, e.g., performOCR(textContent);
       if(!isSpeaking){
         isSpeaking = true;
-        performOCR(textContent); // or any function handling the text
+        performTTS(textContent); // or any function handling the text
       }
       
   }
 });
 
-const performOCR = (textContent) => {
+const performTTS = (textContent) => {
   let utterance;
   let sentiveInfo = false;
   const splitText = textContent.split('\n');

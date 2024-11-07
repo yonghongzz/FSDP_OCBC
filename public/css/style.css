@@ -488,6 +488,10 @@ a {
 
 }
 
+.card-body{
+    touch-action: none;
+}
+
 
 .handle {
     position: absolute;
@@ -508,21 +512,6 @@ a {
     background: radial-gradient(#f5fcfc 45%, gray);
     overflow: hidden;
     border-radius: 10%;
-  }
-  
-  .magnifying-glass::after {
-    display: block; 
-    position: relative;
-    content: "";
-    top: calc(2 * var(--size) / 3);
-    left: calc(2 * var(--size) / 3);
-    height: 15px;
-    width: 70px;
-    background-color: white;
-    border-radius: 50%;
-    z-index: 10;
-    transform: rotate(-45deg);
-    opacity: 70%;
   }
   
   .body-clone {
