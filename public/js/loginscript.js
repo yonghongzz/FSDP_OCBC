@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
             sessionStorage.setItem('loginUserId', loginUserId);
             setCookie('rToken', refreshToken, 7);
 
-            const redirectUrl = userType === 'staff' ? 'staffDashboard.html' : 'index.html';
+            const redirectUrl = userType === 'staff' ? 'staff-video-calls.html' : 'index.html';
             window.location.href = redirectUrl;
         } catch (err) {
             const errorField = document.getElementById('loginError');

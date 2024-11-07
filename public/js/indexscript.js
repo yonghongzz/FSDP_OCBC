@@ -160,9 +160,9 @@ async function refreshToken(rToken) {
     }
 }
 
-document.getElementById('person').addEventListener('click', function() {
-    window.location.href = 'login.html';
-});
+// document.getElementById('person').addEventListener('click', function() {
+//     window.location.href = 'login.html';
+// });
 
 // currently only looks at the first account and card it encounters
 document.addEventListener('DOMContentLoaded', async () => {

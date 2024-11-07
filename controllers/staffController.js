@@ -112,16 +112,20 @@ const refreshAccessToken = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-    const refreshToken = req.headers.authorization && req.headers.authorization.split(" ")[1];
+    const refreshToken = req.headers.authorization?.split(" ")[1];
+    if (!refreshToken) {
+        return res.status(400).send("No refresh token provided");
+    }
+
     try {
-      const success = await Staff.logout(refreshToken);
-      if (!success) {
-        return res.status(404).send("Unsuccessful");
-      }
-      res.status(204).send();
+        const success = await Staff.logout(refreshToken);
+        if (!success) {
+            return res.status(404).send("Token not found");
+        }
+        res.status(204).send();
     } catch (error) {
-      console.error(error);
-      res.status(500).send("Error logging out");
+        console.error(error);
+        res.status(500).send("Error logging out");
     }
 };
 
