@@ -6,12 +6,48 @@ const SIZE = 100; // diameter
 const LENSE_OFFSET_X = SIZE / 10.2;
 const LENSE_OFFSET_Y = SIZE / 10.2;
 let items = [];
-const accountNumber = document.querySelector('.account-number').textContent;
-items.push(accountNumber);
+const accountNumberElement = document.querySelector('.account-number');
+if (accountNumberElement) {
+    const accountNumber = accountNumberElement.textContent;
+    items.push(accountNumber);
+}
 let magnifying = false;
-let speaking = false;
+let canSpeak = false;
+let isSpeaking = false;
+const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
 
-// document.querySelectorAll('img').forEach(image => { image.crossOrigin = 'Anonymous'; image.src += ' '; });
+recognition.onstart=()=>{
+  console.log("Listening..");
+}
+
+recognition.onresult=(event)=>{
+  const speech = event.results[0][0].transcript.toLowerCase();
+  console.log(speech);
+  if(speech.includes("back")){
+    window.history.back();
+  }
+  if(speech.includes("change") && speech.includes("limit")){
+    window.location.href = "change-transaction-limit.html";
+  }
+  else if(speech.includes("scan")){
+    window.location.href = "scanQR.html";
+  }
+  else if(speech.includes("paynow")){
+    window.location.href = "paynow.html";
+  }
+  else if(speech.includes("account")){
+    window.location.href = "account.html"
+  }
+
+
+}
+
+recognition.onend=()=>{
+  console.log("End");
+  recognition.start();
+}
+
+recognition.start();
 
 document.documentElement.style.setProperty("--scale", SCALE);
 document.documentElement.style.setProperty("--size", SIZE + "px");
@@ -50,9 +86,11 @@ magnifyButton.addEventListener("click", ()=>{
   }
 });
 
-voiceButton.addEventListener("click",()=>{
-  speaking = !speaking;
-})
+if(location.pathname.endsWith("index.html")){
+  voiceButton.addEventListener("click",()=>{
+    canSpeak = !canSpeak;
+  });
+}
 
 const moveMagnifyingGlass = (event) => {
   event.preventDefault();
@@ -97,13 +135,14 @@ const removeMagnifyingGlass = () => {
 
 
 document.addEventListener('click', (event) => {
-  if(speaking){
+  if(canSpeak){
     // Identify the clicked element
     const clickedElement = document.elementFromPoint(event.clientX, event.clientY);
     const parentElement = clickedElement.parentElement.parentElement;
     let textContent = '';
       // Check if the element contains any text content
-    if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('blockquote')){
+    console.log(clickedElement.classList[0]);
+    if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('card-body')){
       textContent = clickedElement.innerText.trim();
     }
     // else{
@@ -117,13 +156,18 @@ document.addEventListener('click', (event) => {
 
       // For debugging or use
       console.log("Captured Text:", textContent);
+      
 
       // You could also pass this text to any function, e.g., performOCR(textContent);
-      performOCR(textContent); // or any function handling the text
+      if(!isSpeaking){
+        isSpeaking = true;
+        performTTS(textContent); // or any function handling the text
+      }
+      
   }
 });
 
-const performOCR = (textContent) => {
+const performTTS = (textContent) => {
   let utterance;
   let sentiveInfo = false;
   const splitText = textContent.split('\n');
@@ -148,6 +192,9 @@ const performOCR = (textContent) => {
 
   // Speak the text
   speechSynthesis.speak(utterance);
+  setTimeout(function() {
+    isSpeaking = false;
+  }, 1000);
 };
 document.addEventListener('pointerdown', (event) => {
   if (magnifying) {

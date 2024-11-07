@@ -17,6 +17,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let qrcode = null;
     let isScanning = false;
 
+    function performTTS(){
+        let text = "Align QR code within the frame"
+        let utterance;
+        utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.pitch = 1;
+        utterance.rate = 1;
+        utterance.volume = 1;
+        speechSynthesis.speak(utterance);
+    }
+
+    performTTS();
+
     // Tab switching
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
