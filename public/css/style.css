@@ -571,3 +571,36 @@ a {
 .guide-btns .card {
     width: 100%;             /* Ensure the card itself also takes up the full width */
 }
+
+.steps {
+    background-color: #b9b9b9; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    padding: 10px; 
+    margin-bottom: 20px;
+    text-align: center; 
+}
+
+/* Card Body Content */
+.steps-body {
+    font-size: 16px; 
+    color: #333; 
+    line-height: 1.5; 
+}
+
+/* Additional Styling for Card */
+.steps-body p {
+    margin: 0; 
+}
+
+.okay-button {
+    background-color: #DA291C; 
+    color: rgb(234, 234, 234);
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: 400;
+    padding: 8px;
+}
