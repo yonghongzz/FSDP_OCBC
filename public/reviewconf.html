@@ -32,7 +32,7 @@
 
             <div class="amount-section1">
                 <h1>Amount:</h1>
-                <h1>5.00 SGD</h1>
+                <h1 id="displayAmount"></h1>
             </div>
         
             <div class="transfer-box1">
@@ -40,8 +40,8 @@
                     <div class="icon"><i class="bi bi-wallet2"></i></div>
                     <div class="info">
                         <span class="label">To</span>
-                        <span class="name">John</span>
-                        <span class="contact">+65 9123 4567</span>
+                        <span>John</span>
+                        <span id="displayMobile"></span>
                     </div>
                 </div>
                 
@@ -60,7 +60,7 @@
         
             <div class="comments-section">
                 <span class="label">Comments</span>
-                <p>Mobile Transfer</p>
+                <p id ="displayComments"></p>
             </div>
         
             <div class="warning">
@@ -73,8 +73,10 @@
             </div>
         </div>
     </div>
+    <script src="js/review.js"></script>
     <script src="js/magnifying.js"></script>
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
+    <script src="js/review-handler.js"></script>
 </body>
 </html>

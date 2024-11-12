@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayNow - Transaction Successful</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="style.css"> <!-- Link to your external CSS file -->
+    <link rel="stylesheet" href="css/paynow.css"> <!-- Link to your external CSS file -->
 </head>
 <body>
     <div class="app-container">
@@ -29,7 +29,7 @@
 
         <!-- Transaction Details Section -->
         <div class="amount-section">
-            <h1>5.00 SGD</h1>
+            <h1 id="displayAmount"></h1>
             <div class="transaction-date">20/10/2024 18:00:00</div>
         </div>
 
@@ -38,8 +38,8 @@
                 <div class="icon"><i class="bi bi-wallet2"></i></div>
                 <div class="info">
                     <span class="label">To</span>
-                    <span class="name">John</span>
-                    <span class="contact">+65 9123 4567</span>
+                    <span>John</span>
+                    <span id="displayMobile"></span>
                 </div>
             </div>
             
@@ -54,10 +54,10 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="comments-section">
             <span class="label">Comments</span>
-            <p>Mobile Transfer</p>
+            <p id="displayComments"></p>
         </div>
 
         <!-- Action Buttons -->
@@ -67,5 +67,6 @@
         </div>
         <button class="back-home-btn"><a href="#">Back To Home</a></button>
     </div>
+    <script src="js/review-handler.js"></script>
 </body>
 </html>
