@@ -5,7 +5,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     const micButton = document.getElementById("mic");
     let voice = false;
     console.log(voice);
+    console.log(localStorage.getItem("voice"));
+    
     if(localStorage.getItem("voice") === "true"){
+      console.log("zzz");
         voice = true;
     }
     else{
@@ -55,7 +58,8 @@ document.addEventListener('DOMContentLoaded',()=>{
           else if(data.intents[0].name == 'PayNow'){
             let amount;
             let receiver;
-            localStorage.clear();
+            localStorage.removeItem("amount");
+            localStorage.removeItem("number");
             if (data.entities['wit$number:amount']) {
                 amount = data.entities['wit$number:amount'][0].value;
             }
