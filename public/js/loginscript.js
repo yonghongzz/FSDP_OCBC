@@ -16,13 +16,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('login').addEventListener('submit', async function (e) {
         e.preventDefault();
-        const userType = document.getElementById('userType').value;
+        const userType = localStorage.getItem('role');
+        console.log(userType);
         const loginData = {
             username: document.getElementById('loginUsername').value,
             password_hash: document.getElementById('loginPassword').value
         };
         try {
             const endpoint = userType === 'staff' ? '/staffs/login' : '/users/login';
+            console.log(endpoint);
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
             sessionStorage.setItem('loginUserId', loginUserId);
             setCookie('rToken', refreshToken, 7);
 
-            const redirectUrl = userType === 'staff' ? 'staff-video-calls.html' : 'index.html';
+            const redirectUrl = userType === 'staff' ? 'staff-page.html' : 'index.html';
             window.location.href = redirectUrl;
         } catch (err) {
             const errorField = document.getElementById('loginError');
