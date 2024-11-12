@@ -5,122 +5,8 @@ const SCALE = 1.3; //magnification
 const SIZE = 100; // diameter
 const LENSE_OFFSET_X = SIZE / 10.2;
 const LENSE_OFFSET_Y = SIZE / 10.2;
-let items = [];
-const accountNumberElement = document.querySelector('.account-number');
-if (accountNumberElement) {
-    const accountNumber = accountNumberElement.textContent;
-    items.push(accountNumber);
-}
+
 let magnifying = false;
-let canSpeak = false;
-let isSpeaking = false;
-
-
-const accessToken = 'IPXX73SWZKQ5S6QNJVYQIRKY6WXWW2LR';
-
-async function sendToWitAi(utterance) {
-    const url = `https://api.wit.ai/message?v=20240901&q=${encodeURIComponent(utterance)}`;
-
-    try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Accept': 'application/json'
-            }
-        });
-        const data = await response.json();
-        console.log(data);  // Process data here
-        return data;
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-
-if(window.location.pathname.endsWith("paynow.html")){
-  if(localStorage.getItem("number")){
-    console.log(localStorage.getItem("number"));
-    document.getElementById("mobile").value = localStorage.getItem("number");
-  }
-  if(localStorage.getItem("amount")){
-    document.getElementById("amount").value = localStorage.getItem("amount");
-  }
-}
-
-
-const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
-recognition.lang = 'en-US';
-
-recognition.onstart=()=>{
-  console.log("Listening..");
-}
-
-// let amount;
-// let receiver;
-// let text = "transfer two hundred";
-// let data = await sendToWitAi(text);
-// localStorage.clear();
-// if (data.entities['wit$number:amount']) {
-//     amount = data.entities['wit$number:amount'][0].value;
-//     console.log(amount);
-// }
-// else if (data.entities['wit$amount_of_money:amount_of_money']) {
-//   amount = data.entities['wit$amount_of_money:amount_of_money'][0].value;
-// }
-// if(data.entities['wit$phone_number:phone_number']){
-//   receiver = data.entities['wit$phone_number:phone_number'][0].value;
-// }
-// if(amount){
-//   localStorage.setItem("amount",amount);
-// }
-// if(receiver){
-//   localStorage.setItem("number",receiver);
-// }
-// console.log(amount);
-// window.location.href = "paynow.html";
-
-recognition.onresult=async(event)=>{
-  const speech = event.results[0][0].transcript.toLowerCase();
-  console.log(speech);
-  let data;
-  data = await sendToWitAi(speech);
-
-  if(data.intents[0].name === 'CheckBalance'){
-    window.location.href = "account.html";
-  }
-  else if(data.intents[0].name == 'PayNow'){
-    let amount;
-    let receiver;
-    localStorage.clear();
-    if (data.entities['wit$number:amount']) {
-        amount = data.entities['wit$number:amount'][0].value;
-    }
-    else if (data.entities['wit$amount_of_money:amount_of_money']) {
-      amount = data.entities['wit$amount_of_money:amount_of_money'][0].value;
-    }
-    if(data.entities['wit$phone_number:phone_number']){
-      receiver = data.entities['wit$phone_number:phone_number'][0].value;
-    }
-    if(amount){
-      localStorage.setItem("amount",amount);
-    }
-    if(receiver){
-      localStorage.setItem("number",receiver);
-    }
-    window.location.href = "paynow.html";
-  }
-  else if(data.intents[0].name == "Limit"){
-    window.location.href = "change-transcation-limit.html";
-  }
-};
-
-recognition.onend=()=>{
-  console.log("End");
-  recognition.start();
-}
-
-recognition.start();
 
 document.documentElement.style.setProperty("--scale", SCALE);
 document.documentElement.style.setProperty("--size", SIZE + "px");
@@ -137,7 +23,6 @@ magnifyingGlass.style.left = LENSE_OFFSET_X-20 + "px";
 handle.append(magnifyingGlass);
 
 const magnifyButton = document.getElementById("magnify");
-const voiceButton = document.getElementById("voice");
 
 const addMagnifyingGlass = () => {
   document.addEventListener("pointermove", moveMagnifyingGlass);
@@ -159,11 +44,6 @@ magnifyButton.addEventListener("click", ()=>{
   }
 });
 
-if(location.pathname.endsWith("index.html")){
-  voiceButton.addEventListener("click",()=>{
-    canSpeak = !canSpeak;
-  });
-}
 
 const moveMagnifyingGlass = (event) => {
   event.preventDefault();
@@ -205,73 +85,4 @@ const removeMagnifyingGlass = () => {
   handle.remove();
 };
 
-
-
-document.addEventListener('click', (event) => {
-  if(canSpeak){
-    // Identify the clicked element
-    const clickedElement = document.elementFromPoint(event.clientX, event.clientY);
-    const parentElement = clickedElement.parentElement.parentElement;
-    let textContent = '';
-      // Check if the element contains any text content
-    console.log(clickedElement.classList[0]);
-    if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('card-body')){
-      textContent = clickedElement.innerText.trim();
-    }
-    // else{
-    //   if(parentElement && parentElement.innerText.trim() && parentElement.tagName !== 'BODY' && parentElement.tagName !== 'HTML'){
-    //     console.log(clickedElement.classList[0]);
-    //     const txtAround = "Text around is, ";
-    //     textContent = txtAround + parentElement.innerText.trim();
-    //   }
-    // }
-
-
-      // For debugging or use
-      console.log("Captured Text:", textContent);
-      
-
-      // You could also pass this text to any function, e.g., performOCR(textContent);
-      if(!isSpeaking){
-        isSpeaking = true;
-        performTTS(textContent); // or any function handling the text
-      }
-      
-  }
-});
-
-const performTTS = (textContent) => {
-  let utterance;
-  let sentiveInfo = false;
-  const splitText = textContent.split('\n');
-  splitText.forEach(element => {
-    if(items.includes(element.trim())){
-      sentiveInfo = true;
-    }
-  });
-  if(sentiveInfo){
-    utterance = new SpeechSynthesisUtterance("Sensitive Information");
-  }
-  else{
-    utterance = new SpeechSynthesisUtterance(textContent);
-  }
-
-  utterance.lang = 'en-US'; // Set the language (optional)
-
-  // Optional: Set additional properties
-  utterance.pitch = 1; // Range: 0 to 2
-  utterance.rate = 1; // Range: 0.1 to 10
-  utterance.volume = 1; // Range: 0 to 1
-
-  // Speak the text
-  speechSynthesis.speak(utterance);
-  setTimeout(function() {
-    isSpeaking = false;
-  }, 1000);
-};
-document.addEventListener('pointerdown', (event) => {
-  if (magnifying) {
-    event.preventDefault(); // Prevent default action when magnifying
-  }
-});
 });

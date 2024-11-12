@@ -9,7 +9,7 @@ html,body{
     color: white;
 }
 
-.button-volume, .button-person {
+.button-volume, .button-person,.button-mic {
     color: white;
     margin-right: -0.8rem;
     font-size: x-large;
@@ -27,7 +27,7 @@ html,body{
     color: black;
 }
 
-.button-magnify:hover, .button-volume:hover, .button-person:hover {
+.button-magnify:hover, .button-volume:hover, .button-person:hover,.button-mic:hover {
     color: rgba(255, 255, 65, 0.849);
 }
 
