@@ -65,6 +65,40 @@ async function updateBalance(accId, bal) {
     }
 }
 
+async function createTransaction(accId, amount) {
+
+    const newTransactionData = {
+        account_id: accId,
+        transaction_type: "transfer",
+        amount: amount,
+        name: "John"
+    };
+
+    try {
+        const response = await fetch(`/transactions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(newTransactionData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Failed to create transaction:', errorData);
+            alert(`Error: ${errorData.message}\nDetails: ${errorData.errors.join(', ')}`);
+            return; // Stop further execution if the transaction creation fails
+        }
+
+        const responseData = await response.json();
+        console.log('Transaction created successfully:', responseData);
+        alert(`Transaction Successful: ${responseData.message || 'Your transaction has been processed.'}`);
+    } catch (error) {
+        console.error("Error creating transaction:", error);
+        alert("There was an error processing your transaction. Please try again.");
+    }
+}
 
 function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
@@ -190,6 +224,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Update the transaction amount (you can implement the actual logic here)
             updateBalance(accId, bal);
+
+            createTransaction(accId, amount);
 
             // Show a confirmation message (optional)
             alert(`balance: ${bal}`);
