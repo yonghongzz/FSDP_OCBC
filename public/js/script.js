@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let scanner = null;
     let qrcode = null;
     let isScanning = false;
+    let canSpeak = localStorage.getItem("tts");
 
     function performTTS(){
         let text = "Align QR code within the frame"
@@ -28,7 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
         speechSynthesis.speak(utterance);
     }
 
-    performTTS();
+    if(canSpeak){
+        performTTS();
+    }
+    
 
     // Tab switching
     tabBtns.forEach(btn => {
