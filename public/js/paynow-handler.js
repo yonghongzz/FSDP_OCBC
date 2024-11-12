@@ -2,8 +2,8 @@
 
 document.addEventListener("DOMContentLoaded", async function () {
     const token = sessionStorage.getItem('token');
-const loginUserId = sessionStorage.getItem('loginUserId');
-const rToken = getCookie('rToken'); // refresh token
+    const loginUserId = sessionStorage.getItem('loginUserId');
+    const rToken = getCookie('rToken'); // refresh token
 
 
 async function fetchUserAccounts(user_id) {
@@ -117,6 +117,7 @@ async function refreshToken(rToken) {
         location.reload();
     }
 }
+
     const nextButton = document.querySelector(".next-button");
     nextButton.addEventListener("click", function(event) {
         event.preventDefault(); // Prevent default link behavior
@@ -163,6 +164,7 @@ async function refreshToken(rToken) {
        else{
         localStorage.setItem("amount",amount);
         localStorage.setItem("number",number);
+
         window.location.href = "reviewconf.html"
        }
     });

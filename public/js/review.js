@@ -34,6 +34,37 @@ async function fetchUserAccounts(user_id) {
     }
 }
 
+async function updateBalance(accId, bal) {
+    accId = parseInt(accId);
+
+    const newBalance = {
+        balance: parseFloat(bal)
+    };
+
+    console.log(accId, bal)
+
+    try {
+        const response = await fetch(`/accounts/balance/${accId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(newBalance)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to update balance: ${errorText}`); // Log the response error
+        }
+
+        const updatedAccount = await response.json(); // Get updated account
+        console.log('Updated account:', updatedAccount); // Log updated account
+    } catch (error) {
+        console.error('Error updating balance:', error);
+    }
+}
+
 
 function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
@@ -130,11 +161,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log("useracc:", sessionStorage)
     }
 
-    nextBtn.addEventListener('click',()=>{
-       let amount = localStorage.getItem("amount");
+    let amount;
+    
+    //nextBtn.addEventListener('click',()=>{
+       //amount = localStorage.getItem("amount");
+       //let number = localStorage.getItem("number");
+       //document.getElementById("amount").text
+    //});
+
+    amount = localStorage.getItem("amount");
        let number = localStorage.getItem("number");
-       document.getElementById("amount").text
-       
-       
-});
+       //document.getElementById("amount").text
+
+    console.log(amount)
+
+    const currentAccount = accounts[0];
+    const accId = currentAccount.account_id;
+    console.log(`were here ${accId}`);
+
+    // Function to handle transaction limit confirmation
+    document.querySelector('.confirm-btn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default anchor click behavior
+
+        const bal = currentAccount.balance - amount;
+
+            //console.log(currentAccount.accId)
+            console.log(amount)
+
+            // Update the transaction amount (you can implement the actual logic here)
+            updateBalance(accId, bal);
+
+            // Show a confirmation message (optional)
+            alert(`balance: ${bal}`);
+
+            // Redirect to index.html after a short delay
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000); // Adjust the delay time as needed
+    });
 });

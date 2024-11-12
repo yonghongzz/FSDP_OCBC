@@ -48,6 +48,7 @@ app.get("/", (req, res) => {
 app.get("/accounts", accountController.getAllAccounts);
 app.get("/accounts/:id", accountController.getAccountById);
 app.put("/accounts/:id", accountController.updateTransactionLimit);
+app.put("/accounts/balance/:id", accountController.updateBalance);
 
 // acctransaction
 app.get("/transactions", acctransactionController.getAllAccTransactions);

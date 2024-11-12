@@ -53,8 +53,30 @@ const updateTransactionLimit = async (req, res) => {
   }
 };
 
+const updateBalance = async (req, res) => {
+  const id = parseInt(req.params.id);
+  const newBalanceData = req.body;
+
+  try {
+    const account = await Account.getAccountById(id);
+    if (!account) {
+        return res.status(404).send("Account not found");
+    }
+
+    const updatedAccount = await Account.updateBalance(id, newBalanceData);
+    if (!updatedAccount) {
+      return res.status(404).send("Account not found");
+    }
+    res.json(updatedAccount);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating account");
+  }
+};
+
 module.exports = {
     getAllAccounts,
     getAccountById,
-    updateTransactionLimit
+    updateTransactionLimit,
+    updateBalance
 };
