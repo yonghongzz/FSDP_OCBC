@@ -1,14 +1,12 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OCBC Digital Banking</title>
-    <link rel="stylesheet" href="css/styles2.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-      
     <div class="container">
         <div class="header">
             <div class="notification-bell">🔔</div>
@@ -21,35 +19,26 @@
             <p>Beware of scams!<br>Do not make random transactions</p>
         </div>
 
-        <div class="tab-content" id="pills-tabContent">
-            <!-- login -->
-            <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab"
-                tabindex="0">
-                <form id="login" novalidate>
-                    <div class="inputs">
-                        <div class="form-group">
-                            <label for="loginUsername" class="form-label">Username</label>
-                            <input type="email" id="loginUsername" class="form-control"
-                                placeholder="Enter username">
-                        </div>
-                        <div class="form-group">
-                            <label for="loginPassword" class="form-label">Password</label>
-                            <input type="password" id="loginPassword" class="form-control"
-                                placeholder="Enter password">
-                        </div>
-                        <a href="staff-login.html">Staff Login</a>
-                    </div>
-                    <button id="login-button" type="submit" class="btn btn-danger">Login</button>
-                    <div id="loginError"></div>
-                </form>
-            </div>
+       
+
+
+         <div class="login-form">
+            <form id="login">
+                <h1>Login</h1>
+                <div>
+                    <input type="text" id="loginUsername" name="loginUsername" placeholder="Username" required>
+                </div>
+                <div>
+                    <input type="password" id="loginPassword" name="loginPassword" placeholder="Password" required>
+                </div>
+                <div id="loginError" style="color:red;"></div> 
+                <button type="submit" class="btn">Login</button>
+                
+            </form>
         </div>
     </div>
-    <script src="js/loginscript.js"></script>
-    <script>
-        // set the role to be the user
-        localStorage.setItem('role', 'user');
-    </script>
-</body>
 
+    <script src="loginscript.js"></script> 
+    
+</body>
 </html>
