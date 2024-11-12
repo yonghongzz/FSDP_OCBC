@@ -36,6 +36,10 @@ async function fetchUserAccounts(user_id) {
     }
 }
 
+function displaySmallTransactionLimit(account) {
+    const tll = document.querySelector('.tll');
+    tll.textContent = `Transfer limit: ${account.transaction_limit} SGD`;
+}
 
 function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
@@ -148,18 +152,23 @@ async function refreshToken(rToken) {
         console.log("useracc:", sessionStorage)
     }
 
+    displaySmallTransactionLimit(accounts[0]);
+
     nextBtn.addEventListener('click',()=>{
        let amount = document.getElementById("amount").value;
        let number = document.getElementById("mobile").value;
        console.log(accounts[0]);
        if(amount > accounts[0].transaction_limit){
         console.log("Amount exceed transaction limit!");
+        alert(`Amount exceed transaction limit!`);
        } 
        else if(amount > accounts[0].balance){
         console.log("Not enough balance!");
+        alert(`Not enough balance!`);
        }
        else if(!number || number.length != 8){
-        console.log("Please enter a valid number");
+        console.log("Please enter a valid number.");
+        alert(`Please enter a valid number.`);
        }
        else{
         localStorage.setItem("amount",amount);
