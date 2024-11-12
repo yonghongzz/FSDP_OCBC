@@ -18,7 +18,7 @@ body {
     box-sizing: border-box;
 }
 
-/* Header styling */
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -31,6 +31,29 @@ body {
     border-bottom: 1px solid #ccc;
     box-sizing: border-box;
     padding: 0 15px; 
+}
+
+a {
+  text-decoration: none; 
+}
+
+.styled-button {
+  background-color: #da291c; 
+  color: white;
+  padding: 10px 20px; 
+  font-size: 16px; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease;
+}
+
+.styled-button:hover {
+  background-color: #641509; 
+}
+
+.styled-button:focus {
+  outline: none; 
 }
 
 .title {
@@ -70,3 +93,4 @@ details{
   details[open] div{
     padding: .5em 1em;
   }
+
