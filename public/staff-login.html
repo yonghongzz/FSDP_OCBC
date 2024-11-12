@@ -1,26 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCBC Digital Banking</title>
+    <title>OCBC Help Desk</title>
     <link rel="stylesheet" href="css/styles2.css">
 </head>
 <body>
-      
     <div class="container">
         <div class="header">
-            <div class="notification-bell">🔔</div>
-            <div class="help-icon">❓</div>
+            Today's Date
         </div>
-
-        <h1 class="title">OCBC Digital Banking</h1>
-
-        <div class="warning">
-            <p>Beware of scams!<br>Do not make random transactions</p>
+        <div class="logo">
+            <img src="imgs/ocbc-logo.png" alt="OCBC Logo"> <!-- Ensure you have the logo image in your project folder -->
         </div>
-
+        <h2>Help Desk</h2>
         <div class="tab-content" id="pills-tabContent">
             <!-- login -->
             <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab"
@@ -45,11 +40,9 @@
             </div>
         </div>
     </div>
-    <script src="js/loginscript.js"></script>
-    <script>
-        // set the role to be the user
-        localStorage.setItem('role', 'user');
-    </script>
 </body>
-
+<script src="js/loginscript.js"></script>
+<script>
+    localStorage.setItem('role', 'staff');
+</script>
 </html>

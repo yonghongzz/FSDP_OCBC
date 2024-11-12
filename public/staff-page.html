@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Call App - Staff</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        #calls-panel {
+            width: 300px;
+            background: #f5f5f5;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+        }
+
+        .call-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .call-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .accept-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .reject-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #video-section {
+            flex: 1;
+            position: relative;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #control-banner {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+        }
+
+        #video-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* Shared screen styling */
+        #shared-screen {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #shared-screen video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* User and staff video container */
+        #user-staff-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .small-video-wrapper {
+            width: 200px;
+            aspect-ratio: 16/9;
+            background: #333;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .small-video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #call-ended-message {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="calls-panel">
+        <h2>Incoming Calls</h2>
+        <div id="incoming-calls"></div>
+    </div>
+
+    <div id="video-section">
+        <div id="control-banner">
+            <button class="control-btn" id="toggle-video-btn">🎥</button>
+            <button class="control-btn" id="toggle-audio-btn">🎤</button>
+            <button class="control-btn" style="background: #dc3545" onclick="endCallStaff()">❌</button>
+        </div>
+
+        <div id="video-container">
+            <!-- Shared screen video at the top, spanning full width -->
+            <div id="shared-screen">
+                <video id="sharedScreenVideo" autoplay playsinline></video>
+            </div>
+
+            <!-- User and staff videos centered below the shared screen -->
+            <div id="user-staff-container">
+                <div class="small-video-wrapper">
+                    <video id="localVideo" autoplay playsinline muted></video>
+                </div>
+                <div class="small-video-wrapper">
+                    <video id="remoteVideo" autoplay playsinline></video>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/video-call-staff.js"></script>
+</body>
+</html>
