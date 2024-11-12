@@ -22,8 +22,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Read the certificate and key files
-const privateKey = fs.readFileSync("../../../Users/lohsz/key.pem");
-const certificate = fs.readFileSync("../../../Users/lohsz/cert.pem");
+const privateKey = fs.readFileSync("key.pem");
+const certificate = fs.readFileSync("cert.pem");
 const credentials = { key: privateKey, cert: certificate };
 
 // Create an HTTPS server
