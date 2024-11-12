@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded',()=>{
         if(localStorage.getItem("amount")){
           document.getElementById("amount").value = localStorage.getItem("amount");
         }
+        localStorage.removeItem("number");
+        localStorage.removeItem("amount");
     };
 
     
