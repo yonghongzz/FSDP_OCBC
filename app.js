@@ -13,18 +13,34 @@ const validateUser = require("./middlewares/validateUser");
 const validateStaff = require("./middlewares/validateStaff");
 const validateAccTransaction = require("./middlewares/validateAccTransaction");
 const seedDatabase = require("./seed");
+const https = require("https");
+const fs = require("fs");
+const { Server } = require("socket.io");
 
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Read the certificate and key files
+const privateKey = fs.readFileSync("../../../Users/lohsz/key.pem");
+const certificate = fs.readFileSync("../../../Users/lohsz/cert.pem");
+const credentials = { key: privateKey, cert: certificate };
+
+// Create an HTTPS server
+const server = https.createServer(credentials, app);
+const io = new Server(server, {
+    cors: {
+        origin: "*",  // Allow all origins for testing; restrict this in production
+        methods: ["GET", "POST"]
+    }
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "login.html"));
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 
@@ -60,7 +76,65 @@ app.post("/staffs/check", authenticate.verifyJWT, staffController.checkPassword)
 app.post("/token", staffController.refreshAccessToken);
 app.delete("/logout", staffController.logout);
 
-app.listen(port, async () => {
+let callQueue = {};
+
+io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
+
+    // User initiates a call
+    socket.on("initiate-call", (data) => {
+        socket.join(data.callId);
+        callQueue[data.callId] = socket.id;
+        io.emit("new-call", data);
+    });
+
+    // Staff accepts call
+    socket.on("accept-call", (data) => {
+        const userSocketId = callQueue[data.callId];
+        if (userSocketId) {
+            socket.join(data.callId);
+            io.to(userSocketId).emit("call-accepted", data.callId);
+            delete callQueue[data.callId];
+        }
+    });
+
+    // Handle WebRTC signaling messages
+    socket.on("offer", ({ callId, offer }) => {
+        socket.to(callId).emit("offer", { callId, offer });
+    });
+
+    socket.on("answer", ({ callId, answer }) => {
+        socket.to(callId).emit("answer", { answer });
+    });
+
+    socket.on("ice-candidate", ({ callId, candidate }) => {
+        socket.to(callId).emit("ice-candidate", { candidate });
+    });
+
+    socket.on("disconnect", () => {
+        console.log(`User disconnected: ${socket.id}`);
+    });
+    
+    socket.on('reject-call', (data) => {
+        io.to(data.callId).emit('call-rejected');
+    });
+
+    socket.on('staff-end-call', () => {
+        socket.broadcast.emit('call-ended-by-staff');
+    });
+
+    socket.on('share-screen', ({ callId }) => {
+        io.to(callId).emit('share-screen', { callId });
+    }); 
+
+    // Handle user stopping screen share
+    socket.on('stop-share-screen', ({ callId }) => {
+        io.to(callId).emit('stop-share-screen', { callId });
+    });
+    
+});
+
+server.listen(port, '0.0.0.0', async () => {
     try {
       // Connect to DB using mssql
       await sql.connect(dbConfig);

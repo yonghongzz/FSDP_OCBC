@@ -28,22 +28,16 @@
                 <form id="login" novalidate>
                     <div class="inputs">
                         <div class="form-group">
-                            <label for="loginUsername" class="form-label">E-mail Address</label>
+                            <label for="loginUsername" class="form-label">Username</label>
                             <input type="email" id="loginUsername" class="form-control"
-                                placeholder="Enter username...">
+                                placeholder="Enter username">
                         </div>
                         <div class="form-group">
                             <label for="loginPassword" class="form-label">Password</label>
                             <input type="password" id="loginPassword" class="form-control"
-                                placeholder="Enter password...">
+                                placeholder="Enter password">
                         </div>
-                        <div class="form-group">
-                            <label for="userType" class="form-label">User Type</label>
-                            <select id="userType" class="form-control">
-                                <option value="user">User</option>
-                                <option value="staff">Staff</option>
-                            </select>
-                        </div>
+                        <a href="staff-login.html">Staff Login</a>
                     </div>
                     <button id="login-button" type="submit" class="btn btn-danger">Login</button>
                     <div id="loginError"></div>
@@ -52,6 +46,10 @@
         </div>
     </div>
     <script src="js/loginscript.js"></script>
+    <script>
+        // set the role to be the user
+        localStorage.setItem('role', 'user');
+    </script>
 </body>
 
 </html>
