@@ -3,7 +3,7 @@ const Joi = require("joi");
 const validateCreateAccTransaction = (req, res, next) => {
     const schema = Joi.object({
         account_id: Joi.number().integer().required(),
-        transaction_type: Joi.string().valid('deposit', 'withdrawal').required(),
+        transaction_type: Joi.string().valid('deposit', 'withdrawal', 'transfer', 'payment', 'refund').required(),
         amount: Joi.number().precision(2).positive().required(),
         name: Joi.string().max(100).optional()
     })

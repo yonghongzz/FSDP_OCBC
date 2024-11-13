@@ -2,8 +2,8 @@
 
 document.addEventListener("DOMContentLoaded", async function () {
     const token = sessionStorage.getItem('token');
-const loginUserId = sessionStorage.getItem('loginUserId');
-const rToken = getCookie('rToken'); // refresh token
+    const loginUserId = sessionStorage.getItem('loginUserId');
+    const rToken = getCookie('rToken'); // refresh token
 
 
 async function fetchUserAccounts(user_id) {
@@ -36,6 +36,10 @@ async function fetchUserAccounts(user_id) {
     }
 }
 
+function displaySmallTransactionLimit(account) {
+    const tll = document.querySelector('.tll');
+    tll.textContent = `Transfer limit: ${account.transaction_limit} SGD`;
+}
 
 function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
@@ -117,6 +121,7 @@ async function refreshToken(rToken) {
         location.reload();
     }
 }
+
     const nextButton = document.querySelector(".next-button");
     nextButton.addEventListener("click", function(event) {
         event.preventDefault(); // Prevent default link behavior
@@ -147,22 +152,28 @@ async function refreshToken(rToken) {
         console.log("useracc:", sessionStorage)
     }
 
+    displaySmallTransactionLimit(accounts[0]);
+
     nextBtn.addEventListener('click',()=>{
        let amount = document.getElementById("amount").value;
        let number = document.getElementById("mobile").value;
        console.log(accounts[0]);
        if(amount > accounts[0].transaction_limit){
         console.log("Amount exceed transaction limit!");
+        alert(`Amount exceed transaction limit!`);
        } 
        else if(amount > accounts[0].balance){
         console.log("Not enough balance!");
+        alert(`Not enough balance!`);
        }
        else if(!number || number.length != 8){
-        console.log("Please enter a valid number");
+        console.log("Please enter a valid number.");
+        alert(`Please enter a valid number.`);
        }
        else{
         localStorage.setItem("amount",amount);
         localStorage.setItem("number",number);
+
         window.location.href = "reviewconf.html"
        }
     });

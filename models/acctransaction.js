@@ -55,7 +55,7 @@ class AccTransaction {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `INSERT INTO AccTransactions (account_id, transaction_type, amount, transaction_datetime, name) VALUES (@account_id, @transaction_type, @amount, GETDATE()); SELECT SCOPE_IDENTITY() AS transaction_id;`; 
+        const sqlQuery = `INSERT INTO AccTransactions (account_id, transaction_type, amount, name) VALUES (@account_id, @transaction_type, @amount, @name); SELECT SCOPE_IDENTITY() AS transaction_id;`; 
 
         const request = connection.request();
         request.input("account_id", newAccTransactionData.account_id);

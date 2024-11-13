@@ -34,6 +34,71 @@ async function fetchUserAccounts(user_id) {
     }
 }
 
+async function updateBalance(accId, bal) {
+    accId = parseInt(accId);
+
+    const newBalance = {
+        balance: parseFloat(bal)
+    };
+
+    console.log(accId, bal)
+
+    try {
+        const response = await fetch(`/accounts/balance/${accId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(newBalance)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Failed to update balance: ${errorText}`); // Log the response error
+        }
+
+        const updatedAccount = await response.json(); // Get updated account
+        console.log('Updated account:', updatedAccount); // Log updated account
+    } catch (error) {
+        console.error('Error updating balance:', error);
+    }
+}
+
+async function createTransaction(accId, amount) {
+
+    const newTransactionData = {
+        account_id: accId,
+        transaction_type: "transfer",
+        amount: amount,
+        name: "John"
+    };
+
+    try {
+        const response = await fetch(`/transactions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(newTransactionData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Failed to create transaction:', errorData);
+            alert(`Error: ${errorData.message}\nDetails: ${errorData.errors.join(', ')}`);
+            return; // Stop further execution if the transaction creation fails
+        }
+
+        const responseData = await response.json();
+        console.log('Transaction created successfully:', responseData);
+        alert(`Transaction Successful: ${responseData.message || 'Your transaction has been processed.'}`);
+    } catch (error) {
+        console.error("Error creating transaction:", error);
+        alert("There was an error processing your transaction. Please try again.");
+    }
+}
 
 function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
@@ -130,11 +195,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log("useracc:", sessionStorage)
     }
 
-    nextBtn.addEventListener('click',()=>{
-       let amount = localStorage.getItem("amount");
+    let amount;
+    
+    //nextBtn.addEventListener('click',()=>{
+       //amount = localStorage.getItem("amount");
+       //let number = localStorage.getItem("number");
+       //document.getElementById("amount").text
+    //});
+
+    amount = localStorage.getItem("amount");
        let number = localStorage.getItem("number");
-       document.getElementById("amount").text
-       
-       
-});
+       //document.getElementById("amount").text
+
+    console.log(amount)
+
+    const currentAccount = accounts[0];
+    const accId = currentAccount.account_id;
+    console.log(`were here ${accId}`);
+
+    // Function to handle transaction limit confirmation
+    document.querySelector('.confirm-btn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default anchor click behavior
+
+        const bal = currentAccount.balance - amount;
+
+            //console.log(currentAccount.accId)
+            console.log(amount)
+
+            // Update the transaction amount (you can implement the actual logic here)
+            updateBalance(accId, bal);
+
+            createTransaction(accId, amount);
+
+            // Show a confirmation message (optional)
+            alert(`balance: ${bal}`);
+
+            // Redirect to index.html after a short delay
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000); // Adjust the delay time as needed
+    });
 });
