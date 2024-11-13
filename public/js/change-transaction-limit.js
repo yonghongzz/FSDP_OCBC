@@ -7,6 +7,33 @@ document.getElementById('back').addEventListener('click', function() {
     window.location.href = 'index.html';
 });
 
+let canSpeak = false;
+let isSpeaking = false;
+if(localStorage.getItem("tts") === "true"){
+    canSpeak = true;
+    console.log("canspeak");
+}
+else{
+    canSpeak = false;
+}
+const performTTS = async(textContent) => {
+    let utterance;
+    utterance = new SpeechSynthesisUtterance(textContent);
+  
+    utterance.lang = 'en-US'; // Set the language (optional)
+  
+    // Optional: Set additional properties
+    utterance.pitch = 1; // Range: 0 to 2
+    utterance.rate = 1; // Range: 0.1 to 10
+    utterance.volume = 1; // Range: 0 to 1
+  
+    // Speak the text
+    speechSynthesis.speak(utterance);
+    setTimeout(function() {
+      isSpeaking = false;
+    }, 1000);
+};
+
 // only getting the first account
 // implement dynamic search in the future (using getUrlParams)
 document.addEventListener('DOMContentLoaded', async () => {
@@ -29,8 +56,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Update the transaction amount (you can implement the actual logic here)
             updateTransactionLimit(accId, limitValue);
+            text = `Transaction limit updated to ${limitValue} SGD.`
 
             // Show a confirmation message (optional)
+            if(canSpeak){
+                if(!isSpeaking){
+                    isSpeaking = true;
+                    performTTS(text); // or any function handling the text
+                    console.log("NM");
+                }
+            }
             alert(`Transaction limit updated to ${limitValue} SGD.`);
             
             // Redirect to index.html after a short delay
@@ -38,6 +73,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 window.location.href = 'index.html';
             }, 1000); // Adjust the delay time as needed
         } else {
+            text = 'Please select a transaction limit before confirming.';
+            if(canSpeak){
+                if(!isSpeaking){
+                    isSpeaking = true;
+                    performTTS(text); // or any function handling the text
+                }
+            }
             alert('Please select a transaction limit before confirming.');
         }
     });
