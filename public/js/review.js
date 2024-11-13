@@ -1,8 +1,35 @@
+
 // token
 const token = sessionStorage.getItem('token');
 const loginUserId = sessionStorage.getItem('loginUserId');
 const rToken = getCookie('rToken'); // refresh token
 
+let canSpeak = false;
+let isSpeaking = false;
+if(localStorage.getItem("tts") === "true"){
+    canSpeak = true;
+    console.log("canspeak");
+}
+else{
+    canSpeak = false;
+}
+const performTTS = async(textContent) => {
+    let utterance;
+    utterance = new SpeechSynthesisUtterance(textContent);
+  
+    utterance.lang = 'en-US'; // Set the language (optional)
+  
+    // Optional: Set additional properties
+    utterance.pitch = 1; // Range: 0 to 2
+    utterance.rate = 1; // Range: 0.1 to 10
+    utterance.volume = 1; // Range: 0 to 1
+  
+    // Speak the text
+    speechSynthesis.speak(utterance);
+    setTimeout(function() {
+      isSpeaking = false;
+    }, 1000);
+};
 
 async function fetchUserAccounts(user_id) {
     try {
@@ -93,7 +120,12 @@ async function createTransaction(accId, amount) {
 
         const responseData = await response.json();
         console.log('Transaction created successfully:', responseData);
+        let text = `Transaction Successful: Your transaction has been processed.`;
+        speechSynthesis.cancel();
+        isSpeaking = false;
+        performTTS(text);
         alert(`Transaction Successful: ${responseData.message || 'Your transaction has been processed.'}`);
+        
     } catch (error) {
         console.error("Error creating transaction:", error);
         alert("There was an error processing your transaction. Please try again.");
