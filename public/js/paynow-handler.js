@@ -4,6 +4,32 @@ document.addEventListener("DOMContentLoaded", async function () {
     const token = sessionStorage.getItem('token');
     const loginUserId = sessionStorage.getItem('loginUserId');
     const rToken = getCookie('rToken'); // refresh token
+    let canSpeak = false;
+let isSpeaking = false;
+if(localStorage.getItem("tts") === "true"){
+    canSpeak = true;
+    console.log("canspeak");
+}
+else{
+    canSpeak = false;
+}
+const performTTS = async(textContent) => {
+    let utterance;
+    utterance = new SpeechSynthesisUtterance(textContent);
+  
+    utterance.lang = 'en-US'; // Set the language (optional)
+  
+    // Optional: Set additional properties
+    utterance.pitch = 1; // Range: 0 to 2
+    utterance.rate = 1; // Range: 0.1 to 10
+    utterance.volume = 1; // Range: 0 to 1
+  
+    // Speak the text
+    speechSynthesis.speak(utterance);
+    setTimeout(function() {
+      isSpeaking = false;
+    }, 1000);
+};
 
 
 async function fetchUserAccounts(user_id) {
@@ -133,7 +159,10 @@ async function refreshToken(rToken) {
 
         // Validate mobile number and amount
         if (!mobile || !amount) {
+            text = "Please fill in the required fields: Mobile number and Amount."
+            performTTS(text);
             alert("Please fill in the required fields: Mobile number and Amount.");
+            
             return;
         }
 
@@ -160,14 +189,20 @@ async function refreshToken(rToken) {
        console.log(accounts[0]);
        if(amount > accounts[0].transaction_limit){
         console.log("Amount exceed transaction limit!");
+        text = "Amount excees transcation limit!";
+        performTTS(text);
         alert(`Amount exceed transaction limit!`);
        } 
        else if(amount > accounts[0].balance){
         console.log("Not enough balance!");
+        text = "Not enough balance!";
+        performTTS(text);
         alert(`Not enough balance!`);
        }
        else if(!number || number.length != 8){
         console.log("Please enter a valid number.");
+        text = "Please enter a valid number";
+        performTTS(text);
         alert(`Please enter a valid number.`);
        }
        else{

@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     items = [];
     const accountNumberElement = document.querySelector('.account-number');
     const debitCard = document.querySelector('.debit-cardnum');
+    const accNum = document.querySelector('.acc-num');
     if (accountNumberElement) {
         const accountNumber = accountNumberElement.textContent.trim();
         items.push(accountNumber);
@@ -30,6 +31,10 @@ document.addEventListener('DOMContentLoaded',()=>{
         const debitNumber = debitCard.textContent.trim();
         items.push(debitNumber);
         }
+    if(accNum){
+      const accNumber = accNum.textContent.trim();
+      items.push(accNumber);
+    }
     }
     document.addEventListener('click', (event) => {
         if(canSpeak){
@@ -39,7 +44,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           let textContent = '';
             // Check if the element contains any text content
           console.log(clickedElement.classList[0]);
-          if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('card-body')){
+          if(clickedElement && clickedElement.innerText.trim() && clickedElement.classList[0] !== 'info' && !clickedElement.classList.contains('card-body') && !clickedElement.classList.contains('bi') && clickedElement.tagName !== 'BLOCKQUOTE'){
             textContent = clickedElement.innerText.trim();
           }
       
