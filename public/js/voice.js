@@ -82,6 +82,12 @@ document.addEventListener('DOMContentLoaded',()=>{
           else if(data.intents[0].name == "Limit"){
             window.location.href = "change-transcation-limit.html";
           }
+          else if(data.intents[0].name == "Help"){
+            window.location.href = "HelpNav.html";
+          }
+          else if(data.intents[0].name == "Guide"){
+            window.location.href = "guide.html";
+          }
           else if(data.intents[0].name == "Back"){
             window.history.back();
           };
