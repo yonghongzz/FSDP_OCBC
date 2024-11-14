@@ -51,7 +51,6 @@ class Account {
         : null; 
     }
 
-    // Updates existing post in DB with new data
     static async updateTransactionLimit(id, newLimitData) {
         const connection = await sql.connect(dbConfig); // Establish DB connection
 
@@ -61,6 +60,29 @@ class Account {
         const request = connection.request(); // Create new request
         request.input("id", id);
         request.input("transaction_limit", parseFloat(newLimitData.transaction_limit) || null);
+
+        try {
+            await request.query(sqlQuery); // Execute query
+        } catch (error) {
+            console.error('SQL Error:', error); // Log SQL error
+            throw error; // Rethrow to be caught in the controller
+        } finally {
+            connection.close(); // Close DB connection
+        }
+
+        return this.getAccountById(id); // Retrieve and return updated post using its ID
+    }
+
+    // Updates existing post in DB with new data
+    static async updateBalance(id, newBalanceData) {
+        const connection = await sql.connect(dbConfig); // Establish DB connection
+
+        // SQL query to update post
+        const sqlQuery = `UPDATE Accounts SET balance = @balance WHERE account_id = @id`; 
+
+        const request = connection.request(); // Create new request
+        request.input("id", id);
+        request.input("balance", parseFloat(newBalanceData.balance) || null);
 
         try {
             await request.query(sqlQuery); // Execute query

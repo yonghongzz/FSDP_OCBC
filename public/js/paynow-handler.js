@@ -1,23 +1,36 @@
-// token
-const token = sessionStorage.getItem('token');
-const loginUserId = sessionStorage.getItem('loginUserId');
-const rToken = getCookie('rToken'); // refresh token
+// formHandler.js
 
-function displayAccount(account, card) {
-
-    const accountType = document.querySelector('.account-type');
-    const accountNumber = document.querySelector('.account-number');
-    const balanceAmount = document.querySelector('.balance-amount');
-    const debitCardnum = document.querySelector('.debit-cardnum');
-    const transactionAmount = document.querySelector('.tc-amt');
-
-    // Set the text content
-    accountType.textContent = `${account.account_type}`;
-    accountNumber.textContent = `${account.account_number}`;
-    balanceAmount.textContent = `${account.balance.toFixed(2)} SGD`;
-    debitCardnum.textContent = `${card.card_number}`;
-    transactionAmount.textContent = `${account.transaction_limit.toFixed(2)} SGD`;
+document.addEventListener("DOMContentLoaded", async function () {
+    const token = sessionStorage.getItem('token');
+    const loginUserId = sessionStorage.getItem('loginUserId');
+    const rToken = getCookie('rToken'); // refresh token
+    let canSpeak = false;
+let isSpeaking = false;
+if(localStorage.getItem("tts") === "true"){
+    canSpeak = true;
+    console.log("canspeak");
 }
+else{
+    canSpeak = false;
+}
+const performTTS = async(textContent) => {
+    let utterance;
+    utterance = new SpeechSynthesisUtterance(textContent);
+  
+    utterance.lang = 'en-US'; // Set the language (optional)
+  
+    // Optional: Set additional properties
+    utterance.pitch = 1; // Range: 0 to 2
+    utterance.rate = 1; // Range: 0.1 to 10
+    utterance.volume = 1; // Range: 0 to 1
+  
+    // Speak the text
+    speechSynthesis.speak(utterance);
+    setTimeout(function() {
+      isSpeaking = false;
+    }, 1000);
+};
+
 
 async function fetchUserAccounts(user_id) {
     try {
@@ -49,34 +62,9 @@ async function fetchUserAccounts(user_id) {
     }
 }
 
-async function fetchCards(account_id) {
-    try {
-        const response = await fetch(`/cards?accountId=${account_id}`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const cards = await response.json();
-        return cards;
-    } catch (error) {
-        console.error('Error fetching cards:', error);
-    }
-}
-
-async function fetchUsername(user_id) {
-    try {
-        const response = await fetch(`/users/${user_id}`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const user = await response.json();
-        const username = user.username;
-
-        const welcomeBackDiv = document.querySelector('.welcome-back');
-        const paragraph = welcomeBackDiv.querySelector('p');
-        paragraph.textContent = `Welcome back, ${username}!`;
-    } catch (error) {
-        console.error('Error fetching username:', error);
-    }
+function displaySmallTransactionLimit(account) {
+    const tll = document.querySelector('.tll');
+    tll.textContent = `Transfer limit: ${account.transaction_limit} SGD`;
 }
 
 function isTokenExpired(token) {
@@ -160,36 +148,68 @@ async function refreshToken(rToken) {
     }
 }
 
-// document.getElementById('person').addEventListener('click', function() {
-//     window.location.href = 'login.html';
-// });
+    const nextButton = document.querySelector(".next-button");
+    nextButton.addEventListener("click", function(event) {
+        event.preventDefault(); // Prevent default link behavior
 
-// currently only looks at the first account and card it encounters
-document.addEventListener('DOMContentLoaded', async () => {
-    fetchUsername(loginUserId); // Fetch username
+        // Capture form data
+        const mobile = document.getElementById("mobile").value;
+        const amount = document.getElementById("amount").value;
+        const comments = document.getElementById("comments").value;
 
+        // Validate mobile number and amount
+        if (!mobile || !amount) {
+            text = "Please fill in the required fields: Mobile number and Amount."
+            performTTS(text);
+            alert("Please fill in the required fields: Mobile number and Amount.");
+            
+            return;
+        }
+
+        // Store data in sessionStorage
+        sessionStorage.setItem("mobile", mobile);
+        sessionStorage.setItem("amount", amount);
+        sessionStorage.setItem("comments", comments);
+
+    });
+
+    const nextBtn = document.getElementById("next");
     const accounts = await fetchUserAccounts(loginUserId); // Fetch user accounts
     if (accounts && accounts.length > 0) {
         // Store the accounts in session storage for later use
         sessionStorage.setItem('userAccounts', JSON.stringify(accounts));
         console.log("useracc:", sessionStorage)
-
-        const accId = accounts[0].acc_id;
-        const cards = await fetchCards(accId);
-
-        if (cards && cards.length > 0) {
-            // Store the cards in session storage for later use
-            sessionStorage.setItem('userCards', JSON.stringify(cards));
-            console.log("usercards:", sessionStorage);
-
-        } else {
-            console.log("No cards found for this account.");
-        }
-
-        // Display the first account by default
-        displayAccount(accounts[0], cards[0]); // Create a function to display account details
     }
-    else{
-        window.location.href = "login.html";
-    }
+
+    displaySmallTransactionLimit(accounts[0]);
+
+    nextBtn.addEventListener('click',()=>{
+       let amount = document.getElementById("amount").value;
+       let number = document.getElementById("mobile").value;
+       console.log(accounts[0]);
+       if(amount > accounts[0].transaction_limit){
+        console.log("Amount exceed transaction limit!");
+        text = "Amount excees transcation limit!";
+        performTTS(text);
+        alert(`Amount exceed transaction limit!`);
+       } 
+       else if(amount > accounts[0].balance){
+        console.log("Not enough balance!");
+        text = "Not enough balance!";
+        performTTS(text);
+        alert(`Not enough balance!`);
+       }
+       else if(!number || number.length != 8){
+        console.log("Please enter a valid number.");
+        text = "Please enter a valid number";
+        performTTS(text);
+        alert(`Please enter a valid number.`);
+       }
+       else{
+        localStorage.setItem("amount",amount);
+        localStorage.setItem("number",number);
+
+        window.location.href = "reviewconf.html"
+       }
+    });
 });

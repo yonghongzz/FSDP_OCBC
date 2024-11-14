@@ -11,7 +11,7 @@
     <div class="app-container">
         <!-- Top Header -->
         <div class="top-header">
-            <div class="icon zoom"><i class="bi bi-zoom-in"></i></div>
+            <div class="icon zoom"><i class="bi bi-zoom-in" id="magnify"></i></div>
             <div class="mode">
                 <span>Lite</span>
                 <span class="dropdown"><i class="bi bi-caret-down-fill"></i></span>
@@ -32,7 +32,7 @@
 
             <div class="amount-section1">
                 <h1>Amount:</h1>
-                <h1>5.00 SGD</h1>
+                <h1 id="displayAmount"></h1>
             </div>
         
             <div class="transfer-box1">
@@ -40,8 +40,8 @@
                     <div class="icon"><i class="bi bi-wallet2"></i></div>
                     <div class="info">
                         <span class="label">To</span>
-                        <span class="name">John</span>
-                        <span class="contact">+65 9123 4567</span>
+                        <span>John</span>
+                        <span id="displayMobile"></span>
                     </div>
                 </div>
                 
@@ -60,7 +60,7 @@
         
             <div class="comments-section">
                 <span class="label">Comments</span>
-                <p>Mobile Transfer</p>
+                <p id ="displayComments"></p>
             </div>
         
             <div class="warning">
@@ -69,12 +69,15 @@
 
             <div class="button-container">
                 <button class="cancel-btn"><a href="#">Cancel</a></button>
-                <div class="confirm-btn"><a href="success.html">Confirm</a></button>
+                <button class="confirm-btn"><a href="success.html">Confirm</a></button>
             </div>
         </div>
     </div>
+    <script src="js/review.js"></script>
     <script src="js/magnifying.js"></script>
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
+    <script src="js/review-handler.js"></script>
+    
 </body>
 </html>

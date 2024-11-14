@@ -1,11 +1,8 @@
+
 // token
 const token = sessionStorage.getItem('token');
 const loginUserId = sessionStorage.getItem('loginUserId');
 const rToken = getCookie('rToken'); // refresh token
-
-document.getElementById('back').addEventListener('click', function() {
-    window.location.href = 'index.html';
-});
 
 let canSpeak = false;
 let isSpeaking = false;
@@ -34,78 +31,6 @@ const performTTS = async(textContent) => {
     }, 1000);
 };
 
-// only getting the first account
-// implement dynamic search in the future (using getUrlParams)
-document.addEventListener('DOMContentLoaded', async () => {
-    const accounts = await fetchUserAccounts(loginUserId); // Fetch user accounts
-    const currentAccount = accounts[0];
-    const accId = currentAccount.account_id;
-    console.log(accId)
-
-    // Function to handle transaction limit confirmation
-    document.querySelector('.confirm-limit').addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default anchor click behavior
-
-        // Get the selected limit from the dropdown
-        const selectedLimit = document.querySelector('.dropdown-menu .dropdown-item.active');
-        if (selectedLimit) {
-            const limitValue = selectedLimit.textContent;
-
-            //console.log(currentAccount.accId)
-            console.log(limitValue)
-
-            // Update the transaction amount (you can implement the actual logic here)
-            updateTransactionLimit(accId, limitValue);
-            text = `Transaction limit updated to ${limitValue} SGD.`
-
-            // Show a confirmation message (optional)
-            if(canSpeak){
-                if(!isSpeaking){
-                    isSpeaking = true;
-                    performTTS(text); // or any function handling the text
-                    console.log("NM");
-                }
-            }
-            alert(`Transaction limit updated to ${limitValue} SGD.`);
-            
-            // Redirect to index.html after a short delay
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000); // Adjust the delay time as needed
-        } else {
-            text = 'Please select a transaction limit before confirming.';
-            if(canSpeak){
-                if(!isSpeaking){
-                    isSpeaking = true;
-                    performTTS(text); // or any function handling the text
-                }
-            }
-            alert('Please select a transaction limit before confirming.');
-        }
-    });
-
-    // Adding event listeners to dropdown items
-    const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', function() {
-            // Remove 'active' class from all items
-            dropdownItems.forEach(i => i.classList.remove('active'));
-            
-            // Add 'active' class to the selected item
-            this.classList.add('active');
-
-            // Update the dropdown button text to reflect the selected limit
-            const dropdownButton = document.querySelector('.dropdown-toggle');
-            dropdownButton.textContent = `${this.textContent} SGD`;
-        });
-    });
-});
-
-// get the latest transaction amt
-// update the account transaction amt when press confirm
-// bring them back to index.html
-
-
 async function fetchUserAccounts(user_id) {
     try {
         const response = await fetch(`/accounts`); // Adjust endpoint as needed
@@ -113,6 +38,18 @@ async function fetchUserAccounts(user_id) {
             throw new Error('Network response was not ok');
         }
         const accounts = await response.json();
+        console.log(accounts)
+        console.log(user_id);
+
+        /*
+        const userAccounts = [];
+        for (const account of accounts) {
+            const userId = account.user_id;
+            if (userId == loginUserId) {
+                userAccounts.push(account);
+            }
+        }
+        */
 
         // Filter accounts that match the loginUserId
         const userAccounts = accounts.filter(account => account.user_id == loginUserId);
@@ -124,35 +61,76 @@ async function fetchUserAccounts(user_id) {
     }
 }
 
-async function updateTransactionLimit(accId, limit) {
+async function updateBalance(accId, bal) {
     accId = parseInt(accId);
 
-    const newTransactionLimit = {
-        transaction_limit: parseFloat(limit)
+    const newBalance = {
+        balance: parseFloat(bal)
     };
 
+    console.log(accId, bal)
+
     try {
-        const response = await fetch(`/accounts/${accId}`, {
+        const response = await fetch(`/accounts/balance/${accId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(newTransactionLimit)
+            body: JSON.stringify(newBalance)
         });
 
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Failed to update limit: ${errorText}`); // Log the response error
+            throw new Error(`Failed to update balance: ${errorText}`); // Log the response error
         }
 
         const updatedAccount = await response.json(); // Get updated account
         console.log('Updated account:', updatedAccount); // Log updated account
     } catch (error) {
-        console.error('Error updating transaction limit:', error);
+        console.error('Error updating balance:', error);
     }
 }
 
+async function createTransaction(accId, amount) {
+
+    const newTransactionData = {
+        account_id: accId,
+        transaction_type: "transfer",
+        amount: amount,
+        name: "John"
+    };
+
+    try {
+        const response = await fetch(`/transactions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(newTransactionData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Failed to create transaction:', errorData);
+            alert(`Error: ${errorData.message}\nDetails: ${errorData.errors.join(', ')}`);
+            return; // Stop further execution if the transaction creation fails
+        }
+
+        const responseData = await response.json();
+        console.log('Transaction created successfully:', responseData);
+        let text = `Transaction Successful: Your transaction has been processed.`;
+        speechSynthesis.cancel();
+        isSpeaking = false;
+        performTTS(text);
+        alert(`Transaction Successful: ${responseData.message || 'Your transaction has been processed.'}`);
+        
+    } catch (error) {
+        console.error("Error creating transaction:", error);
+        alert("There was an error processing your transaction. Please try again.");
+    }
+}
 
 function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
@@ -234,3 +212,59 @@ async function refreshToken(rToken) {
         location.reload();
     }
 }
+
+// document.getElementById('person').addEventListener('click', function() {
+//     window.location.href = 'login.html';
+// });
+
+// currently only looks at the first account and card it encounters
+document.addEventListener('DOMContentLoaded', async () => {
+    const nextBtn = document.getElementById("next");
+    const accounts = await fetchUserAccounts(loginUserId); // Fetch user accounts
+    if (accounts && accounts.length > 0) {
+        // Store the accounts in session storage for later use
+        sessionStorage.setItem('userAccounts', JSON.stringify(accounts));
+        console.log("useracc:", sessionStorage)
+    }
+
+    let amount;
+    
+    //nextBtn.addEventListener('click',()=>{
+       //amount = localStorage.getItem("amount");
+       //let number = localStorage.getItem("number");
+       //document.getElementById("amount").text
+    //});
+
+    amount = localStorage.getItem("amount");
+       let number = localStorage.getItem("number");
+       //document.getElementById("amount").text
+
+    console.log(amount)
+
+    const currentAccount = accounts[0];
+    const accId = currentAccount.account_id;
+    console.log(`were here ${accId}`);
+
+    // Function to handle transaction limit confirmation
+    document.querySelector('.confirm-btn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default anchor click behavior
+
+        const bal = currentAccount.balance - amount;
+
+            //console.log(currentAccount.accId)
+            console.log(amount)
+
+            // Update the transaction amount (you can implement the actual logic here)
+            updateBalance(accId, bal);
+
+            createTransaction(accId, amount);
+
+            // Show a confirmation message (optional)
+            alert(`balance: ${bal}`);
+
+            // Redirect to index.html after a short delay
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000); // Adjust the delay time as needed
+    });
+});

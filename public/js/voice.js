@@ -5,7 +5,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     const micButton = document.getElementById("mic");
     let voice = false;
     console.log(voice);
+    console.log(localStorage.getItem("voice"));
+    
     if(localStorage.getItem("voice") === "true"){
+      console.log("zzz");
         voice = true;
     }
     else{
@@ -36,6 +39,8 @@ document.addEventListener('DOMContentLoaded',()=>{
         if(localStorage.getItem("amount")){
           document.getElementById("amount").value = localStorage.getItem("amount");
         }
+        localStorage.removeItem("number");
+        localStorage.removeItem("amount");
     };
 
     
@@ -49,13 +54,14 @@ document.addEventListener('DOMContentLoaded',()=>{
       let data;
       data = await sendToWitAi(speech);
         if(data.intents[0].confidence >= 0.9){
-        if(data.intents[0].name === 'CheckBalance'){
-            window.location.href = "account.html";
+          if(data.intents[0].name === 'CheckBalance'){
+              window.location.href = "account.html";
           }
           else if(data.intents[0].name == 'PayNow'){
             let amount;
             let receiver;
-            localStorage.clear();
+            localStorage.removeItem("amount");
+            localStorage.removeItem("number");
             if (data.entities['wit$number:amount']) {
                 amount = data.entities['wit$number:amount'][0].value;
             }
@@ -76,10 +82,22 @@ document.addEventListener('DOMContentLoaded',()=>{
           else if(data.intents[0].name == "Limit"){
             window.location.href = "change-transcation-limit.html";
           }
+          else if(data.intents[0].name == "Help"){
+            window.location.href = "HelpNav.html";
+          }
+          else if(data.intents[0].name == "Guide"){
+            window.location.href = "guide.html";
+          }
           else if(data.intents[0].name == "Back"){
             window.history.back();
-          };
-    }
+          }
+          else if(data.intents[0].name == "Home"){
+            window.location.href = "index.html";
+          }
+          else if(data.intents[0].name == "QRCode"){
+            window.location.href = "scanQR.html";
+          }
+      }
     };
     
     recognition.onend=()=>{
