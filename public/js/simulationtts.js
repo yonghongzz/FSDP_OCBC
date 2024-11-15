@@ -37,9 +37,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         
         // Speak the text
         speechSynthesis.speak(utterance);
-        setTimeout(function() {
-            isSpeaking = false;
-        }, 1000);
+        isSpeaking = false;
     };
 
     if(stepsElement){
