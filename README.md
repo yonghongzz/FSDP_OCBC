@@ -1,54 +1,41 @@
-# FSDP_OCBC
+Here’s an enhanced version of the README description to further showcase your digital banking solution:
+
+---
+
+# FSDP_OCBC: Inclusive Digital Banking for All
 
 ## Problem Statement and Focus Area
-> How might we make digital banking accessible for everyone
-> Target audience: Seniors of today and tomorrow
-> Designing for the current generation of seniors is important, in a rapidly advancing world where payments 
-are going digital, ensuring that the digital gap does not widen is paramount. However, 
-we do need to remember that one day the current generation will grow old too and therefore require 
-assistance in our daily activities. Therefore, designing with the needs of the future generations in 
-mind would help in laying the foundations for future proofing our solution.
+> **How might we make digital banking accessible for everyone?**
+> - **Target Audience**: Today’s and tomorrow’s seniors
+> - In a world where payments are increasingly digital, our solution addresses the growing digital divide among seniors. By designing inclusively for current and future generations, we aim to create a secure, adaptable, and accessible foundation for digital banking, ensuring ease of use as technology evolves.
 
-## Our solution
-A lite version of the OCBC digital banking app that contains features commonly used in day to day 
-activites such as shopping, paying for essentials and transferring money to friends and loved ones.
+## Our Solution
+We’ve developed a lite version of the OCBC digital banking app that supports key daily financial activities such as shopping, paying bills, and transferring funds. Prioritizing simplicity and accessibility, the app serves as an intuitive gateway for seniors to engage with digital finance confidently.
 
-## Features 
-### Magnifying glass
-- Enlarges selected sections of the page to improve text visibility, allowing users to read easily,
-improving user experience as users will be able to have a clearer understanding without the need to squint.
+## Key Features 
+### Magnifying Glass
+- **Enhances Readability**: Enlarges text and selected sections, making information clearer and reducing the need for users to strain their eyes.
 
-### Text to speech
-- Selectively reads out clicked words that are non-sensitive. Addresses problems of users who have
-vision issues 
+### Text-to-Speech
+- **Auditory Assistance**: Reads out selected, non-sensitive text to help users with visual impairments navigate and understand app content effortlessly.
 
-### Speech to Text
-- Minimises the need for specific handmovements for typing, allowing users to talk to the app to
-execute certain commands for certain features such as Pay Now, to navigate around the app, and to 
-input fields. 
+### Speech-to-Text
+- **Hands-Free Interaction**: Users can perform key actions (e.g., initiating payments) and input information verbally, reducing the need for fine motor control.
 
-### Simulation for iBanking Services
-- Allows users to gain familiarity with using iBanking services through step-by-step walkthroughs
-that mimic the actual service. This alleviates any potential fears of mistakes that the user might
-make and result in a loss of savings because the simulation allows the users to practice indefinitely
-and provides a form of recap when in doubt.
+### iBanking Simulation
+- **Practice Environment**: Step-by-step simulations allow users to safely practice iBanking services without risking errors, building familiarity and confidence.
 
-### FAQ section
-- Provides users with answers to commonly asked questions about the app.
+### FAQ Section
+- **Quick Support**: A dedicated section with answers to common app questions helps users find solutions independently.
 
-### Video Call with support staff
-- Provides a human touch to customer support issues.
-- Share screen function allows users to easily show their problems to support staff, without needing
-to describe and having to guess the issue over a voice call via the hotline. It increases efficiency 
-as the problem can be quickly identified and resolved.
-- Benefits persons with mobility issues as it can be an alternative to going to a physical branch 
-counter to get their issues resolved.
+### Video Call with Support Staff
+- **Personalized Assistance**: Users can engage with customer support via video call, with screen sharing to help staff better understand issues. This feature is ideal for users who may find in-person visits challenging.
 
+## Technologies Used
+- **Frontend**: HTML, CSS, JavaScript, Bootstrap
+- **Backend**: Node.js, Socket.IO, Microsoft SQL Server
+- **Voice and Accessibility**: wit.ai, Web Speech API, SpeechRecognition
 
-## Technologies used
-> - HTML, CSS, JavaScript, Bootstrap
-> - Node JS, Socket.IO, Microsoft SQL Server
-> - wit.ai, Web Speech API, SpeechRecognition
+---
 
-## Miscellaneous
-### Citations
+This README positions the app as a forward-thinking, user-friendly banking solution designed to bridge the digital gap, emphasizing ease of use and empowering accessibility for all users.
