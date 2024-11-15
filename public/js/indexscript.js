@@ -189,7 +189,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Display the first account by default
         displayAccount(accounts[0], cards[0]); // Create a function to display account details
     }
-    else{
-        window.location.href = "login.html";
-    }
 });
