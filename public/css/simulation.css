@@ -12,6 +12,7 @@ body {
     align-items: center;
     min-height: 100vh;
     background-color: #f5f5f5;
+    touch-action: none;
 }
 
 .app-container {
@@ -21,6 +22,7 @@ body {
     border-radius: 8px;
     overflow-y: auto;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    touch-action: none;
 }
 
 .top-header {
@@ -646,3 +648,33 @@ h2 {
     font-weight: 400;
 }
 
+.handle {
+    position: absolute;
+    height: calc(var(--size) * 1.9);
+    width: calc(var(--size) * 1.9);
+    background: var(--handle-background);
+    background-size: contain;
+    filter: drop-shadow(-2px -2px 10px rgba(0, 0, 0, 0.5));
+  }
+  
+  .magnifying-glass {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    height: calc(var(--size) * 0.8);
+    width: calc(var(--size) * 1.4);
+    border: solid 3px black;
+    background: radial-gradient(#f5fcfc 45%, gray);
+    overflow: hidden;
+    border-radius: 10%;
+  }
+  
+  .body-clone {
+    position: absolute;
+    margin-left: 8vw;
+    padding: inherit;
+    height: 100vh;
+    width: calc(100vw - var(--scrollbar-width));
+    transform: scale(var(--scale));
+    overflow: hidden;
+  }

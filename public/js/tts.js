@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       
       const performTTS = async(textContent) => {
         updateSensitiveInfo();
+        speechSynthesis.cancel();
         let utterance;
         let sentiveInfo = false;
         const splitText = textContent.split('\n');
