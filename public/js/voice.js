@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded',()=>{
       let data;
       data = await sendToWitAi(speech);
         if(data.intents[0].confidence >= 0.9){
-        if(data.intents[0].name === 'CheckBalance'){
-            window.location.href = "account.html";
+          if(data.intents[0].name === 'CheckBalance'){
+              window.location.href = "account.html";
           }
           else if(data.intents[0].name == 'PayNow'){
             let amount;
@@ -90,8 +90,14 @@ document.addEventListener('DOMContentLoaded',()=>{
           }
           else if(data.intents[0].name == "Back"){
             window.history.back();
-          };
-    }
+          }
+          else if(data.intents[0].name == "Home"){
+            window.location.href = "index.html";
+          }
+          else if(data.intents[0].name == "QRCode"){
+            window.location.href = "scanQR.html";
+          }
+      }
     };
     
     recognition.onend=()=>{
