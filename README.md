@@ -1,7 +1,3 @@
-Here’s an enhanced version of the README description to further showcase your digital banking solution:
-
----
-
 # FSDP_OCBC: Inclusive Digital Banking for All
 
 ## Problem Statement and Focus Area
