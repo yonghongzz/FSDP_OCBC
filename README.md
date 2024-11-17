@@ -35,7 +35,3 @@ We’ve developed a lite version of the OCBC digital banking app that supports k
 - **Frontend**: HTML, CSS, JavaScript, Bootstrap
 - **Backend**: Node.js, Socket.IO, Microsoft SQL Server
 - **Voice and Accessibility**: wit.ai, Web Speech API, SpeechRecognition
-
----
-
-This README positions the app as a forward-thinking, user-friendly banking solution designed to bridge the digital gap, emphasizing ease of use and empowering accessibility for all users.
