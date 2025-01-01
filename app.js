@@ -17,9 +17,14 @@ const https = require("https");
 const fs = require("fs");
 const { Server } = require("socket.io");
 
+const {generateRegistrationOptions,verifyRegistrationResponse} = require("@simplewebauthn/server");
+const cookieParser = require("cookie-parser")
 
 const app = express();
 const port = process.env.PORT || 3000;
+const RPID = "localhost";
+const origin = "https://localhost:3000";
+
 
 // Read the certificate and key files
 const privateKey = fs.readFileSync("key.pem");
@@ -41,6 +46,7 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
 
 
 
@@ -161,3 +167,37 @@ process.on("SIGINT", async () => {
   console.log("Database connection closed");
   process.exit(0); // Exit with code 0 indicating successful shutdown
 });
+
+app.get('/generate-auth',async(req,res)=>{
+    const email = req.query.email;
+    if(!email){
+        return res.status(400).json({error:"Email is required"});
+    }
+    const options = await generateRegistrationOptions({
+        rpID: RPID,
+        rpName: "FSDP",
+        userName: email,
+    });
+    res.cookie(
+        "regInfo",
+        JSON.stringify({
+            userId: options.user.id,
+            email,
+            challenge: options.challenge,
+        }),
+        {httpOnly:true,maxAge:60000,secure:true}
+    );
+    res.json(options);
+});
+
+app.post('/verify-auth',async(req,res)=>{
+    let verification;
+    const regInfo = JSON.parse(req.cookies.regInfo);
+    verification = await verifyRegistrationResponse({
+        response: req.body,
+        expectedChallenge: regInfo.challenge,
+        expectedOrigin: origin,
+        expectedRPID: RPID,
+    });
+    res.json(verification);
+})
