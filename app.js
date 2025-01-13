@@ -12,12 +12,14 @@ const authenticate = require("./middlewares/authenticate");
 const validateUser = require("./middlewares/validateUser");
 const validateStaff = require("./middlewares/validateStaff");
 const validateAccTransaction = require("./middlewares/validateAccTransaction");
+const biometricController = require("./controllers/biometricController");
 const seedDatabase = require("./seed");
 const https = require("https");
 const fs = require("fs");
 const { Server } = require("socket.io");
 
-const {generateRegistrationOptions,verifyRegistrationResponse} = require("@simplewebauthn/server");
+const {generateRegistrationOptions,verifyRegistrationResponse,generateAuthenticationOptions,
+    verifyAuthenticationResponse,} = require("@simplewebauthn/server");
 const cookieParser = require("cookie-parser")
 
 const app = express();
@@ -82,6 +84,9 @@ app.post("/staffs/login", validateStaff.validateLoginStaff, staffController.logi
 app.post("/staffs/check", authenticate.verifyJWT, staffController.checkPassword);
 app.post("/token", staffController.refreshAccessToken);
 app.delete("/logout", staffController.logout);
+
+app.post("/save-passkey",biometricController.createPasskey);
+app.get("/get-passkey",biometricController.getPasskey);
 
 let callQueue = {};
 
@@ -200,4 +205,57 @@ app.post('/verify-auth',async(req,res)=>{
         expectedRPID: RPID,
     });
     res.json(verification);
+});
+
+app.post('/generate-authentication-options',async(req,res)=>{
+    const userId = req.query.userId;
+    const passkey = req.body;
+    const options = await generateAuthenticationOptions({
+        RPID,
+        allowCredentials: [
+            {
+                id: passkey.cred_id,
+                transports: passkey.transports,
+            }
+        ]
+    });
+    res.cookie(
+        "authInfo",
+        JSON.stringify({
+            challenge: options.challenge,
+        }),
+        {httpOnly:true,maxAge:60000,secure:true}
+    );
+    res.json(options);
+});
+
+app.post('/verify-authentication',async(req,res)=>{
+    const authInfo = JSON.parse(req.cookies.authInfo);
+    const { asseResp, passkey } = req.body;
+
+    console.log(asseResp);
+    if(!passkey){
+        throw new Error(`Could not find passkey for user`);
+    }
+    let verification;
+    try{
+        verification = await verifyAuthenticationResponse({
+            response: asseResp,
+            expectedChallenge: authInfo.challenge,
+            expectedOrigin: origin,
+            expectedRPID: RPID,
+            credential: {
+                id: passkey.cred_id,
+                publicKey: passkey.cred_public_key,
+                counter: passkey.counter,
+                transports: passkey.transports,
+            },
+        });
+        res.json(verification);
+    }catch(error){
+        console.error(error);
+        return res.status(400).send({error:error.message});
+    }
 })
+
+

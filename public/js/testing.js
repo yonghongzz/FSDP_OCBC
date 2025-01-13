@@ -1,5 +1,7 @@
+
+
 //import { startAuthentication, startRegistration } from 'https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@latest/dist/browser.bundle.min.js';
-const { startRegistration } = SimpleWebAuthnBrowser;
+const { startRegistration,startAuthentication } = SimpleWebAuthnBrowser;
 document.addEventListener('DOMContentLoaded',async ()=>{
     // token
     const loginUserId = sessionStorage.getItem('loginUserId');
@@ -50,12 +52,87 @@ document.addEventListener('DOMContentLoaded',async ()=>{
       const verifyJSON  = await verifyResponse.json();
 
       if(verifyJSON && verifyJSON.verified){
-        console.log("Success");
+        console.log(verifyJSON);
+        const newPasskey = {
+          userId: user.user_id,
+          webAuthnUserId: options.user.id,
+          credId: verifyJSON.registrationInfo.credential.id,
+          publicKey: verifyJSON.registrationInfo.credential.publicKey,
+          counter: verifyJSON.registrationInfo.credential.counter,
+          transports: verifyJSON.registrationInfo.credential.transports,
+          deviceType: verifyJSON.registrationInfo.credentialDeviceType,
+          backedUp: verifyJSON.registrationInfo.credentialBackedUp,
+        }
+        saveNewPasskey(newPasskey);
       }
       else{
         console.log("ERROR");
       }
     }
+
+    async function saveNewPasskey(passkey){
+      const saved = await fetch('/save-passkey',{
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(passkey)
+      });
+    }
+    document.getElementById("get").addEventListener('click',async()=>{
+      getPasskey(user.user_id);
+    })
     
+    async function getPasskey(userId){
+      const response = await fetch(`/get-passkey?userId=${userId}`);
+      if(response.ok){
+        const passkey = await response.json();
+        return passkey;
+      }
+    }
+
+    async function authenticateAuth(userId){
+      console.log(userId);
+      const passkey = await getPasskey(userId);
+      const resp = await fetch(`/generate-authentication-options?userId=${userId}`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(passkey),
+      });
+      const optionsJSON = await resp.json();
+      console.log(optionsJSON);
+      let asseResp;
+      try{
+        asseResp = await startAuthentication({optionsJSON:optionsJSON});
+      }catch(error){
+        console.log("ERROR");
+      }
+
+      const body = {
+        asseResp,
+        passkey,
+      }
+
+      const verificationResp = await fetch(`/verify-authentication`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      const verificationJSON = await verificationResp.json();
+      if(verificationJSON && verificationJSON.verified){
+        console.log("Success");
+        console.log(verificationJSON);
+      }
+    }
+
+    document.getElementById("verify").addEventListener('click',async ()=>{
+      console.log(user.user_id);
+      authenticateAuth(user.user_id);
+    })
 
 })
