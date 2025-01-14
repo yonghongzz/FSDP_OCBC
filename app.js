@@ -208,10 +208,9 @@ app.post('/verify-auth',async(req,res)=>{
 });
 
 app.post('/generate-authentication-options',async(req,res)=>{
-    const userId = req.query.userId;
     const passkey = req.body;
     const options = await generateAuthenticationOptions({
-        RPID,
+        rpID: RPID,
         allowCredentials: [
             {
                 id: passkey.cred_id,
@@ -226,6 +225,8 @@ app.post('/generate-authentication-options',async(req,res)=>{
         }),
         {httpOnly:true,maxAge:60000,secure:true}
     );
+    const transports = options.allowCredentials[0].transports;
+    options.allowCredentials[0].transports = JSON.parse(transports);
     res.json(options);
 });
 
@@ -233,7 +234,6 @@ app.post('/verify-authentication',async(req,res)=>{
     const authInfo = JSON.parse(req.cookies.authInfo);
     const { asseResp, passkey } = req.body;
 
-    console.log(asseResp);
     if(!passkey){
         throw new Error(`Could not find passkey for user`);
     }

@@ -1,5 +1,6 @@
 
 
+
 //import { startAuthentication, startRegistration } from 'https://cdn.jsdelivr.net/npm/@simplewebauthn/browser@latest/dist/browser.bundle.min.js';
 const { startRegistration,startAuthentication } = SimpleWebAuthnBrowser;
 document.addEventListener('DOMContentLoaded',async ()=>{
@@ -101,19 +102,26 @@ document.addEventListener('DOMContentLoaded',async ()=>{
         },
         body: JSON.stringify(passkey),
       });
-      const optionsJSON = await resp.json();
-      console.log(optionsJSON);
+      const options = await resp.json();
+      console.log(options);
       let asseResp;
       try{
-        asseResp = await startAuthentication({optionsJSON:optionsJSON});
+        asseResp = await startAuthentication({ optionsJSON: options, useBrowserAutofill: false });
+        console.log(asseResp);
       }catch(error){
-        console.log("ERROR");
+        console.log(error);
       }
+
+      //passkey.transports = JSON.parse(passkey.transports);
+      console.log(passkey.transports);
+      // passkey.cred_public_key = base64ToBase64Url(passkey.cred_public_key);
+      console.log(passkey.cred_public_key);
 
       const body = {
         asseResp,
         passkey,
       }
+      console.log(passkey);
 
       const verificationResp = await fetch(`/verify-authentication`,{
         method: 'POST',
@@ -133,6 +141,7 @@ document.addEventListener('DOMContentLoaded',async ()=>{
     document.getElementById("verify").addEventListener('click',async ()=>{
       console.log(user.user_id);
       authenticateAuth(user.user_id);
-    })
+    });
+
 
 })
