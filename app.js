@@ -156,7 +156,7 @@ server.listen(port, '0.0.0.0', async () => {
       await sql.connect(dbConfig);
   
       // Seed DB with initial data
-      //seedDatabase();
+      seedDatabase();
   
       console.log("Database connection established successfully");
     } catch (err) {
@@ -237,6 +237,8 @@ app.post('/generate-authentication-options',async(req,res)=>{
 app.post('/verify-authentication',async(req,res)=>{
     const authInfo = JSON.parse(req.cookies.authInfo);
     const { asseResp, passkey } = req.body;
+    console.log(passkey);
+    console.log(asseResp);
 
     if(!passkey){
         throw new Error(`Could not find passkey for user`);

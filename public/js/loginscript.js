@@ -144,19 +144,29 @@ async function refreshToken(rToken) {
 const fingerprint = document.getElementById("biometric");
 fingerprint.addEventListener('click',async()=>{
     const username = document.getElementById("loginUsername").value;
-    if(username){
-        try {
-            const userId = await fetchUserId(username); // Wait for the userId to be fetched
-            if (userId) {
-                authenticateAuth(userId); // Now call authenticateAuth with the valid userId
-            } else {
-                console.log("User ID not found.");
-            }
-        } catch (error) {
-            console.error('Error during fingerprint authentication:', error);
-        }
+    if(!username){
+        const errorField = document.getElementById('loginError');
+        errorField.textContent = 'Please enter your username!';
+        return;
+    }
+    const userId = await fetchUserId(username);
+
+    if(!userId){
+        alert("User not found.");
+        return;
     }
 
+    const passkey = await getPasskey(userId);
+
+    if(!passkey){
+        alert("Biometric not register yet!");
+        return;
+    }
+    try {
+        authenticateAuth(userId);
+    } catch (error) {
+        console.error('Error during fingerprint authentication:', error);
+    }
 });
 
 async function fetchUserId(username) {
@@ -175,7 +185,12 @@ async function fetchUserId(username) {
 async function getPasskey(userId){
     const response = await fetch(`/get-passkey?userId=${userId}`);
     if(response.ok){
-      const passkey = await response.json();
+      const text = await response.text();
+      if (!text) {
+          return null; // Return null if response body is empty
+      }
+
+      const passkey = JSON.parse(text); // Parse as JSON if the body is not empty
       return passkey;
     }
   }

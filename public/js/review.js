@@ -1,4 +1,4 @@
-
+const { startRegistration,startAuthentication } = SimpleWebAuthnBrowser;
 // token
 const token = sessionStorage.getItem('token');
 const loginUserId = sessionStorage.getItem('loginUserId');
@@ -246,25 +246,107 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log(`were here ${accId}`);
 
     // Function to handle transaction limit confirmation
-    document.querySelector('.confirm-btn').addEventListener('click', function(event) {
+    document.querySelector('.confirm-btn').addEventListener('click', async function(event) {
         event.preventDefault(); // Prevent the default anchor click behavior
+        if(await getPasskey(loginUserId)){
+            if(await authenticateAuth(loginUserId)){
+                transaction();
+            }
+            else{
+                alert("Authentication failed. Fingerprint is not correct");
+            }
+        }
+        else{
+            transaction();
+        }
+    });
 
+    function transaction(){
         const bal = currentAccount.balance - amount;
 
-            //console.log(currentAccount.accId)
-            console.log(amount)
+        //console.log(currentAccount.accId)
+        console.log(amount)
 
-            // Update the transaction amount (you can implement the actual logic here)
-            updateBalance(accId, bal);
+        // Update the transaction amount (you can implement the actual logic here)
+        updateBalance(accId, bal);
 
-            createTransaction(accId, amount);
+        createTransaction(accId, amount);
 
-            // Show a confirmation message (optional)
-            alert(`balance: ${bal}`);
+        // Show a confirmation message (optional)
+        alert(`balance: ${bal}`);
 
-            // Redirect to index.html after a short delay
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000); // Adjust the delay time as needed
-    });
+        // Redirect to index.html after a short delay
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1000); // Adjust the delay time as needed
+    }
+
+    async function getPasskey(userId){
+        const response = await fetch(`/get-passkey?userId=${userId}`);
+        if(response.ok){
+          const text = await response.text();
+          if (!text) {
+              return null; // Return null if response body is empty
+          }
+  
+          const passkey = JSON.parse(text); // Parse as JSON if the body is not empty
+          return passkey;
+        }
+      }
+    
+      async function authenticateAuth(userId){
+        console.log(userId);
+        const passkey = await getPasskey(userId);
+        const resp = await fetch(`/generate-authentication-options?userId=${userId}`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(passkey),
+        });
+        const options = await resp.json();
+        console.log(options);
+        let asseResp;
+        try{
+          asseResp = await startAuthentication({ optionsJSON: options, useBrowserAutofill: false });
+          console.log(asseResp);
+        }catch(error){
+          console.log(error);
+        }
+    
+        const body = {
+          asseResp,
+          passkey,
+        }
+        console.log(passkey);
+    
+        const verificationResp = await fetch(`/verify-authentication`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+    
+        const verificationJSON = await verificationResp.json();
+        console.log(verificationJSON);
+        if(verificationJSON && verificationJSON.verified){
+          console.log("Success");
+          console.log(verificationJSON);
+          updateCounter(passkey,verificationJSON.authenticationInfo.newCounter);
+          return true;
+        }
+      }
+      
+      async function updateCounter(passkey,newCounter){
+        passkey.counter = newCounter;
+        const updatePasskeyCounter = await fetch('/update-counter',{
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(passkey),
+        });
+    
+      }
 });
