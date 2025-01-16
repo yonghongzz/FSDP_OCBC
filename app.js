@@ -17,6 +17,8 @@ const seedDatabase = require("./seed");
 const https = require("https");
 const fs = require("fs");
 const { Server } = require("socket.io");
+const {Buffer} = require("buffer");
+const {Base64} = require("js-base64");
 
 const {generateRegistrationOptions,verifyRegistrationResponse,generateAuthenticationOptions,
     verifyAuthenticationResponse,} = require("@simplewebauthn/server");
@@ -246,7 +248,7 @@ app.post('/verify-authentication',async(req,res)=>{
             expectedRPID: RPID,
             credential: {
                 id: passkey.cred_id,
-                publicKey: passkey.cred_public_key,
+                publicKey: new Uint8Array(Buffer.from(passkey.cred_public_key, 'base64')),
                 counter: passkey.counter,
                 transports: passkey.transports,
             },
@@ -256,6 +258,7 @@ app.post('/verify-authentication',async(req,res)=>{
         console.error(error);
         return res.status(400).send({error:error.message});
     }
-})
+});
+
 
 

@@ -112,10 +112,7 @@ document.addEventListener('DOMContentLoaded',async ()=>{
         console.log(error);
       }
 
-      //passkey.transports = JSON.parse(passkey.transports);
-      console.log(passkey.transports);
-      // passkey.cred_public_key = base64ToBase64Url(passkey.cred_public_key);
-      console.log(passkey.cred_public_key);
+
 
       const body = {
         asseResp,
@@ -132,6 +129,7 @@ document.addEventListener('DOMContentLoaded',async ()=>{
       });
 
       const verificationJSON = await verificationResp.json();
+      console.log(verificationJSON);
       if(verificationJSON && verificationJSON.verified){
         console.log("Success");
         console.log(verificationJSON);
@@ -143,5 +141,8 @@ document.addEventListener('DOMContentLoaded',async ()=>{
       authenticateAuth(user.user_id);
     });
 
+    async function updateCounter(passkey,newCounter){
+      
+    }
 
 })
