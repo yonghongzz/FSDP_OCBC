@@ -51,6 +51,17 @@ class Passkey {
         return result.recordset[0];
     }
 
+    static async updateCounter(passkey){
+        const connection = await sql.connect(dbConfig);
+        const sqlQuery = `UPDATE Passkey SET counter = @counter WHERE webauthn_user_id = @webauthnId`;
+        const request = connection.request();
+        request.input("counter",passkey.counter);
+        request.input("webauthnId",passkey.webauthn_user_id);
+        const result = await request.query(sqlQuery);
+        connection.close();
+        return result;
+    }
+
 }
 
 module.exports = Passkey;

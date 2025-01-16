@@ -40,11 +40,15 @@
                         <a href="staff-login.html">Staff Login</a>
                     </div>
                     <button id="login-button" type="submit" class="btn btn-danger">Login</button>
+                
                     <div id="loginError"></div>
+                    
                 </form>
+                <button id="biometric">Fingerprint</button>
             </div>
         </div>
     </div>
+    <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
     <script src="js/loginscript.js"></script>
     <script>
         // set the role to be the user

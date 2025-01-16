@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded',async ()=>{
       if(verificationJSON && verificationJSON.verified){
         console.log("Success");
         console.log(verificationJSON);
+        updateCounter(passkey,verificationJSON.authenticationInfo.newCounter);
       }
     }
 
@@ -142,7 +143,15 @@ document.addEventListener('DOMContentLoaded',async ()=>{
     });
 
     async function updateCounter(passkey,newCounter){
-      
+      passkey.counter = newCounter;
+      const updatePasskeyCounter = await fetch('/update-counter',{
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(passkey),
+      });
+
     }
 
 })

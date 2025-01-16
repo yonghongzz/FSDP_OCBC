@@ -72,6 +72,7 @@ app.get("/cards:id", cardController.getCardById);
 // user
 app.get("/users", userController.getAllUsers);
 app.get("/users/:id", userController.getUserById);
+app.get("/userId/:username",userController.getUserId);
 app.post("/users", validateUser.validateCreateUser, userController.createUser);
 app.put("/users/:id", validateUser.validateUpdateUser, userController.updateUser);
 app.post("/users/login", validateUser.validateLoginUser, userController.loginUser);
@@ -89,6 +90,7 @@ app.delete("/logout", staffController.logout);
 
 app.post("/save-passkey",biometricController.createPasskey);
 app.get("/get-passkey",biometricController.getPasskey);
+app.put("/update-counter",biometricController.updateCounter);
 
 let callQueue = {};
 
@@ -154,7 +156,7 @@ server.listen(port, '0.0.0.0', async () => {
       await sql.connect(dbConfig);
   
       // Seed DB with initial data
-      seedDatabase();
+      //seedDatabase();
   
       console.log("Database connection established successfully");
     } catch (err) {

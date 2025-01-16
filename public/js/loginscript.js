@@ -1,3 +1,5 @@
+const { startRegistration,startAuthentication } = SimpleWebAuthnBrowser;
+
 document.addEventListener('DOMContentLoaded', function () {
     const token = sessionStorage.getItem('token');
     const loginUserId = sessionStorage.getItem('loginUserId');
@@ -138,3 +140,104 @@ async function refreshToken(rToken) {
         location.reload();
     }
 }
+
+const fingerprint = document.getElementById("biometric");
+fingerprint.addEventListener('click',async()=>{
+    const username = document.getElementById("loginUsername").value;
+    if(username){
+        try {
+            const userId = await fetchUserId(username); // Wait for the userId to be fetched
+            if (userId) {
+                authenticateAuth(userId); // Now call authenticateAuth with the valid userId
+            } else {
+                console.log("User ID not found.");
+            }
+        } catch (error) {
+            console.error('Error during fingerprint authentication:', error);
+        }
+    }
+
+});
+
+async function fetchUserId(username) {
+    try {
+        const response = await fetch(`/userId/${username}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        userId = await response.json();
+        return userId;
+    } catch (error) {
+        console.error('Error fetching username:', error);
+    }
+}
+
+async function getPasskey(userId){
+    const response = await fetch(`/get-passkey?userId=${userId}`);
+    if(response.ok){
+      const passkey = await response.json();
+      return passkey;
+    }
+  }
+
+  async function authenticateAuth(userId){
+    console.log(userId);
+    const passkey = await getPasskey(userId);
+    const resp = await fetch(`/generate-authentication-options?userId=${userId}`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(passkey),
+    });
+    const options = await resp.json();
+    console.log(options);
+    let asseResp;
+    try{
+      asseResp = await startAuthentication({ optionsJSON: options, useBrowserAutofill: false });
+      console.log(asseResp);
+    }catch(error){
+      console.log(error);
+    }
+
+    const body = {
+      asseResp,
+      passkey,
+    }
+    console.log(passkey);
+
+    const verificationResp = await fetch(`/verify-authentication`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const verificationJSON = await verificationResp.json();
+    console.log(verificationJSON);
+    if(verificationJSON && verificationJSON.verified){
+      console.log("Success");
+      console.log(verificationJSON);
+      updateCounter(passkey,verificationJSON.authenticationInfo.newCounter);
+      const response = await fetch(`/users/${userId}`);
+      const user = await response.json();
+      if(user){
+        sessionStorage.setItem('loginUserId',userId);
+        window.location.href = "index.html";
+      }
+      console.log(user);
+    }
+  }
+  
+  async function updateCounter(passkey,newCounter){
+    passkey.counter = newCounter;
+    const updatePasskeyCounter = await fetch('/update-counter',{
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(passkey),
+    });
+
+  }
