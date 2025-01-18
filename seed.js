@@ -112,9 +112,9 @@ async function seedDatabase() {
         //Insert data into User table
         await sql.query(`
             INSERT INTO Users(username, password_hash, email, phone_number)
-            VALUES ('Anna', '${hashedPassword1}', 'anna@gmail.com', '12345678'),  
-                   ('Brian','${hashedPassword2}', 'brian@gmail.com', '23456789'),
-                   ('Charlie', '${hashedPassword3}', 'charlie@gmail.com', '34567890');
+            VALUES ('Anna', '${hashedPassword1}', 'fsdpanna123@gmail.com', '12345678'),  
+                   ('Brian','${hashedPassword2}', 'fsdpbrian123@gmail.com', '23456789'),
+                   ('Charlie', '${hashedPassword3}', 'fsdpcharlie123@gmail.com', '34567890');
         `);
 
         // Insert data into Account table

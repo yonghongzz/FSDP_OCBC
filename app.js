@@ -19,6 +19,8 @@ const fs = require("fs");
 const { Server } = require("socket.io");
 const {Buffer} = require("buffer");
 const {Base64} = require("js-base64");
+const nodemailer = require("nodemailer");
+require('dotenv').config();
 
 const {generateRegistrationOptions,verifyRegistrationResponse,generateAuthenticationOptions,
     verifyAuthenticationResponse,} = require("@simplewebauthn/server");
@@ -264,5 +266,47 @@ app.post('/verify-authentication',async(req,res)=>{
     }
 });
 
+app.post('/send-email',async(req,res)=>{
+    const {user,amount} = req.body;
+    const transporter = nodemailer.createTransport({
+        service:'gmail',
+        auth:{
+            user: process.env.SERVER_EMAIL,
+            pass: process.env.SERVER_PASSWORD
+        }
+    });
+    const mailOptions = {
+        from:process.env.SERVER_EMAIL,
+        to:user.email,
+        subject: "Your Transaction Was Successfully Processed",
+        text: `
+            Dear ${user.username},
+
+            This is a confirmation that your recent transaction of $${amount} has been successfully processed.
+
+            ---
+
+            If you did not authorize this transaction or if you notice any discrepancies, please contact us immediately. Our team is available to assist you 24/7.
+
+            ---
+
+            **Important Security Reminder:**
+            To ensure the safety of your account, please review your recent transactions and verify that everything is in order. If you believe your account has been compromised, please follow the steps in our [Fraud Protection Center] or contact us directly.
+
+            Thank you for choosing OCBC. We value your trust and are here to support you.
+
+            Best regards,  
+            OCBC  
+            `,
+    };
+    console.log("OK");
+    transporter.sendMail(mailOptions, function(error,info){
+        if(error){
+            console.log(error);
+        }else{
+            console.log('Email sent: '+info.response);
+        }
+    });
+})
 
 

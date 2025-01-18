@@ -250,18 +250,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault(); // Prevent the default anchor click behavior
         if(await getPasskey(loginUserId)){
             if(await authenticateAuth(loginUserId)){
-                transaction();
+                await transaction();
             }
             else{
                 alert("Authentication failed. Fingerprint is not correct");
             }
         }
         else{
-            transaction();
+            await transaction();
         }
     });
 
-    function transaction(){
+    async function transaction(){
         const bal = currentAccount.balance - amount;
 
         //console.log(currentAccount.accId)
@@ -272,6 +272,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         createTransaction(accId, amount);
 
+        const user = await fetchUser(loginUserId);
+        sendEmail(user,amount);
+
         // Show a confirmation message (optional)
         alert(`balance: ${bal}`);
 
@@ -279,6 +282,47 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 1000); // Adjust the delay time as needed
+    }
+
+    async function sendEmail(user,amount){
+        try {
+            const body = {
+                user:user,
+                amount:amount,
+            }
+            const response = await fetch(`/send-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(body)
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Failed to send email:', errorData);
+                alert(`Error: ${errorData.message}\nDetails: ${errorData.errors.join(', ')}`);
+                return;
+            }
+            
+        } catch (error) {
+            console.error("Error creating transaction:", error);
+            alert("There was an error processing your transaction. Please try again.");
+        }
+    }
+
+    async function fetchUser(user_id) {
+        try {
+            const response = await fetch(`/users/${user_id}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const user = await response.json();
+            return user;
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
     }
 
     async function getPasskey(userId){
