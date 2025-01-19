@@ -9,6 +9,18 @@ async function seedDatabase() {
         // Drop existing tables (optional if you want to recreate them entirely)
         await sql.query(`
             if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.OverseasTransactionLogs') and sysstat & 0xf = 3)
+            DROP TABLE dbo.OverseasTransactionLogs;
+
+            if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.OverseasTransactions') and sysstat & 0xf = 3)
+            DROP TABLE dbo.OverseasTransactions;
+
+            if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.OverseasPayees') and sysstat & 0xf = 3)
+            DROP TABLE dbo.OverseasPayees;
+
+            if exists (SELECT * FROM sysobjects 
             WHERE id = object_id('dbo.AccTransactions') and sysstat & 0xf = 3)
             DROP TABLE dbo.AccTransactions;
 
@@ -74,6 +86,42 @@ async function seedDatabase() {
                 username VARCHAR(50) NOT NULL UNIQUE,
                 password_hash VARCHAR(255) NOT NULL
             );
+
+            CREATE TABLE OverseasPayees (
+                payee_id INT PRIMARY KEY IDENTITY(1,1),
+                user_id INT,                     -- Foreign key to link to Users table
+                payee_name VARCHAR(100) NOT NULL, -- Name of the payee (could be a person or company)
+                bank_name VARCHAR(100) NOT NULL,  -- Name of the bank where the payee holds an account
+                country VARCHAR(50) NOT NULL,     -- Country where the payee's bank is located
+                account_number VARCHAR(20) NOT NULL, -- Payee's account number
+                currency VARCHAR(10) NOT NULL,    -- Currency used by the payee's bank (e.g., USD, EUR)
+                is_pinned BIT DEFAULT 0,          -- Indicates if the payee is pinned as frequent by the user (0 = not pinned, 1 = pinned)
+                FOREIGN KEY (user_id) REFERENCES Users(user_id)  -- Links to the Users table
+            );
+
+            CREATE TABLE OverseasTransactions (
+                transaction_id INT PRIMARY KEY IDENTITY(1,1),
+                user_id INT,                     -- Foreign key linking to the Users table
+                payee_id INT,                    -- Foreign key linking to the OverseasPayees table
+                amount DECIMAL(10, 2) NOT NULL,   -- The amount the user wants to send in their currency
+                currency VARCHAR(10) NOT NULL,    -- The currency of the transaction (user's currency)
+                converted_amount DECIMAL(10, 2) NOT NULL, -- The amount after currency conversion (to payee's currency)
+                transaction_datetime DATETIME DEFAULT GETDATE(), -- The date and time of the transaction
+                transaction_fee DECIMAL(10, 2),  -- The transaction fee for sending the money
+                transaction_type VARCHAR(50) CHECK (transaction_type IN ('send', 'receive')) NOT NULL, -- Type of transaction (send or receive)
+                tags VARCHAR(255),               -- Tags for categorizing the transaction (e.g., "gift", "business")
+                FOREIGN KEY (user_id) REFERENCES Users(user_id),  -- Links to the Users table
+                FOREIGN KEY (payee_id) REFERENCES OverseasPayees(payee_id)  -- Links to the OverseasPayees table
+            );
+
+            CREATE TABLE OverseasTransactionLogs (
+                log_id INT PRIMARY KEY IDENTITY(1,1),
+                transaction_id INT,              -- Foreign key linking to the OverseasTransactions table
+                exchange_rate DECIMAL(10, 6) NOT NULL,  -- Exchange rate used for the transaction
+                transaction_fee DECIMAL(10, 2),  -- The fee applied during the transaction
+                log_datetime DATETIME DEFAULT GETDATE(), -- The date and time when the log entry was created
+                FOREIGN KEY (transaction_id) REFERENCES OverseasTransactions(transaction_id)  -- Links to the OverseasTransactions table
+            );
         `);
 
         // Hash passwords
@@ -135,6 +183,36 @@ async function seedDatabase() {
             VALUES ('John', '${hashedPassword4}'),  
                    ('Jane','${hashedPassword5}'),
                    ('Jim', '${hashedPassword6}');
+        `);
+
+        // Insert data into OverseasPayees table
+        await sql.query(`
+            INSERT INTO OverseasPayees (user_id, payee_name, bank_name, country, account_number, currency, is_pinned)
+            VALUES 
+                (1, 'John Doe', 'Bank of America', 'USA', '1234567890123456', 'USD', 1),
+                (1, 'Maria Garcia', 'Banco Santander', 'Spain', '2345678901234567', 'EUR', 0),
+                (2, 'Emily Davis', 'HSBC', 'UK', '3456789012345678', 'GBP', 1),
+                (3, 'Carlos Oliveira', 'Itau', 'Brazil', '4567890123456789', 'BRL', 0);
+        `);
+
+        // Insert data into OverseasTransactions table
+        await sql.query(`
+            INSERT INTO OverseasTransactions (user_id, payee_id, amount, currency, converted_amount, transaction_datetime, transaction_fee, transaction_type, tags)
+            VALUES 
+                (1, 1, 200.00, 'USD', 200.00, '2025-01-18 10:00:00', 5.00, 'send', 'gift'),
+                (1, 2, 150.00, 'USD', 140.00, '2025-01-18 11:00:00', 4.50, 'send', 'business'),
+                (2, 3, 100.00, 'GBP', 120.00, '2025-01-18 12:00:00', 3.00, 'send', 'education'),
+                (3, 4, 300.00, 'BRL', 320.00, '2025-01-18 13:00:00', 7.00, 'send', 'charity');
+        `);
+
+        // Insert data into OverseasTransactionLogs table
+        await sql.query(`
+            INSERT INTO OverseasTransactionLogs (transaction_id, exchange_rate, transaction_fee, log_datetime)
+            VALUES 
+                (1, 1.00, 5.00, '2025-01-18 10:01:00'),
+                (2, 0.93, 4.50, '2025-01-18 11:01:00'),
+                (3, 1.20, 3.00, '2025-01-18 12:01:00'),
+                (4, 1.07, 7.00, '2025-01-18 13:01:00');
         `);
 
         console.log('Sample data inserted successfully.');
