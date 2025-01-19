@@ -39,8 +39,36 @@ const createOverseasPayee = async (req, res) => {
     }
 };
 
+// Update an overseas payee's details
+const updateOverseasPayee = async (req, res) => {
+    const payeeId = parseInt(req.params.id);  // Get payee ID from URL
+    const updatedPayeeData = req.body;  // Get the updated payee data from request body
+    try {
+        const updatedPayee = await OverseasPayee.updatePayee(payeeId, updatedPayeeData);
+        res.json(updatedPayee);  // Return the updated payee
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error updating overseas payee");
+    }
+};
+
+// Pin or unpin an overseas payee
+const toggleOverseasPayeePin = async (req, res) => {
+    const payeeId = parseInt(req.params.id);  // Get payee ID from URL
+    const { is_pinned } = req.body;  // Get the new pin status from request body
+    try {
+        const updatedPayee = await OverseasPayee.togglePin(payeeId, is_pinned);
+        res.json(updatedPayee);  // Return the updated payee after pinning/unpinning
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error toggling overseas payee pin status");
+    }
+};
+
 module.exports = {
     getAllOverseasPayees,
     getOverseasPayeeById,
-    createOverseasPayee
+    createOverseasPayee,
+    updateOverseasPayee,
+    toggleOverseasPayeePin
 };

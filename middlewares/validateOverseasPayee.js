@@ -22,6 +22,29 @@ const validateCreateOverseasPayee = (req, res, next) => {
     next(); // If validation passes, proceed to the next route handler
 };
 
+// Update validation schema
+const validateUpdateOverseasPayee = (req, res, next) => {
+    const schema = Joi.object({
+        payee_name: Joi.string().max(100).optional(),
+        bank_name: Joi.string().max(100).optional(),
+        country: Joi.string().max(50).optional(),
+        account_number: Joi.string().max(20).optional(),
+        currency: Joi.string().max(10).optional(),
+        is_pinned: Joi.boolean().optional()  // Optional field for update
+    });
+
+    const validation = schema.validate(req.body, { abortEarly: false });
+
+    if (validation.error) {
+        const errors = validation.error.details.map((error) => error.message);
+        res.status(400).json({ message: "Validation error", errors });
+        return;
+    }
+
+    next(); // If validation passes, move to the next middleware/route handler
+};
+
 module.exports = {
-    validateCreateOverseasPayee
+    validateCreateOverseasPayee,
+    validateUpdateOverseasPayee
 };
