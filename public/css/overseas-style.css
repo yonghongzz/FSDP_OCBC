@@ -1,0 +1,205 @@
+.bankapp-header {
+    background-color: #da291c;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: larger;
+    height: 60px; /* Increased height for a thicker header */
+    padding: 0;
+}
+
+.card-header {
+    background: transparent !important;
+    border: none;
+    padding: 0 !important;
+}
+
+.header-content {
+    display: flex;
+    justify-content: center; /* Center all items (icons + text) */
+    align-items: center; /* Vertically center all items */
+    height: 100%; /* Make the content container span the full header height */
+    padding: 0 10px;
+    background: none;
+}
+
+.header-left,
+.header-right {
+    flex: 0; /* Icons take up only as much space as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px; /* Add space between the icons and the center text */
+}
+
+.header-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.header-title {
+    margin: 0;
+    font-size: 18px; /* Slightly smaller font size for better fit */
+    color: white;
+    word-wrap: break-word; /* Break long words into the next line if necessary */
+}
+
+.header-icon {
+    font-size: 24px;
+    color: white;
+    margin: 0 5px; /* Space between icons */
+}
+
+.header-icon-link {
+    text-decoration: none; /* Remove default underline from links */
+    color: inherit; /* Inherit color from the icon */
+    display: flex;
+    align-items: center;
+}
+
+/* Navigation Bar */
+.navbar-special {
+    display: flex;
+    justify-content: space-between; /* Evenly space the links */
+    background-color: #f0f0f0; /* Light background for the navbar */
+    border-radius: 10px; /* Optional: if you want rounded corners for the navbar */
+    height: 50px; /* Thinner navbar */
+}
+
+.nav-link-special {
+    text-decoration: none; /* Remove the default underline from links */
+    color: black; /* Change text color inside navbar to black */
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    flex: 1;
+    padding: 10px 0; /* Thinner vertical padding */
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    border-left: 1px solid #ccc; /* Add borders between links */
+}
+
+.nav-link-special:first-child {
+    border-left: none; /* Remove the border on the first link */
+}
+
+/* Hover effect for links */
+.nav-link-special:hover {
+    color: #ffffff; /* Change text color to white on hover */
+    background-color: #000000; /* Change background to black on hover */
+    opacity: 0.8; /* Make it slightly faded */
+}
+
+/* Add Recipient Section */
+.add-recipient {
+    margin-top: 20px; /* Add spacing between navbar and the section */
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7; /* Light background */
+    padding: 10px 15px; /* Padding around the content */
+    border-radius: 10px; /* Rounded corners for the section */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Add Recipient Section */
+.add-recipient {
+    margin: 10px 15px; /* Add space around the section: top/bottom and left/right */
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7; /* Light background */
+    padding: 10px; /* Keep some padding inside the section */
+    border-radius: 10px; /* Rounded corners for the section */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none; /* Remove underline from link */
+}
+
+/* Hover effect for add-recipient */
+.add-recipient:hover {
+    background-color: #e0e0e0; /* Change background when hovered */
+}
+
+/* Icon and text inside add-recipient */
+.add-recipient i {
+    font-size: 20px;
+    color: #da291c; /* Icon color */
+    margin-right: 10px; /* Space between icon and text */
+}
+
+.add-recipient-text {
+    font-size: 16px;
+    color: #333333; /* Text color */
+    font-weight: bold;
+}
+
+/* Recipients Title */
+.recipients-title {
+    margin: 10px 15px; /* Add space around the title */
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333; /* Dark text color */
+}
+
+.recipient-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9; /* Light background for the box */
+    border: 1px solid #ccc; /* Border around the recipient box */
+    border-radius: 8px; /* Rounded corners */
+    padding: 5px;
+    margin: 10px 15px; /* Margin between recipient items */
+}
+
+.recipient-left {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.recipient-pfp {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Circle shape for the profile picture */
+    margin-right: 10px; /* Space between the icon and the text */
+}
+
+.recipient-info {
+    display: flex;
+    flex-direction: column; /* Stack name and bank */
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.recipient-name {
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.recipient-bank {
+    color: #666;
+}
+
+.recipient-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.recipient-info-link {
+    text-decoration: none;
+    color: #da291c; /* Icon color */
+}
+
+.recipient-info-icon {
+    font-size: 20px; /* Icon size */
+    transition: all 0.3s ease;
+    padding-right: 5px;
+}
+
+/* Hover effect for the info icon */
+.recipient-info-link:hover .recipient-info-icon {
+    color: #000;
+}
+
+
