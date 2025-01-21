@@ -202,4 +202,243 @@
     color: #000;
 }
 
+/* Register recipient (select currency) */
+.currency-dropdown-container {
+    margin: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
+.currency-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 5px;
+}
+
+.currency-dropdown {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #333333;
+    appearance: none; /* Removes default browser styling */
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+    /* For custom arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px 16px;
+}
+
+.currency-dropdown:focus {
+    border-color: #da291c;
+    box-shadow: 0 0 5px rgba(218, 41, 28, 0.5);
+    outline: none; /* Removes default focus outline */
+}
+
+.currency-dropdown::-ms-expand {
+    display: none; /* Hides default dropdown arrow in Edge */
+}
+
+.recipients-choose-currency {
+    font-weight: 500;
+    margin: 0px 15px; /* Add space around the title */
+    font-size: 15px;
+    color: #333333; /* Dark text color */
+}
+
+/* Next button (on register page) */
+.next-button-container {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0; /* Adjust margin for better spacing */
+    margin-top: 231px;
+}
+
+.next-button {
+    background-color: #da291c;
+    color: white;
+    border: none;
+    padding: 10px 80px; /* Increase padding for a longer button */
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px; /* Slightly more rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for a pop-out effect */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.next-button:hover {
+    background-color: #c8231a; /* Slightly darker red on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+}
+
+.next-button:active {
+    transform: scale(0.98); /* Subtle press effect */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Reduced shadow when pressed */
+}
+
+/* Register form */
+.recipient-details-form {
+    margin: 0px 15px;
+}
+
+.form-group {
+    margin: 15px 0px;
+}
+
+.add-recipient-button {
+    background-color: #da291c;
+    color: white;
+    border: none;
+    padding: 10px 80px; /* Adjust padding for a narrower button */
+    font-size: 16px; /* Slightly smaller font size */
+    font-weight: bold;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    display: inline-block; /* Ensures button-like behavior */
+    white-space: nowrap; /* Prevents text wrapping */
+    width: auto; /* Allows button width to adjust to the content */
+    margin: 3px 0px;
+}
+
+.add-recipient-button:hover {
+    background-color: #c8231a; /* Darker red on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+}
+
+.add-recipient-button:active {
+    transform: scale(0.98); /* Subtle press effect */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Reduced shadow when pressed */
+}
+
+form label {
+    font-weight: bold; /* Makes the text thicker */
+    font-size: 16px; /* Optional: Adjust font size for better readability */
+    color: #333; /* Optional: Change the color if needed */
+}
+
+/* Add recipient success */
+/* Scoped Success Page Styles */
+/* Scoped Success Page Styles */
+/* Scoped Success Page Styles */
+.success-page {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.success-container {
+    text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.success-icon {
+    font-size: 120px; /* Increased size of the tick */
+    color: #28a745;
+    margin-bottom: 5px;
+    margin-top: -40px;
+}
+
+.success-message {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Scoped Success Page Styles */
+.success-page {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.success-container {
+    text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.success-icon {
+    font-size: 120px; /* Increased size of the tick */
+    color: #28a745;
+}
+
+.success-message {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.recipient-details-box {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    display: inline-block;
+    width: 100%;
+}
+
+.recipient-details {
+    text-align: left;
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.recipient-details p {
+    margin: 10px 0;  /* Added margin for spacing between lines */
+}
+
+/* Styling for the buttons to match the "Add Recipient" button from the previous page */
+.btn-back-home {
+    background-color: #da291c;
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 62px;
+}
+
+.btn-back-home:hover {
+    background-color: #0056b3;
+    text-decoration: none;
+}
