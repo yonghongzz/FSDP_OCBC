@@ -122,6 +122,22 @@ async function seedDatabase() {
                 log_datetime DATETIME DEFAULT GETDATE(), -- The date and time when the log entry was created
                 FOREIGN KEY (transaction_id) REFERENCES OverseasTransactions(transaction_id)  -- Links to the OverseasTransactions table
             );
+
+            CREATE TABLE RecurringTransfers (
+                recurring_id INT PRIMARY KEY IDENTITY(1,1),
+                user_id INT,                     -- Links to Users table
+                payee_id INT,                    -- Links to OverseasPayees table
+                account_id INT,                  -- Links to Accounts table
+                amount DECIMAL(10, 2) NOT NULL,  -- Amount to be transferred
+                currency VARCHAR(10) NOT NULL,   -- Currency of the transaction
+                frequency VARCHAR(20) CHECK (frequency IN ('daily', 'weekly', 'monthly', 'yearly')) NOT NULL, -- Frequency of the transfer
+                next_transfer_date DATE NOT NULL, -- Date of the next scheduled transfer
+                end_date DATE,                   -- Optional: End date for the recurring transfer
+                status VARCHAR(20) CHECK (status IN ('active', 'paused', 'canceled')) DEFAULT 'active', -- Status of the recurring transfer
+                FOREIGN KEY (user_id) REFERENCES Users(user_id),
+                FOREIGN KEY (payee_id) REFERENCES OverseasPayees(payee_id),
+                FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
+            );
         `);
 
         // Hash passwords
@@ -213,6 +229,18 @@ async function seedDatabase() {
                 (2, 0.93, 4.50, '2025-01-18 11:01:00'),
                 (3, 1.20, 3.00, '2025-01-18 12:01:00'),
                 (4, 1.07, 7.00, '2025-01-18 13:01:00');
+        `);
+
+        // Insert data into RecurringTransfers table
+        await sql.query(`
+            -- Insert data into RecurringTransfers table
+            INSERT INTO RecurringTransfers (user_id, payee_id, account_id, amount, currency, frequency, next_transfer_date, end_date, status)
+            VALUES 
+                (1, 1, 1, 100.00, 'USD', 'monthly', '2025-02-01', '2025-12-01', 'active'),
+                (1, 2, 2, 50.00, 'EUR', 'weekly', '2025-01-25', NULL, 'active'),
+                (2, 3, 3, 200.00, 'GBP', 'daily', '2025-01-23', NULL, 'paused'),
+                (3, 4, 4, 300.00, 'BRL', 'yearly', '2026-01-01', '2026-12-31', 'active'),
+                (1, 1, 1, 150.00, 'USD', 'monthly', '2025-03-01', NULL, 'canceled');
         `);
 
         console.log('Sample data inserted successfully.');
