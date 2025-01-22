@@ -107,7 +107,7 @@
     margin: 10px 15px; /* Add space around the section: top/bottom and left/right */
     display: flex;
     align-items: center;
-    background-color: #f7f7f7; /* Light background */
+    background-color: #a6a6a6; /* Light background */
     padding: 10px; /* Keep some padding inside the section */
     border-radius: 10px; /* Rounded corners for the section */
     cursor: pointer;
@@ -205,6 +205,7 @@
 /* Register recipient (select currency) */
 .currency-dropdown-container {
     margin: 20px 15px;
+    margin-bottom: 62px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -441,4 +442,60 @@ form label {
 .btn-back-home:hover {
     background-color: #0056b3;
     text-decoration: none;
+}
+
+/* Pin as Frequent Payee */
+.form-recipient-details {
+    margin: 15px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.form-recipient-details label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.form-recipient-details input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    accent-color: #da291c;
+}
+
+/* Overseas transfer - select fund */
+.fund-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    cursor: pointer;
+    accent-color: #da291c;
+}
+
+/* Overseas transfer - transfer details */
+.refresh-button-container {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0; /* Adjust margin for better spacing */
+    margin-top: 231px;
+}
+
+.refresh-button {
+    background-color: #303030;
+    color: white;
+    border: none;
+    padding: 5px 50px; /* Increase padding for a longer button */
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 8px; /* Slightly more rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow for a pop-out effect */
+    cursor: pointer;
+    transition: all 0.3s ease;
 }

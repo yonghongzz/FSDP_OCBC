@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>overseas register recipient</title>
+    <title>overseas transfer category</title>
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/overseas-style.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 
 <body>
@@ -25,7 +26,7 @@
         
                 <!-- Header Text -->
                 <div class="header-center">
-                    <h1 class="header-title">Select Currency</h1>
+                    <h1 class="header-title" style="font-weight: 500;">Overseas Transfer</h1>
                 </div>
         
                 <!-- Right Icons -->
@@ -37,34 +38,32 @@
             </div>
         </div>
 
+        <div class="w3-border">
+            <div class="w3-container w3-green w3-center" style="height:24px;width:75%;">75%</div>
+        </div>
+
         <!-- Recipients Text -->
-        <h2 class="recipients-title" style="padding-top: 10px;">Please select a currency</h2>
+        <h2 class="recipients-title" style="padding-top: 10px;">Step 3: Select a transfer category</h2>
 
         <!-- Explanation under "Select Currency" -->
-        <h2 class="recipients-choose-currency">Choose the currency you want to use for your transfer.</h2>
+        <h2 class="recipients-choose-currency"style="padding-bottom: 10px;">Select a category for this transfer.</h2>
 
         <div class="currency-dropdown-container">
-            <label for="currency-dropdown" class="currency-label">Select a Currency:</label>
             <select id="currency-dropdown" class="currency-dropdown">
-                <option value="usd">US Dollar (USD)</option>
-                <option value="eur">Euro (EUR)</option>
-                <option value="jpy">Japanese Yen (JPY)</option>
-                <option value="myr">Malaysian Ringgit (MYR)</option>
-                <option value="thb">Thai Baht (THB)</option>
-                <option value="krw">Korean Won (KRW)</option>
-                <option value="cny">Chinese Yuan (CNY)</option>
-                <option value="gbp">British Pound (GBP)</option>
-                <option value="cad">Canadian Dollar (CAD)</option>
-                <option value="aud">Australian Dollar (AUD)</option>
+                <option value="gift">Gift</option>
+                <option value="business">Business</option>
+                <option value="education">Education</option>
+                <option value="charity">Charity</option>
+                <option value="others">Others</option>
             </select>
         </div>    
 
         <!-- Next Button -->
-        <div class="next-button-container">
+        <div class="next-button-container" style="margin-top: 220px;">
             <button class="next-button">Next</button>
-        </div>
-        
-    </div>
+        </div>   
+    </div>    
+
     <!-- Bootstrap Bundle (includes Popper) -->
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
     <script src="js/overseas-transaction-menu.js"></script>
