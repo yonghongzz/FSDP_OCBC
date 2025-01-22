@@ -499,3 +499,140 @@ form label {
     cursor: pointer;
     transition: all 0.3s ease;
 }
+
+/* Overseas transfer - view recent transfers */
+/* Recent Transfers Container */
+.recent-transfers {
+    margin: 20px;
+  }
+  
+  /* Individual Transfer Item */
+  .transfer-item {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff; /* Changed to pure white for contrast */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    border: 1px solid #e0e0e0; /* Light border */
+  }
+  
+  .recipient-info-recent {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: -10px;
+  }
+  
+  .recipient-bank-recent {
+    color: #555;
+  }
+  
+  .transfer-details {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .transfer-status {
+    margin-top: 10px;
+  }
+  
+  .status {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 8px;
+    color: white;
+  }
+  
+  .status.completed {
+    background-color: #28a745;
+  }
+  
+  .status.pending {
+    background-color: #ffc107;
+  }
+  
+  .status.failed {
+    background-color: #dc3545;
+  }
+  
+  /* Buttons Section */
+  .transfer-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* "View Details" Button - Less Prominent */
+  .details-button {
+    background-color: #f5f5f5; /* Light gray */
+    color: #555; /* Darker text for readability */
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #ccc; /* Subtle border for definition */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .details-button:hover {
+    background-color: #e0e0e0; /* Slightly darker on hover */
+    color: #333; /* Slightly darker text */
+  }
+  
+  /* "Repeat Transfer" Button - More Prominent */
+  .repeat-button {
+    background-color: #da291c; /* Bold red */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .repeat-button:hover {
+    background-color: #c8231a; /* Slightly darker red */
+  }
+
+/* Overseas transaction faq */
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+  }
+  
+  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+  .active, .accordion:hover {
+    background-color: #ccc;
+  }
+  
+  /* Style the accordion panel. Note: hidden by default */
+  .panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+  }
+
+  .accordion:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+  }
+  
+  .active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+  }
