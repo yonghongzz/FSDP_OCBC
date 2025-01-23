@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>overseas register recipient</title>
+    <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/overseas-style.css" />
+</head>
+
+<body>
+    <!--entire thing-->
+    <div class="card bankapp">
+        <!--bankapp header-->
+        <div class="bankapp-header">
+            <div class="header-content card-header d-flex justify-content-between align-items-center">
+                <!-- Left Icon -->
+                <div class="header-left">
+                    <a href="#" class="header-icon-link">
+                        <i class="bi bi-house header-icon"></i>
+                    </a>
+                </div>
+        
+                <!-- Header Text -->
+                <div class="header-center">
+                    <h1 class="header-title">Enter Recipient Details</h1>
+                </div>
+        
+                <!-- Right Icons -->
+                <div class="header-right">
+                    <a href="#" class="header-icon-link">
+                        <i class="bi bi-gear header-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipients Text -->
+        <h2 class="recipients-title" style="padding-top: 10px;">Please enter the recipient's details</h2>
+
+        <!-- Explanation under "Select Currency" -->
+        <h2 class="recipients-choose-currency"style="padding-bottom: 10px;">Provide accurate recipient details for overseas transfer.</h2>
+
+        <!-- Form Fields -->
+        <form class="recipient-details-form">
+            <!-- Bank Name -->
+            <div class="form-group">
+                <label for="bank-name">Bank Name:</label>
+                <select id="bank-name" class="form-control">
+                    <option value="">Select Bank</option>
+                    <option value="bank1">Bank of America</option>
+                    <option value="bank2">Chase Bank</option>
+                    <option value="bank3">HSBC</option>
+                    <option value="bank4">Standard Chartered</option>
+                    <option value="bank5">CitiBank</option>
+                    <!-- Add more banks as needed -->
+                </select>
+            </div>
+
+            <!-- Recipient Account Number -->
+            <div class="form-group">
+                <label for="account-number">Recipient Account Number:</label>
+                <input type="text" id="account-number" class="form-control" placeholder="Enter account number" maxlength="16">
+            </div>
+
+            <!-- Recipient Full Name -->
+            <div class="form-group">
+                <label for="full-name">Recipient Full Name:</label>
+                <input type="text" id="full-name" class="form-control" placeholder="Enter full name">
+            </div>
+
+            <!-- Country -->
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" class="form-control">
+                    <option value="">Select Country</option>
+                    <option value="us">United States</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="jp">Japan</option>
+                    <option value="my">Malaysia</option>
+                    <option value="th">Thailand</option>
+                    <option value="kr">South Korea</option>
+                    <option value="cn">China</option>
+                    <option value="au">Australia</option>
+                    <!-- Add more countries as needed -->
+                </select>
+            </div>
+
+            <!-- Add Recipient Button -->
+            <div class="form-group mt-4">
+                <button type="submit" class="add-recipient-button w-100" style="margin-top: 32px;">Add Recipient</button>
+            </div>
+        </form>
+        
+    </div>
+    <!-- Bootstrap Bundle (includes Popper) -->
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <script src="js/overseas-transaction-menu.js"></script>
+    <script src="./js/magnifying.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/tts.js"></script>
+    <script src="js/voice.js"></script>
+
+</body>
+
+</html>

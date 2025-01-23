@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>overseas transaction menu</title>
+    <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/overseas-style.css" />
+</head>
+
+<body>
+    <!--entire thing-->
+    <div class="card bankapp">
+        <!--bankapp header-->
+        <div class="bankapp-header">
+            <div class="header-content card-header d-flex justify-content-between align-items-center">
+                <!-- Left Icon -->
+                <div class="header-left">
+                    <a href="#" class="header-icon-link">
+                        <i class="bi bi-house header-icon"></i>
+                    </a>
+                </div>
+        
+                <!-- Header Text -->
+                <div class="header-center">
+                    <h1 class="header-title">Overseas Transfer</h1>
+                </div>
+        
+                <!-- Right Icons -->
+                <div class="header-right">
+                    <a href="#" class="header-icon-link">
+                        <i class="bi bi-bell header-icon"></i>
+                    </a>
+                    <a href="#" class="header-icon-link">
+                        <i class="bi bi-gear header-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Bar (under the header) -->
+        <div class="navbar-special">
+            <a href="#recipient" class="nav-link-special" style="background-color: white;">Recipient</a>
+            <a href="#recent" class="nav-link-special">Recent</a>
+            <a href="#recurring" class="nav-link-special">Recurring</a>
+        </div>
+
+        <!-- Add Recipient Section (Clickable) -->
+        <a href="#" class="add-recipient">
+            <i class="bi bi-person-plus"></i>
+            <span class="add-recipient-text">Add Recipient</span>
+        </a>
+
+        <!-- Recipients Text -->
+        <h2 class="recipients-title">Recipients</h2>
+
+        <div id="recipient-container">
+            <!-- Recipient boxes will be dynamically inserted here -->
+        </div>        
+
+        <!--
+        <div class="recipient-box">
+            <div class="recipient-left">
+                <img src="path/to/pfp-icon.png" alt="Profile Icon" class="recipient-pfp" />
+                <div class="recipient-info">
+                    <p class="recipient-name">John Doe</p>
+                    <p class="recipient-bank">Bank of Example</p>
+                </div>
+            </div>
+            <div class="recipient-right">
+                <a href="#" class="recipient-info-link">
+                    <i class="bi bi-info-circle recipient-info-icon"></i>
+                </a>
+            </div>
+        </div>
+        -->
+        
+    </div>
+    <!-- Bootstrap Bundle (includes Popper) -->
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <script src="js/overseas-transaction-menu.js"></script>
+    <script src="./js/magnifying.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/tts.js"></script>
+    <script src="js/voice.js"></script>
+
+</body>
+
+</html>

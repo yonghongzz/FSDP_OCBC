@@ -1,22 +1,35 @@
 const express = require("express");
 const path = require("path");
+
 const accountController = require("./controllers/accountController");
 const acctransactionController = require("./controllers/acctransactionController");
 const cardController = require("./controllers/cardController");
 const userController = require("./controllers/userController");
 const staffController = require("./controllers/staffController");
+const overseaspayeeController = require("./controllers/overseaspayeeController");
+const overseastransactionController = require("./controllers/overseastransactionController");
+const overseastransactionlogController = require("./controllers/overseastransactionlogController");
+const recurringTransferController = require("./controllers/recurringtransferController");
+
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser");
+
 const authenticate = require("./middlewares/authenticate");
 const validateUser = require("./middlewares/validateUser");
 const validateStaff = require("./middlewares/validateStaff");
 const validateAccTransaction = require("./middlewares/validateAccTransaction");
+const validateOverseasPayee = require("./middlewares/validateOverseasPayee");
+const validateOverseasTransaction = require("./middlewares/validateOverseasTransaction");
+const validateOverseasTransactionLog = require("./middlewares/validateOverseasTransactionLog");
+const validateRecurringTransfer = require("./middlewares/validateRecurringTransfer");
+
 const seedDatabase = require("./seed");
 const https = require("https");
 const fs = require("fs");
 const { Server } = require("socket.io");
 const cors = require('cors');
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -75,6 +88,30 @@ app.post("/staffs/login", validateStaff.validateLoginStaff, staffController.logi
 app.post("/staffs/check", authenticate.verifyJWT, staffController.checkPassword);
 app.post("/token", staffController.refreshAccessToken);
 app.delete("/logout", staffController.logout);
+
+// overseas payee
+app.get("/overseas-payees/:userId", overseaspayeeController.getAllOverseasPayees);
+app.get("/overseas-payees/details/:id", overseaspayeeController.getOverseasPayeeById);
+app.post("/overseas-payees", validateOverseasPayee.validateCreateOverseasPayee, overseaspayeeController.createOverseasPayee);
+app.put("/overseas-payees/:id", validateOverseasPayee.validateUpdateOverseasPayee, overseaspayeeController.updateOverseasPayee);
+app.patch("/overseas-payees/:id/pin", overseaspayeeController.toggleOverseasPayeePin);
+
+// overseas transaction
+app.get("/overseas-transactions/:userId", overseastransactionController.getAllOverseasTransactions);
+app.get("/overseas-transactions/id/:id", overseastransactionController.getOverseasTransactionById);
+app.post("/overseas-transactions", validateOverseasTransaction.validateCreateOverseasTransaction, overseastransactionController.createOverseasTransaction);
+
+// overseas transaction logs
+app.get("/overseas-transaction-logs/:transactionId", overseastransactionlogController.getAllOverseasTransactionLogs);
+app.get("/overseas-transaction-logs/id/:id", overseastransactionlogController.getOverseasTransactionLogById);
+app.post("/overseas-transaction-logs", validateOverseasTransactionLog.validateCreateOverseasTransactionLog, overseastransactionlogController.createOverseasTransactionLog);
+
+// Recurring Transfer
+app.get("/recurring-transfers", recurringTransferController.getAllRecurringTransfers);
+app.get("/recurring-transfers/:id", recurringTransferController.getRecurringTransferById);
+app.post("/recurring-transfers", validateRecurringTransfer.validateCreateRecurringTransfer, recurringTransferController.createRecurringTransfer);
+app.put("/recurring-transfers/:id", validateRecurringTransfer.validateUpdateRecurringTransfer, recurringTransferController.updateRecurringTransfer);
+app.delete("/recurring-transfers/:id", recurringTransferController.deleteRecurringTransfer);
 
 let callQueue = {};
 
