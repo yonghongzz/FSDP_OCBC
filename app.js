@@ -16,7 +16,7 @@ const seedDatabase = require("./seed");
 const https = require("https");
 const fs = require("fs");
 const { Server } = require("socket.io");
-
+const cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -35,14 +35,13 @@ const io = new Server(server, {
     }
 });
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 app.use(express.static(path.join(__dirname, "public")));
-
-
 
 // account
 app.get("/accounts", accountController.getAllAccounts);
@@ -134,6 +133,92 @@ io.on("connection", (socket) => {
     });
     
 });
+
+// Knowledge base endpoint
+app.get('/api/knowledge', (req, res) => {
+    try {
+        // Use readFileSync for synchronous reading
+        const knowledgeBase = fs.readFileSync(
+            path.join(__dirname, 'data', 'knowledge.txt'),
+            { encoding: 'utf8' }  // Proper way to specify encoding
+        );
+        res.json({ knowledge: knowledgeBase });
+    } catch (error) {
+        console.error('Error reading knowledge base:', error);
+        res.status(500).json({ 
+            error: 'Failed to load knowledge base',
+            details: error.message 
+        });
+    }
+});
+
+// Chat endpoint
+app.post('/api/chat', (req, res) => {
+    try {
+        const { message } = req.body;
+        const knowledgeBase = fs.readFileSync(
+            path.join(__dirname, 'data', 'knowledge.txt'),
+            { encoding: 'utf8' }
+        );
+        
+        // Simple response logic (you can enhance this)
+        const response = findResponse(message, knowledgeBase);
+        
+        res.json({ response });
+    } catch (error) {
+        console.error('Error processing chat:', error);
+        res.status(500).json({ 
+            error: 'Failed to process message',
+            details: error.message 
+        });
+    }
+});
+
+function findResponse(message, knowledgeBase) {
+    if (!message || !knowledgeBase) {
+        return "I'm sorry, I couldn't process your request.";
+    }
+    try {
+        // Split the knowledge base into QA pairs
+        const pairs = knowledgeBase.split('\n').filter(line => line.trim());
+        let bestMatch = {
+            answer: "I'm sorry, I don't have an answer for that question.",
+            score: 0
+        };
+        // Process each pair of lines (question and answer)
+        for (let i = 0; i < pairs.length - 1; i += 2) {
+            const question = pairs[i].toLowerCase();
+            const answer = pairs[i + 1];
+            // Skip if we don't have a complete QA pair
+            if (!answer) continue;
+            // Calculate match score
+            let score = 0;
+            const messageWords = message.toLowerCase().split(/\W+/).filter(word => word.length > 2);
+            const questionWords = question.split(/\W+/).filter(word => word.length > 2);
+            // Check for word matches
+            messageWords.forEach(word => {
+                if (questionWords.includes(word)) {
+                    score += 1;
+                }
+            });
+            // Boost score for exact matches
+            if (question.includes(message.toLowerCase())) {
+                score += 5;
+            }
+            // Update best match if we found a better score
+            if (score > bestMatch.score) {
+                bestMatch = {
+                    answer: answer,
+                    score: score
+                };
+            }
+        }
+        return bestMatch.score > 0 ? bestMatch.answer : "I'm sorry, I don't have enough information to answer that question.";
+    } catch (error) {
+        console.error('Error in findResponse:', error);
+        return "I'm sorry, I encountered an error processing your question.";
+    }
+}
 
 server.listen(port, '0.0.0.0', async () => {
     try {
