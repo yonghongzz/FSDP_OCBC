@@ -1,4 +1,5 @@
-// First, create a data collection function to gather training examples
+document.addEventListener('DOMContentLoaded',async()=>{
+  // First, create a data collection function to gather training examples
 let trainingData = [];
 let gestureClasses = ['home','confirm','go back','reload'];
 let model;
@@ -215,9 +216,21 @@ async function predictGesture(landmarks) {
   console.log(confidence)
   if (confidence > 0.8) {  // Set your confidence threshold
       const gestureIndex = prediction[0].indexOf(confidence);
-      return gestureClasses[gestureIndex];
+      console.log(gestureClasses[gestureIndex]);
+      if(gestureClasses[gestureIndex] == "home"){
+        window.location.href = "index.html";
+      }
+      else if(gestureClasses[gestureIndex] == "reload"){
+        window.location.reload();
+      }
+      else if(gestureClasses[gestureIndex] == "go back"){
+        window.history.back();
+      }
+      
+          // Wait for 3 seconds before allowing the next prediction
+     await new Promise(resolve => setTimeout(resolve, 3000));
   }
-  return 'unknown';
+  //return 'unknown';
   //return gestureClasses[gestureIndex];
 }
 
@@ -277,13 +290,14 @@ hands.onResults(async (result) => {
       if (model.trained) {
         const normalizedLandmarks = normalizeLandmarks(landmarks);
         const gesture = await predictGesture(normalizedLandmarks);
-        console.log(`Predicted gesture: ${gesture}`);
       }
     }
   }
 
   canvasCtx.restore();
 });
+
+await loadModel();
 
 // Update the UI controls
 const trainButton = document.createElement('button');
@@ -377,3 +391,5 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+
+});
