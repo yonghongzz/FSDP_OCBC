@@ -10,6 +10,8 @@ const overseaspayeeController = require("./controllers/overseaspayeeController")
 const overseastransactionController = require("./controllers/overseastransactionController");
 const overseastransactionlogController = require("./controllers/overseastransactionlogController");
 const recurringTransferController = require("./controllers/recurringtransferController");
+const atmController = require("./controllers/atmController");
+const bankController = require("./controllers/bankController");
 
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
@@ -112,6 +114,12 @@ app.get("/recurring-transfers/:id", recurringTransferController.getRecurringTran
 app.post("/recurring-transfers", validateRecurringTransfer.validateCreateRecurringTransfer, recurringTransferController.createRecurringTransfer);
 app.put("/recurring-transfers/:id", validateRecurringTransfer.validateUpdateRecurringTransfer, recurringTransferController.updateRecurringTransfer);
 app.delete("/recurring-transfers/:id", recurringTransferController.deleteRecurringTransfer);
+
+// ATM
+app.get("/atms", atmController.getAllATMs);
+
+// Bank
+app.get("/banks", bankController.getAllBanks);
 
 let callQueue = {};
 

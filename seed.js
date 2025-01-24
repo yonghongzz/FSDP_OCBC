@@ -16,6 +16,10 @@ async function seedDatabase() {
             WHERE id = object_id('dbo.OverseasTransactions') and sysstat & 0xf = 3)
             DROP TABLE dbo.OverseasTransactions;
 
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.RecurringTransfers') and sysstat & 0xf = 3)
+            DROP TABLE dbo.RecurringTransfers;
+
             if exists (SELECT * FROM sysobjects 
             WHERE id = object_id('dbo.OverseasPayees') and sysstat & 0xf = 3)
             DROP TABLE dbo.OverseasPayees;
@@ -39,6 +43,14 @@ async function seedDatabase() {
             if exists (SELECT * FROM sysobjects 
             WHERE id = object_id('dbo.Users') and sysstat & 0xf = 3)
             DROP TABLE dbo.Users;
+
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.BankLocations') and sysstat & 0xf = 3)
+            DROP TABLE dbo.BankLocations;
+
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.ATMLocations') and sysstat & 0xf = 3)
+            DROP TABLE dbo.ATMLocations;
         `);
 
         // Create tables
@@ -137,6 +149,19 @@ async function seedDatabase() {
                 FOREIGN KEY (user_id) REFERENCES Users(user_id),
                 FOREIGN KEY (payee_id) REFERENCES OverseasPayees(payee_id),
                 FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
+            );
+            CREATE TABLE BankLocations (
+                location_id INT PRIMARY KEY IDENTITY(1,1),
+                bank_name VARCHAR(100) NOT NULL,  -- Name of the bank
+                address VARCHAR(255) NOT NULL,    -- Address of the bank
+                postal_code VARCHAR(20) NOT NULL,  -- Postal code of the bank location
+                operating_hours VARCHAR(255)      -- Operating hours of the bank
+            );
+            CREATE TABLE ATMLocations (
+                atm_id INT PRIMARY KEY IDENTITY(1,1),
+                bank_name VARCHAR(100) NOT NULL,  -- Name of the bank
+                address VARCHAR(255) NOT NULL,    -- Address of the ATM location
+                postal_code VARCHAR(20) NOT NULL  -- Postal code of the ATM location
             );
         `);
 
@@ -242,7 +267,26 @@ async function seedDatabase() {
                 (3, 4, 4, 300.00, 'BRL', 'yearly', '2026-01-01', '2026-12-31', 'active'),
                 (1, 1, 1, 150.00, 'USD', 'monthly', '2025-03-01', NULL, 'canceled');
         `);
+        
+        await sql.query(`
+            INSERT INTO BankLocations (bank_name, address, postal_code, operating_hours)
+            VALUES
+                ('Jurong East Branch', '50 Jurong Gateway Road #B1-18 Jem', 'Singapore 608549', 'Mon-Fri: 11.00am to 6.00pm Sat: 11.00am to 4.30pm Sun: 11.00am to 4.30pm Public Holidays: Closed'), 
+                ('Jurong Point Branch', '1 Jurong West Central 2 #B1-31/32/33/46 Jurong Point Shopping Centre', 'Singapore 648886', 'Mon-Fri: 11.00am to 6.00pm Sat: 11.00am to 4.30pm Sun: 11.00am to 4.30pm Public Holidays: Closed'),
+                ('Clementi Branch', '3155 Commonwealth Avenue West #04-52 to 55 The Clementi Mall', 'Singapore 129588', 'Mon-Fri: 11.00am to 6.00pm Sat: 11.00am to 2.30pm Sun & Public Holidays: Closed'),
+                ('Bukit Batok Branch', '634 Bukit Batok Central #01-108', 'Singapore 650634', 'Mon-Fri: 9.30am to 4.30pm Sat: 9.30am to 12.00pm Sun & Public Holidays: Closed'),
+                ('National University of Singapore FRANK Store', '2 College Avenue West #01-03 Stephen Riady Centre, University Town', 'Singapore 138607', 'Mon-Fri: 10.00am to 6.00pm Sat: 10.00am to 2.30pm Sun & Public Holidays: Closed');        
+        `);
 
+        await sql.query(`
+            INSERT INTO ATMLocations (bank_name, address, postal_code)
+            VALUES
+                ('Singapore Institute of Management', '461 Clementi Road SIM Headquarters', 'Singapore 599491'), 
+                ('The Clementi Mall', '3155 Commonwealth Avenue West #04-52 to 55 The Clementi Mall', 'Singapore 129588'),
+                ('Clementi Avenue 3 - FairPrice', '451 Clementi Avenue 3 #01-307', 'Singapore 120451'),
+                ('Clementi Avenue 5', '325 Clementi Avenue 5 #01-137', 'Singapore 120325'),
+                ('UOB ATM - UOB Clementi Branch', 'Blk 450 #01-287/289 Clementi Avenue 3 #01-287/289', 'Singapore 120450');
+        `)
         console.log('Sample data inserted successfully.');
 
     } catch (err) {
