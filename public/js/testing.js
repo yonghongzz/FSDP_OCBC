@@ -1,6 +1,6 @@
 // First, create a data collection function to gather training examples
 let trainingData = [];
-let gestureClasses = ['thumbs_up', 'peace', 'open_palm'];
+let gestureClasses = ['home','confirm','go back','reload'];
 let model;
 let results = null;
 const hands = new Hands({
@@ -38,9 +38,12 @@ function normalizeLandmarks(landmarks) {
 }
 
 // Update collectTrainingData to include a timeout
-async function collectTrainingData(gestureName, numSamples = 30) {
+async function collectTrainingData(gestureName, numSamples = 100 ) {
   console.log(`Collecting samples for ${gestureName}`);
   let samplesCollected = 0;
+  setTimeout(() => {
+    
+  }, 5000);
   
   return new Promise((resolve, reject) => {
     const collector = setInterval(async () => {
@@ -74,6 +77,33 @@ async function collectTrainingData(gestureName, numSamples = 30) {
       }
     }, 30000); // 30 second timeout
   });
+}
+
+async function loadModel() {
+  try {
+    // Load the model architecture and weights
+    model = await tf.loadLayersModel('/hand-gesture-model.json');
+    
+    gestureClasses = ["home", "confirm", "go back", "reload"];
+    
+    // Recompile the model to ensure it's ready for predictions
+    model.compile({
+      optimizer: 'adam',
+      loss: 'sparseCategoricalCrossentropy',
+      metrics: ['accuracy']
+    });
+    
+    // Mark model as trained
+    model.trained = true;
+    
+    console.log('Model loaded successfully');
+    console.log('Loaded Gesture Classes:', gestureClasses);
+    
+    return model;
+  } catch (error) {
+    console.error('Error loading model:', error);
+    throw error;
+  }
 }
 
 // Update trainModel to handle collection errors
@@ -180,8 +210,15 @@ async function saveModel() {
 async function predictGesture(landmarks) {
   const input = tf.tensor([landmarks.flat()]);
   const prediction = await model.predict(input).array();
-  const gestureIndex = prediction[0].indexOf(Math.max(...prediction[0]));
-  return gestureClasses[gestureIndex];
+  //const gestureIndex = prediction[0].indexOf(Math.max(...prediction[0]));
+  const confidence = Math.max(...prediction[0]);
+  console.log(confidence)
+  if (confidence > 0.8) {  // Set your confidence threshold
+      const gestureIndex = prediction[0].indexOf(confidence);
+      return gestureClasses[gestureIndex];
+  }
+  return 'unknown';
+  //return gestureClasses[gestureIndex];
 }
 
 // Initialize the model
@@ -339,3 +376,4 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
