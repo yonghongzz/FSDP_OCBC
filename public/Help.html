@@ -6,6 +6,7 @@
     <title>OCBC Digital Banking</title>
     <link rel="stylesheet" href="css/Help.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 </head>
 <body>
     <div class="container">
@@ -52,7 +53,7 @@
             </div>
           </details>
           
-          <h1 class="title">Frequently Asked Questions</h1>
+          <h1 class="faq_title">Frequently Asked Questions</h1>
 
           <details>
             <summary>ATM Card Activations</summary>
@@ -77,6 +78,83 @@
 
           <script src="js/tts.js"></script>
           <script src="js/voice.js"></script>
+          <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {i18next.init({
+              lng: localStorage.getItem('language') || 'en', // Get the language from localStorage
+              resources: {
+                en: { translation: {  
+                  "questions_title": "Questions Regarding App",
+  "how_transfer": "How do I transfer money?",
+  "transfer_answer": "Once logged in, press the PayNow button to proceed.",
+  "how_tts": "How do I enable text-to-speech?",
+  "tts_answer": "On the homepage, press the Volume icon to enable the text-to-speech function.",
+  "how_magnify": "How do I use the magnifying function?",
+  "magnify_answer": "Please press the magnifying glass icon on the top right of the page.",
+  "how_contact_support": "How do I contact manual support?",
+  "contact_support_answer": "Please contact us using the built-in video call function, or visit our official website at",
+  "how_walkthrough": "How do I use the walkthrough function?",
+  "walkthrough_answer": "On the homepage, press the guide button on the bottom left.",
+  
+  "faq_title": "Frequently Asked Questions",
+  "atm_activation": "ATM Card Activation",
+  "atm_answer": "Please send the SMS request from the mobile number you registered with us.",
+  "crs": "CRS",
+  "crs_answer": "The Common Reporting Standard (CRS) is a new information-gathering and reporting requirement for financial institutions.",
+  "bank_code": "OCBC Bank and Branch Code",
+  "bank_code_answer": "Bank code: 7339. The first three numbers of your OCBC account number are branch codes."
+                    } },
+                es: { translation: {
+ "questions_title": "Preguntas sobre la aplicación",
+  "how_transfer": "¿Cómo transfiero dinero?",
+  "transfer_answer": "Una vez que haya iniciado sesión, presione el botón de PayNow para continuar.",
+  "how_tts": "¿Cómo habilito la función de texto a voz?",
+  "tts_answer": "En la página principal, presione el ícono de volumen para habilitar la función de texto a voz.",
+  "how_magnify": "¿Cómo uso la función de aumento?",
+  "magnify_answer": "Presione el ícono de la lupa en la parte superior derecha de la página.",
+  "how_contact_support": "¿Cómo contacto con soporte manual?",
+  "contact_support_answer": "Contáctenos utilizando la función de videollamada incorporada o visite nuestro sitio web oficial en",
+  "how_walkthrough": "¿Cómo uso la función de recorrido?",
+  "walkthrough_answer": "En la página principal, presione el botón de guía en la parte inferior izquierda.",
+  
+  "faq_title": "Preguntas frecuentes",
+  "atm_activation": "Activación de tarjeta ATM",
+  "atm_answer": "Envíe la solicitud por SMS desde el número de móvil registrado con nosotros.",
+  "crs": "CRS",
+  "crs_answer": "El Common Reporting Standard (CRS) es un nuevo requisito de recopilación y presentación de información para las instituciones financieras.",
+  "bank_code": "Código del banco y sucursal de OCBC",
+  "bank_code_answer": "Código bancario: 7339. Los primeros tres números de su número de cuenta OCBC son códigos de sucursal.",} }
+              }
+            }, function(err, t) {
+              updateHelpContent();
+            });
+            
+            function updateHelpContent() {
+  // Questions section
+  document.querySelector('.title').innerHTML = i18next.t('questions_title');
+  document.querySelectorAll('summary')[0].innerHTML = i18next.t('how_transfer');
+  document.querySelectorAll('details div')[0].innerHTML = i18next.t('transfer_answer');
+  document.querySelectorAll('summary')[1].innerHTML = i18next.t('how_tts');
+  document.querySelectorAll('details div')[1].innerHTML = i18next.t('tts_answer');
+  document.querySelectorAll('summary')[2].innerHTML = i18next.t('how_magnify');
+  document.querySelectorAll('details div')[2].innerHTML = i18next.t('magnify_answer');
+  document.querySelectorAll('summary')[3].innerHTML = i18next.t('how_contact_support');
+  document.querySelectorAll('details div')[3].innerHTML = i18next.t('contact_support_answer') + ' <a href="https://www.ocbc.com/personal-banking/help-and-support">Here</a>';
+  document.querySelectorAll('summary')[4].innerHTML = i18next.t('how_walkthrough');
+  document.querySelectorAll('details div')[4].innerHTML = i18next.t('walkthrough_answer');
+  
+  // FAQ section
+  document.querySelector('.faq_title').innerHTML = i18next.t('faq_title');
+  document.querySelectorAll('summary')[5].innerHTML = i18next.t('atm_activation');
+  document.querySelectorAll('details div')[5].innerHTML = i18next.t('atm_answer');
+  document.querySelectorAll('summary')[6].innerHTML = i18next.t('crs');
+  document.querySelectorAll('details div')[6].innerHTML = i18next.t('crs_answer');
+  document.querySelectorAll('summary')[7].innerHTML = i18next.t('bank_code');
+  document.querySelectorAll('details div')[7].innerHTML = i18next.t('bank_code_answer');
+  
+}
+            })
+            </script>
 
 </body>
 </html>

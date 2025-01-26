@@ -38,6 +38,13 @@
                 </button>
                 <div class="dropdown-menu" id="profileMenu">
                     <button class="dropdown-item" id="logoutBtn">Logout</button>
+                    <div class="language-selector">
+                        <select id="languageSelect" onchange="changeLanguage(this.value)">
+                            <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="fr">French</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -180,6 +187,76 @@
     <script src="js/profile.js"></script>
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+    <script>
+      const resources = {
+        en: {
+          translation: {
+            "welcome_back": "Welcome back",
+            "pay_now": "PayNow",
+            "scan_qr": "Scan QR",
+            "pay_bills": "Pay Bills",
+            "account_balance": "A/C Balance",
+            "debit": "Debit",
+            "daily_limit": "Daily transaction limit",
+            "change_limit": "Change transaction limit",
+            "guide": "Guide",
+            "pay_transfer": "Pay and Transfer",
+            "help": "Help"
+          }
+        },
+        es: {
+          translation: {
+            "welcome_back": "Bienvenido de nuevo",
+            "pay_now": "Pagar ahora",
+            "scan_qr": "Escanear QR",
+            "pay_bills": "Pagar facturas",
+            "account_balance": "Saldo de la cuenta",
+            "debit": "Débito",
+            "daily_limit": "Límite diario de transacciones",
+            "change_limit": "Cambiar límite de transacciones",
+            "guide": "Guía",
+            "pay_transfer": "Pagar y transferir",
+            "help": "Ayuda"
+          }
+        },
+        // Add more languages here
+      };
+    
+// Initialize i18next with language stored in localStorage, or default to English
+i18next.init({
+  lng: localStorage.getItem('language') || 'en', // Get stored language or default to English
+  resources
+}, function(err, t) {
+  updateContent();
+});
+
+// Store language in localStorage when changed
+function changeLanguage(lng) {
+  localStorage.setItem('language', lng); // Store selected language in localStorage
+  i18next.changeLanguage(lng, function(err, t) {
+    updateContent();
+  });
+}
+
+// Function to update page content based on the selected language
+function updateContent() {
+  document.querySelector('.welcome-back p').innerHTML = i18next.t('welcome_back');
+  document.querySelector('.payment-button-text').innerHTML = i18next.t('pay_now');
+  document.querySelectorAll('.payment-button-text')[1].innerHTML = i18next.t('scan_qr');
+  document.querySelectorAll('.payment-button-text')[2].innerHTML = i18next.t('pay_bills');
+  document.querySelector('.balance-text').innerHTML = i18next.t('account_balance');
+  document.querySelector('.debit-text').innerHTML = i18next.t('debit');
+  document.querySelector('.tc-text').innerHTML = i18next.t('daily_limit');
+  document.querySelector('.tchange-text').innerHTML = i18next.t('change_limit');
+  document.querySelector('.walkthrough-text').innerHTML = i18next.t('guide');
+  document.querySelector('.pat-text').innerHTML = i18next.t('pay_transfer');
+  document.querySelector('.needhelp-text').innerHTML = i18next.t('help');
+}
+
+    </script>
+    
+
 
 </body>
 
