@@ -9,6 +9,10 @@ async function seedDatabase() {
         // Drop existing tables (optional if you want to recreate them entirely)
         await sql.query(`
             if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.RecurringTransfers') and sysstat & 0xf = 3)
+            DROP TABLE dbo.RecurringTransfers;
+
+            if exists (SELECT * FROM sysobjects 
             WHERE id = object_id('dbo.OverseasTransactionLogs') and sysstat & 0xf = 3)
             DROP TABLE dbo.OverseasTransactionLogs;
 
