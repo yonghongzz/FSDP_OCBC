@@ -107,7 +107,7 @@ app.get("/overseas-transaction-logs/id/:id", overseastransactionlogController.ge
 app.post("/overseas-transaction-logs", validateOverseasTransactionLog.validateCreateOverseasTransactionLog, overseastransactionlogController.createOverseasTransactionLog);
 
 // Recurring Transfer
-app.get("/recurring-transfers", recurringTransferController.getAllRecurringTransfers);
+app.get("/recurring-transfers/user/:userId", recurringTransferController.getAllRecurringTransfers);
 app.get("/recurring-transfers/:id", recurringTransferController.getRecurringTransferById);
 app.post("/recurring-transfers", validateRecurringTransfer.validateCreateRecurringTransfer, recurringTransferController.createRecurringTransfer);
 app.put("/recurring-transfers/:id", validateRecurringTransfer.validateUpdateRecurringTransfer, recurringTransferController.updateRecurringTransfer);

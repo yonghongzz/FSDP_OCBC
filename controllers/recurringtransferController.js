@@ -1,70 +1,64 @@
 const RecurringTransfer = require("../models/recurringtransfer");
 
+// Get all recurring transfers for a user
 const getAllRecurringTransfers = async (req, res) => {
+    const userId = parseInt(req.params.userId);  // Get user ID from URL
     try {
-        const recurringTransfers = await RecurringTransfer.getAllRecurringTransfers();
-        res.json(recurringTransfers);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error retrieving recurring transfers");
+        const transfers = await RecurringTransfer.getAllRecurringTransfers(userId); 
+        console.log(transfers); // Log the fetched data
+        res.json(transfers);  // Return the list of recurring transfers in JSON format
+    } catch (error) { 
+        console.error(error); 
+        res.status(500).send("Error retrieving recurring transfers"); 
     }
 };
 
+// Get a specific recurring transfer by ID
 const getRecurringTransferById = async (req, res) => {
-    const recurringTransferId = parseInt(req.params.id);
+    const transferId = parseInt(req.params.id);  // Get recurring_transfer_id from URL
     try {
-        const recurringTransfer = await RecurringTransfer.getRecurringTransferById(recurringTransferId);
-        if (!recurringTransfer) {
-            return res.status(404).send("Recurring transfer not found");
+        const transfer = await RecurringTransfer.getRecurringTransferById(transferId); 
+        if (!transfer) {
+            return res.status(404).send("Recurring transfer not found");  // If transfer not found, return 404
         }
-        res.json(recurringTransfer);
+        res.json(transfer);  // Return the recurring transfer details
     } catch (error) {
         console.error(error);
         res.status(500).send("Error retrieving recurring transfer");
     }
 };
 
+// Create a new recurring transfer
 const createRecurringTransfer = async (req, res) => {
-    const newRecurringTransferData = req.body;
-
+    const newTransferData = req.body;  // Get recurring transfer data from request body
     try {
-        const createdRecurringTransfer = await RecurringTransfer.createRecurringTransfer(newRecurringTransferData);
-        res.status(201).json(createdRecurringTransfer);
+        await RecurringTransfer.createRecurringTransfer(newTransferData);
+        res.status(201).send("Recurring transfer created successfully");  // Return success message
     } catch (error) {
         console.error(error);
         res.status(500).send("Error creating recurring transfer");
     }
 };
 
+// Update a recurring transfer's details
 const updateRecurringTransfer = async (req, res) => {
-    const recurringTransferId = parseInt(req.params.id);
-    const updatedData = req.body;
-
+    const transferId = parseInt(req.params.id);  // Get recurring_transfer_id from URL
+    const updatedTransferData = req.body;  // Get the updated transfer data from request body
     try {
-        const existingRecurringTransfer = await RecurringTransfer.getRecurringTransferById(recurringTransferId);
-        if (!existingRecurringTransfer) {
-            return res.status(404).send("Recurring transfer not found");
-        }
-
-        const updatedRecurringTransfer = await RecurringTransfer.updateRecurringTransfer(recurringTransferId, updatedData);
-        res.json(updatedRecurringTransfer);
+        await RecurringTransfer.updateRecurringTransfer(transferId, updatedTransferData);
+        res.send("Recurring transfer updated successfully");  // Return success message
     } catch (error) {
         console.error(error);
         res.status(500).send("Error updating recurring transfer");
     }
 };
 
+// Delete a recurring transfer
 const deleteRecurringTransfer = async (req, res) => {
-    const recurringTransferId = parseInt(req.params.id);
-
+    const transferId = parseInt(req.params.id);  // Get recurring_transfer_id from URL
     try {
-        const existingRecurringTransfer = await RecurringTransfer.getRecurringTransferById(recurringTransferId);
-        if (!existingRecurringTransfer) {
-            return res.status(404).send("Recurring transfer not found");
-        }
-
-        await RecurringTransfer.deleteRecurringTransfer(recurringTransferId);
-        res.status(204).send(); // No Content
+        await RecurringTransfer.deleteRecurringTransfer(transferId);
+        res.status(200).send("Recurring transfer deleted successfully");  // Confirm deletion
     } catch (error) {
         console.error(error);
         res.status(500).send("Error deleting recurring transfer");
@@ -76,5 +70,5 @@ module.exports = {
     getRecurringTransferById,
     createRecurringTransfer,
     updateRecurringTransfer,
-    deleteRecurringTransfer
+    deleteRecurringTransfer,
 };

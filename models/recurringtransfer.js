@@ -2,8 +2,7 @@ const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
 class RecurringTransfer {
-    constructor(recurring_transfer_id, user_id, payee_id, account_id, amount, currency, frequency, next_transfer_date, end_date, status) {
-        this.recurring_transfer_id = recurring_transfer_id;
+    constructor(user_id, payee_id, account_id, amount, currency, frequency, next_transfer_date, end_date, status) {
         this.user_id = user_id;
         this.payee_id = payee_id;
         this.account_id = account_id;
@@ -15,33 +14,34 @@ class RecurringTransfer {
         this.status = status;
     }
 
-    static async getAllRecurringTransfers() {
+    // Fetch all recurring transfers for a specific user
+    static async getAllRecurringTransfers(user_id) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM RecurringTransfers`;
+        const sqlQuery = `SELECT * FROM RecurringTransfers WHERE user_id = @user_id`;
 
         const request = connection.request();
+        request.input("user_id", sql.Int, user_id);
         const result = await request.query(sqlQuery);
 
         connection.close();
 
         return result.recordset.map(
-            (row) =>
-                new RecurringTransfer(
-                    row.recurring_transfer_id,
-                    row.user_id,
-                    row.payee_id,
-                    row.account_id,
-                    row.amount,
-                    row.currency,
-                    row.frequency,
-                    row.next_transfer_date,
-                    row.end_date,
-                    row.status
-                )
+            (row) => new RecurringTransfer(
+                row.user_id,
+                row.payee_id,
+                row.account_id,
+                row.amount,
+                row.currency,
+                row.frequency,
+                row.next_transfer_date,
+                row.end_date,
+                row.status
+            )
         );
     }
 
+    // Fetch a specific recurring transfer by ID
     static async getRecurringTransferById(id) {
         const connection = await sql.connect(dbConfig);
 
@@ -55,27 +55,26 @@ class RecurringTransfer {
 
         return result.recordset[0]
             ? new RecurringTransfer(
-                  result.recordset[0].recurring_transfer_id,
-                  result.recordset[0].user_id,
-                  result.recordset[0].payee_id,
-                  result.recordset[0].account_id,
-                  result.recordset[0].amount,
-                  result.recordset[0].currency,
-                  result.recordset[0].frequency,
-                  result.recordset[0].next_transfer_date,
-                  result.recordset[0].end_date,
-                  result.recordset[0].status
-              )
+                result.recordset[0].user_id,
+                result.recordset[0].payee_id,
+                result.recordset[0].account_id,
+                result.recordset[0].amount,
+                result.recordset[0].currency,
+                result.recordset[0].frequency,
+                result.recordset[0].next_transfer_date,
+                result.recordset[0].end_date,
+                result.recordset[0].status
+            )
             : null;
     }
 
+    // Create a new recurring transfer
     static async createRecurringTransfer(newRecurringTransferData) {
         const connection = await sql.connect(dbConfig);
 
         const sqlQuery = `
             INSERT INTO RecurringTransfers (user_id, payee_id, account_id, amount, currency, frequency, next_transfer_date, end_date, status)
             VALUES (@user_id, @payee_id, @account_id, @amount, @currency, @frequency, @next_transfer_date, @end_date, @status);
-            SELECT SCOPE_IDENTITY() AS recurring_transfer_id;
         `;
 
         const request = connection.request();
@@ -89,13 +88,12 @@ class RecurringTransfer {
         request.input("end_date", sql.Date, newRecurringTransferData.end_date || null);
         request.input("status", sql.VarChar(50), newRecurringTransferData.status);
 
-        const result = await request.query(sqlQuery);
+        await request.query(sqlQuery);
 
         connection.close();
-
-        return this.getRecurringTransferById(result.recordset[0].recurring_transfer_id);
     }
 
+    // Update an existing recurring transfer
     static async updateRecurringTransfer(id, updatedData) {
         const connection = await sql.connect(dbConfig);
 
@@ -129,10 +127,9 @@ class RecurringTransfer {
         await request.query(sqlQuery);
 
         connection.close();
-
-        return this.getRecurringTransferById(id);
     }
 
+    // Delete a recurring transfer by ID
     static async deleteRecurringTransfer(id) {
         const connection = await sql.connect(dbConfig);
 
