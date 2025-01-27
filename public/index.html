@@ -21,6 +21,55 @@
                     <button class="btn btn-link button-magnify" id="magnify" type="button">
                         <i class="bi bi-zoom-in"></i>
                     </button>
+                </div>
+                <button class="btn btn-link button-volume" id="voice" type="button">
+                    <i class="bi bi-volume-up-fill"></i>
+                </button>
+                <button class="btn btn-link button-mic" id="mic" type="button">
+                    <i class="bi bi-mic-fill"></i>
+                </button>
+                <button class="btn btn-link button-gesture" id="gesture" type="button">
+                    <i class="bi bi-hand-index-fill"></i>
+                </button>
+                <button class="btn btn-link button-person" id="person" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-person-fill"></i>
+                </button>
+                <div class="dropdown-menu" id="profileMenu">
+                    <button class="dropdown-item" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!--bankapp content area-->
+        <div class="card-body bankapp-content">
+          <blockquote class="blockquote mb-0">
+            <div class="welcome-back" style="margin-bottom: -6px; margin-top: -4px; font-weight: bold">
+                <p><!--something should be here--></p>
+            </div>
+
+            <div class="payment">
+                <a href="paynow.html" class="payment-button" style="margin-left: 10px;">
+                    <div class="payment-button-icon">
+                        <img src="https://thewhisky.sg/wp-content/uploads/2021/10/paynow-logo-2-01.png" alt="PayNow">
+                    </div>
+                    <div class="payment-button-text" style="margin-top: -2.2rem;">
+                        PayNow
+                    </div>
+                </a>
+                <a href="scanQR.html" class="payment-button">
+                    <div class="payment-button-icon">
+                        <i class="bi bi-qr-code-scan"></i>
+                    </div>
+                    <div class="payment-button-text">
+                        Scan QR
+                    </div>
+                </a>
+                <a href="#" class="payment-button" style="margin-right: 10px;">
+                    <div class="payment-button-icon">
+                        <i class="bi bi-journals"></i>
+                    </div>
+                    <div class="payment-button-text">
+                        Pay Bills
                     <div class="card normal-lite">
                         <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
                             Lite
@@ -179,8 +228,18 @@
             </div>
         </div>
     </div>
+
+    <video class="input_video" style="display:none;"></video>
+    <canvas class="output_canvas" style="display: none;"></canvas>
+
+
     <!-- Bootstrap Bundle (includes Popper) -->
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="js/hand-gesture.js"></script>
     <script src="js/indexscript.js"></script>
     <script src="./js/magnifying.js"></script>
     <script src="js/profile.js"></script>
