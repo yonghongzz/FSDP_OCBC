@@ -62,7 +62,42 @@
     <script src="./js/magnifying.js"></script>
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
-
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+    <script>
+        i18next.init({
+          lng: localStorage.getItem('language') || 'en', // Get the language from localStorage
+          resources: {
+            en: { translation: {
+              "guide_title": "Find assistance",
+              "guide_select": "Please select one option for help",
+              "faq_page": "FAQ Page",
+              "video_call_staff": "Video call to staff"
+            }},
+            cn: { translation: {
+              "guide_title": "寻求帮助",
+              "guide_select": "请选择一个选项来获取帮助",
+              "faq_page": "FAQ页面",
+              "video_call_staff": "视频通话至工作人员"
+            }},
+            my: { translation: {
+              "guide_title": "Cari bantuan",
+              "guide_select": "Sila pilih satu pilihan untuk bantuan",
+              "faq_page": "Halaman FAQ",
+              "video_call_staff": "Panggilan video kepada staf"
+            }}
+          },
+        }, function(err, t) {
+          updateGuideContent();
+        });
+        
+        function updateGuideContent() {
+          document.querySelector('.guide p').innerHTML = i18next.t('guide_title');
+          document.querySelector('.guide-selectone p').innerHTML = i18next.t('guide_select');
+          document.querySelectorAll('.guide-btns .card-body')[0].innerHTML = i18next.t('faq_page');
+          document.querySelectorAll('.guide-btns .card-body')[1].innerHTML = i18next.t('video_call_staff');
+        }
+        </script>
+        
 </body>
 
 </html>

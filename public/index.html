@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<body>
+<body class="lang-en">
     <!--entire thing-->
     <div class="card bankapp">
         <!--bankapp header-->
@@ -41,8 +41,8 @@
                     <div class="language-selector">
                         <select id="languageSelect" onchange="changeLanguage(this.value)">
                             <option value="en">English</option>
-                            <option value="es">Spanish</option>
-                            <option value="fr">French</option>
+                            <option value="cn">简体中文</option>
+                            <option value="my">Melayu</option>
                         </select>
                     </div>
                 </div>
@@ -202,25 +202,45 @@
             "change_limit": "Change transaction limit",
             "guide": "Guide",
             "pay_transfer": "Pay and Transfer",
-            "help": "Help"
+            "help": "Help",
+            "logout": "Logout",  
+            "lite": "Lite"       
           }
         },
-        es: {
+        cn: {
           translation: {
-            "welcome_back": "Bienvenido de nuevo",
-            "pay_now": "Pagar ahora",
-            "scan_qr": "Escanear QR",
-            "pay_bills": "Pagar facturas",
-            "account_balance": "Saldo de la cuenta",
-            "debit": "Débito",
-            "daily_limit": "Límite diario de transacciones",
-            "change_limit": "Cambiar límite de transacciones",
-            "guide": "Guía",
-            "pay_transfer": "Pagar y transferir",
-            "help": "Ayuda"
+            "welcome_back": "欢迎回来",
+            "pay_now": "PayNow",
+            "scan_qr": "二维码",
+            "pay_bills": "支付账单",
+            "account_balance": "账户余额",
+            "debit": "借记",
+            "daily_limit": "每日交易限额",
+            "change_limit": "更改交易限额",
+            "guide": "指南",
+            "pay_transfer": "转账",
+            "help": "帮助",
+            "logout": "登出",  
+            "lite": "简洁版"       
           }
         },
-        // Add more languages here
+        my: {
+          translation: {
+            "welcome_back": "Selamat kembali",
+            "pay_now": "PayNow",
+            "scan_qr": "QR",
+            "pay_bills": "Bayar Bil",
+            "account_balance": "Baki Akaun",
+            "debit": "Debit",
+            "daily_limit": "Had Harian Transaksi",
+            "change_limit": "Ubah Had Transaksi",
+            "guide": "Panduan",
+            "pay_transfer": "Pindahan Wang",
+            "help": "Bantuan",
+            "logout": "Keluar",  
+            "lite": "Ringan"     
+          }
+        },
       };
     
 // Initialize i18next with language stored in localStorage, or default to English
@@ -233,11 +253,26 @@ i18next.init({
 
 // Store language in localStorage when changed
 function changeLanguage(lng) {
-  localStorage.setItem('language', lng); // Store selected language in localStorage
-  i18next.changeLanguage(lng, function(err, t) {
-    updateContent();
-  });
+    localStorage.setItem('language', lng);
+    i18next.changeLanguage(lng, function(err, t) {
+        updateContent();
+    });
+
+    // Select payment button text elements
+    const paymentButtons = document.querySelectorAll('.payment-button-text');
+
+    // Adjust font size based on the selected language
+    paymentButtons.forEach(button => {
+        if (lng === 'en') {
+            button.style.fontSize = '16px';  // English
+        } else if (lng === 'cn') {
+            button.style.fontSize = '14px';  // Mandarin
+        } else if (lng === 'my') {
+            button.style.fontSize = '13px';  // Malay
+        } 
+    });
 }
+
 
 // Function to update page content based on the selected language
 function updateContent() {
@@ -252,6 +287,8 @@ function updateContent() {
   document.querySelector('.walkthrough-text').innerHTML = i18next.t('guide');
   document.querySelector('.pat-text').innerHTML = i18next.t('pay_transfer');
   document.querySelector('.needhelp-text').innerHTML = i18next.t('help');
+  document.getElementById('logoutBtn').innerHTML = i18next.t('logout');
+document.querySelector('.normal-lite div').innerHTML = i18next.t('lite');
 }
 
     </script>
