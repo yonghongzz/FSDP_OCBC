@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Recipient Information</title>
+    <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/overseas-style.css" />
+</head>
+
+<body>
+    <div class="card bankapp">
+        <!-- Bankapp Header -->
+        <div class="bankapp-header">
+            <div class="header-content card-header d-flex justify-content-between align-items-center">
+                <div class="header-left">
+                    <a href="overseas-transaction-menu.html" class="header-icon-link">
+                        <i class="bi bi-arrow-left header-icon"></i>
+                    </a>
+                </div>
+                <div class="header-center">
+                    <h1 class="header-title">Edit Recipient Info</h1>
+                </div>
+                <div class="header-right">
+                    <a href="overseas-transaction-help.html" class="header-icon-link">
+                        <i class="bi bi-question-circle header-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipients Text -->
+        <h2 class="recipients-title" style="padding-top: 10px;">Recipient Details</h2>
+
+        <!-- Explanation under "Select Currency" -->
+        <h2 class="recipients-choose-currency" style="padding-bottom: 15px;">View and pin recipient for easy access.</h2>
+
+        <!-- Page Content -->
+        <div class="recipient-details-box">
+            <!-- Recipient Info -->
+            <div class="recipient-details">
+                <p><strong>Recipient Name:</strong> John Doe</p>
+                <p><strong>Bank Name:</strong> Chase Bank</p>
+                <p><strong>Account Number:</strong> 1234567890123456</p>
+                <p><strong>Country:</strong> United States</p>
+            </div>
+        </div>
+
+        <!-- Pin as Frequent Payee -->
+        <div class="form-group form-recipient-details" style="margin-bottom: 75px;">
+            <label for="pin-checkbox" class="d-flex justify-content-between align-items-center">
+                <span>Pin as Frequent Payee</span>
+                <input type="checkbox" id="pin-checkbox" />
+            </label>
+        </div>
+
+        <!-- Save Button -->
+        <div class="form-group form-recipient-details mt-4">
+            <button type="button" class="add-recipient-button w-100" id="save-btn">Save Changes</button>
+        </div>
+    </div>
+
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <script src="js/overseas-transaction-menu.js"></script>
+</body>
+
+</html>
