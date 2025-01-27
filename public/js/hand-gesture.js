@@ -56,25 +56,27 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
         // Modify the hands.onResults to include prediction
   hands.onResults(async (result) => {
-    results = result;
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-  
-    if (results.multiHandLandmarks) {
-      for (const landmarks of results.multiHandLandmarks) {
-        drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 5});
-        drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
-        
-        // Add prediction if model is trained
-        if (model.trained) {
-          const normalizedLandmarks = normalizeLandmarks(landmarks);
-          const gesture = await predictGesture(normalizedLandmarks);
+    if(gesture){
+        results = result;
+        canvasCtx.save();
+        canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+        canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+      
+        if (results.multiHandLandmarks) {
+          for (const landmarks of results.multiHandLandmarks) {
+            drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#00FF00', lineWidth: 5});
+            drawLandmarks(canvasCtx, landmarks, {color: '#FF0000', lineWidth: 2});
+            
+            // Add prediction if model is trained
+            if (model.trained) {
+              const normalizedLandmarks = normalizeLandmarks(landmarks);
+              const gesture = await predictGesture(normalizedLandmarks);
+            }
+          }
         }
-      }
+      
+        canvasCtx.restore();
     }
-  
-    canvasCtx.restore();
   });
   }
   
@@ -144,46 +146,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
             // Wait for 3 seconds before allowing the next prediction
        await new Promise(resolve => setTimeout(resolve, 3000));
     }
-  }
-  
-  // Initialize the model
-  function createModel() {
-    const numClasses = gestureClasses.length;
-    
-    model = tf.sequential();
-    
-    // Input layer (21 landmarks × 3 coordinates)
-    model.add(tf.layers.dense({ 
-        inputShape: [63], // 21 landmarks * 3 coordinates (x, y, z)
-        units: 128, 
-        activation: 'relu' 
-    }));
-    
-    // Hidden layers
-    model.add(tf.layers.dense({ 
-        units: 64, 
-        activation: 'relu' 
-    }));
-    model.add(tf.layers.dense({ 
-        units: 32, 
-        activation: 'relu' 
-    }));
-    
-    // Output layer (number of gesture classes)
-    model.add(tf.layers.dense({ 
-        units: numClasses, 
-        activation: 'softmax' 
-    }));
-    
-    // Compile the model
-    model.compile({
-        optimizer: 'adam',
-        loss: 'sparseCategoricalCrossentropy',
-        metrics: ['accuracy']
-    });
-    
-    console.log('Model created successfully');
-    return model;
   }
   
   

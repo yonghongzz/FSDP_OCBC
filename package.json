@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "start": "nodemon app.js"
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
