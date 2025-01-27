@@ -3,7 +3,7 @@ const Joi = require("joi");
 const validateCreateOverseasTransaction = (req, res, next) => {
     const schema = Joi.object({
         payee_id: Joi.number().integer().required(),  // Payee ID is required and should be an integer
-        account_id: Joi.number().integer().required(),  // Account ID is required and should be an integer
+        user_id: Joi.number().integer().required(),  // Account ID is required and should be an integer
         transaction_type: Joi.string().valid('send', 'receive').required(),  // Corrected to only accept 'send' or 'receive'
         amount: Joi.number().precision(2).positive().required(),  // Positive amount with 2 decimal precision
         currency: Joi.string().length(3).uppercase().required(),  // Currency code (3 uppercase letters, e.g., USD, EUR)

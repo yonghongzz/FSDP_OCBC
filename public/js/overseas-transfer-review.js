@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const transferCategory = sessionStorage.getItem('transferCategory');
     const accountGetId = sessionStorage.getItem('selectedAccount');
     const userID = JSON.parse(accountGetId);  // Extract user data from session storage
+    const loginUserId = sessionStorage.getItem('loginUserId')
 
     // Check if recipient data exists
     if (recipient) {
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const transactionData = {
             payee_id: recipientDetails.payee_id,  // The recipient's ID
-            account_id: userID.account_id,  // Only the account ID, not the whole object
+            user_id: loginUserId,  // Only the account ID, not the whole object
             transaction_type: 'send',  // Assuming 'send' as the transaction type
             amount: transferAmount,
             currency: currency,
