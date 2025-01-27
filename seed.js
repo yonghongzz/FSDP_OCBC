@@ -24,6 +24,10 @@ async function seedDatabase() {
             WHERE id = object_id('dbo.OverseasTransactions') and sysstat & 0xf = 3)
             DROP TABLE dbo.OverseasTransactions;
 
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.RecurringTransfers') and sysstat & 0xf = 3)
+            DROP TABLE dbo.RecurringTransfers;
+
             if exists (SELECT * FROM sysobjects 
             WHERE id = object_id('dbo.OverseasPayees') and sysstat & 0xf = 3)
             DROP TABLE dbo.OverseasPayees;
@@ -47,6 +51,14 @@ async function seedDatabase() {
             if exists (SELECT * FROM sysobjects 
             WHERE id = object_id('dbo.Users') and sysstat & 0xf = 3)
             DROP TABLE dbo.Users;
+
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.BankLocations') and sysstat & 0xf = 3)
+            DROP TABLE dbo.BankLocations;
+
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.ATMLocations') and sysstat & 0xf = 3)
+            DROP TABLE dbo.ATMLocations;
         `);
 
         //Create tables
@@ -161,6 +173,21 @@ async function seedDatabase() {
                 FOREIGN KEY (payee_id) REFERENCES OverseasPayees(payee_id),
                 FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
             );
+            CREATE TABLE BankLocations (
+                location_id INT PRIMARY KEY IDENTITY(1,1),
+                bank_name VARCHAR(100) NOT NULL,  -- Name of the bank
+                address VARCHAR(255) NOT NULL,    -- Address of the bank
+                operating_hours VARCHAR(255),      -- Operating hours of the bank
+                latitude DECIMAL(9, 4),           -- Latitude of the bank location
+                longitude DECIMAL(9, 4)           -- Longitude of the bank location
+            );
+            CREATE TABLE ATMLocations (
+                atm_id INT PRIMARY KEY IDENTITY(1,1),
+                bank_name VARCHAR(100) NOT NULL,  -- Name of the bank
+                address VARCHAR(255) NOT NULL,    -- Address of the ATM location
+                latitude DECIMAL(9, 4),           -- Latitude of the ATM location
+                longitude DECIMAL(9, 4)           -- Longitude of the ATM location
+            );
         `);
 
         // Hash passwords
@@ -265,7 +292,26 @@ async function seedDatabase() {
                 (3, 4, 4, 300.00, 'BRL', 'yearly', '2026-01-01', '2026-12-31', 'active'),
                 (1, 1, 1, 150.00, 'USD', 'monthly', '2025-03-01', NULL, 'canceled');
         `);
+        
+        await sql.query(`
+            INSERT INTO BankLocations (bank_name, address, operating_hours, latitude, longitude)
+            VALUES
+                ('Jurong East Branch', '50 Jurong Gateway Road #B1-18 Jem, Singapore 608549', 'Mon-Fri: 11.00am to 6.00pm Sat: 11.00am to 4.30pm Sun: 11.00am to 4.30pm Public Holidays: Closed', 1.3331, 103.7437), 
+                ('Jurong Point Branch', '1 Jurong West Central 2 #B1-31/32/33/46 Jurong Point Shopping Centre, Singapore 648886', 'Mon-Fri: 11.00am to 6.00pm Sat: 11.00am to 4.30pm Sun: 11.00am to 4.30pm Public Holidays: Closed', 1.3399, 103.7065),
+                ('Clementi Branch', '3155 Commonwealth Avenue West #04-52 to 55 The Clementi Mall, Singapore 129588', 'Mon-Fri: 11.00am to 6.00pm Sat: 11.00am to 2.30pm Sun & Public Holidays: Closed', 1.3150, 103.7644),
+                ('Bukit Batok Branch', '634 Bukit Batok Central #01-108, Singapore 650634', 'Mon-Fri: 9.30am to 4.30pm Sat: 9.30am to 12.00pm Sun & Public Holidays: Closed', 1.3497, 103.7514),
+                ('National University of Singapore FRANK Store', '2 College Avenue West Stephen Riady Centre University Town, #01-01 National University of Singapore, Singapore 138607', 'Mon-Fri: 10.00am to 6.00pm Sat: 10.00am to 2.30pm Sun & Public Holidays: Closed', 1.3043, 103.7727);        
+        `);
 
+        await sql.query(`
+            INSERT INTO ATMLocations (bank_name, address, latitude, longitude)
+            VALUES
+                ('Singapore Institute of Management', '461 Clementi Road SIM Headquarters Singapore 599491', 1.3298, 103.7765), 
+                ('The Clementi Mall', '3155 Commonwealth Avenue West #04-52 to 55 The Clementi Mall Singapore 129588', 1.3150, 103.7644),
+                ('Clementi Avenue 3 - FairPrice', '451 Clementi Avenue 3 #01-307 Singapore 120451', 1.3126, 103.7657),
+                ('Clementi Avenue 5', '325 Clementi Avenue 5 #01-137 Singapore 120325', 1.3152, 103.7668),
+                ('UOB ATM - UOB Clementi Branch', 'Blk 450 #01-287/289 Clementi Avenue 3 #01-287/289 Singapore 120450', 1.3136, 103.7654);
+        `);
         console.log('Sample data inserted successfully.');
 
     } catch (err) {

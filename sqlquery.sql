@@ -147,3 +147,17 @@ CREATE TABLE OverseasTransactionLogs (
     FOREIGN KEY (transaction_id) REFERENCES OverseasTransactions(transaction_id)  -- Links to the OverseasTransactions table
 );
 
+CREATE TABLE BankLocations (
+    location_id INT PRIMARY KEY IDENTITY(1,1),
+    bank_name VARCHAR(100) NOT NULL,  -- Name of the bank
+    address VARCHAR(255) NOT NULL,    -- Address of the bank
+    postal_code VARCHAR(10) NOT NULL  -- Postal code of the bank location
+    operating_hours VARCHAR(255)      -- Operating hours of the bank
+)
+
+CREATE TABLE ATMLocations (
+    atm_id INT PRIMARY KEY IDENTITY(1,1),
+    bank_name VARCHAR(100) NOT NULL,  -- Name of the bank
+    address VARCHAR(255) NOT NULL,    -- Address of the ATM location
+    postal_code VARCHAR(10) NOT NULL  -- Postal code of the ATM location
+)
