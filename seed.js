@@ -169,8 +169,8 @@ async function seedDatabase() {
         // Insert data into Account table
         await sql.query(`
             INSERT INTO Accounts(user_id, account_type, account_number, balance, transaction_limit)
-            VALUES (1, 'Savings Account', '1111111111111111', 500.00, 1000.00),  
-                   (1, 'Current Account', '2222222222222222', 1000.00, 1000.00),
+            VALUES (1, 'Savings Account', '1111111111111111', 5000.00, 1000.00),  
+                   (1, 'Current Account', '2222222222222222', 10000.00, 1000.00),
                    (2, 'Savings Account', '3333333333333333', 2000.00, 1000.00),
                    (3, 'Savings Account', '4444444444444444', 3000.00, 1000.00);
         `);

@@ -106,18 +106,13 @@ async function fetchOverseasPayee(user_id) {
 }
 
 async function displayOverseasPayees() {
-    const overseasPayees = await fetchOverseasPayee(loginUserId); // Fetch overseas payees for the logged-in user
+    const overseasPayees = await fetchOverseasPayee(loginUserId);
 
     if (overseasPayees && overseasPayees.length > 0) {
-        // Select the container where the recipient boxes will be added
         const recipientContainer = document.querySelector('.recipient-container');
-        
-        // Clear the container before adding new boxes (optional, if you want to clear it each time)
         recipientContainer.innerHTML = '';
 
-        // Loop through each overseas payee and create a recipient box
         overseasPayees.forEach(payee => {
-            // Create the recipient box HTML
             const recipientBox = document.createElement('div');
             recipientBox.classList.add('recipient-box');
 
@@ -136,12 +131,18 @@ async function displayOverseasPayees() {
                 </div>
             `;
 
-            // Optionally, handle "pinned" payees differently (e.g., add a "pinned" class)
             if (payee.is_pinned) {
                 recipientBox.classList.add('pinned');
             }
 
-            // Append the recipient box to the container
+            // Add click event listener to the recipient box
+            recipientBox.addEventListener('click', () => {
+                // Store the selected payee information in sessionStorage
+                sessionStorage.setItem('selectedPayee', JSON.stringify(payee));
+                // Navigate to the transfer details page
+                window.location.href = 'overseas-select-fund.html';
+            });
+
             recipientContainer.appendChild(recipientBox);
         });
     }
