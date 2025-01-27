@@ -1,19 +1,62 @@
-// Initialize map
-const map = L.map('map').setView([1.3521, 103.8198], 12); // Default to Singapore coordinates
+// Initialize map centered on Singapore
+const SINGAPORE_BOUNDS = {
+  north: 1.4504,
+  south: 1.2500,
+  east: 104.0240,
+  west: 103.6000
+};
+
+const map = L.map('map', {
+  maxBounds: [
+    [SINGAPORE_BOUNDS.south, SINGAPORE_BOUNDS.west],
+    [SINGAPORE_BOUNDS.north, SINGAPORE_BOUNDS.east]
+  ],
+  minZoom: 11
+}).setView([1.3521, 103.8198], 12);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
-let currentCategory = 'branches';
+let currentCategory = 'banks';
 let markers = L.layerGroup().addTo(map);
+let userLocationMarker = null;
 
-class BankLocation {
-  constructor(bank_name, address, postal_code, operating_hours) {
-    this.bank_name = bank_name;
-    this.address = address;
-    this.postal_code = postal_code;
-    this.operating_hours = operating_hours;
+// Get device location
+function getUserLocation() {
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        // Check if location is within Singapore bounds
+        if (latitude >= SINGAPORE_BOUNDS.south && 
+            latitude <= SINGAPORE_BOUNDS.north && 
+            longitude >= SINGAPORE_BOUNDS.west && 
+            longitude <= SINGAPORE_BOUNDS.east) {
+          
+          // Remove existing user location marker if it exists
+          if (userLocationMarker) {
+            userLocationMarker.remove();
+          }
+
+          // Add user location marker with Google Maps style
+          userLocationMarker = L.marker([latitude, longitude], {
+            icon: L.divIcon({
+              className: 'user-location-marker',
+              html: '<div></div>',
+              iconSize: [16, 16],
+              iconAnchor: [8, 8]
+            })
+          }).addTo(map);
+
+          // Center map on user location
+          map.setView([latitude, longitude], 15);
+        }
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+      }
+    );
   }
 }
 
@@ -21,11 +64,9 @@ class BankLocation {
 async function fetchLocations(category) {
   try {
     // Simulate API call - replace with actual endpoint
-    const response = await fetch(`/api/${category}`);
+    const response = await fetch(`/${category}`);
     const data = await response.json();
-    return data.recordset.map(
-      (row) => new BankLocation(row.bank_name, row.address, row.postal_code, row.operating_hours)
-    );
+    return data;
   } catch (error) {
     console.error('Error fetching locations:', error);
     return [];
@@ -38,29 +79,68 @@ window.handleSearch = async () => {
   if (!searchInput) return;
 
   try {
-    // Simulate geocoding - replace with actual geocoding service
-    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${searchInput}`);
+    // Add Singapore to the search query to limit results
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${searchInput}, Singapore`);
     const data = await response.json();
     
     if (data.length > 0) {
       const { lat, lon } = data[0];
-      map.setView([lat, lon], 15);
-      await updateLocations();
+      
+      // Verify the location is within Singapore bounds
+      if (lat >= SINGAPORE_BOUNDS.south && 
+          lat <= SINGAPORE_BOUNDS.north && 
+          lon >= SINGAPORE_BOUNDS.west && 
+          lon <= SINGAPORE_BOUNDS.east) {
+        map.setView([lat, lon], 15);
+        await updateLocations();
+      }
     }
   } catch (error) {
     console.error('Error during search:', error);
   }
 };
 
+// Add keyboard support for search
+document.getElementById('search').addEventListener('keypress', (event) => {
+  if (event.key === 'Enter') {
+    handleSearch();
+  }
+});
+
 // Category selection
 window.setCategory = async (category) => {
   currentCategory = category;
   
   // Update UI
-  document.getElementById('branchesBtn').classList.toggle('active', category === 'branches');
-  document.getElementById('atmBtn').classList.toggle('active', category === 'atm');
+  document.getElementById('branchesBtn').classList.toggle('active', category === 'banks');
+  document.getElementById('atmBtn').classList.toggle('active', category === 'atms');
   
   await updateLocations();
+};
+
+// Overlay functionality
+window.showOverlay = (location) => {
+  const overlay = document.getElementById('locationOverlay');
+  const details = document.getElementById('locationDetails');
+  
+  details.innerHTML = `
+    <div class="location-name">${location.bank_name}</div>
+    <div class="location-info">
+      <strong>Address:</strong><br>
+      ${location.address}
+    </div>
+    <div class="location-info">
+      <strong>Operating Hours:</strong><br>
+      ${location.operating_hours}
+    </div>
+  `;
+  
+  overlay.classList.add('active');
+};
+
+window.closeOverlay = () => {
+  const overlay = document.getElementById('locationOverlay');
+  overlay.classList.remove('active');
 };
 
 // Update map markers
@@ -72,34 +152,12 @@ async function updateLocations() {
   const locations = await fetchLocations(currentCategory);
   
   locations.forEach(location => {
-    // In a real application, you would use the actual coordinates from the location data
-    // Here we're using a geocoding service to convert addresses to coordinates
-    geocodeAddress(location);
+    const marker = L.marker([location.latitude, location.longitude])
+      .on('click', () => showOverlay(location));
+    markers.addLayer(marker);
   });
 }
 
-async function geocodeAddress(location) {
-  try {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location.address)}`
-    );
-    const data = await response.json();
-    
-    if (data.length > 0) {
-      const { lat, lon } = data[0];
-      const marker = L.marker([lat, lon])
-        .bindPopup(`
-          <strong>${location.bank_name}</strong><br>
-          ${location.address}<br>
-          Postal Code: ${location.postal_code}<br>
-          Hours: ${location.operating_hours}
-        `);
-      markers.addLayer(marker);
-    }
-  } catch (error) {
-    console.error('Error geocoding address:', error);
-  }
-}
-
-// Initial load
+// Initial setup
+getUserLocation();
 updateLocations();

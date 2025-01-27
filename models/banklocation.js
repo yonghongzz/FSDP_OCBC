@@ -2,11 +2,12 @@ const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
 class BankLocation{
-    constructor(bank_name, address, postal_code, operating_hours){
+    constructor(bank_name, address, operating_hours, latitude, longitude) {
         this.bank_name = bank_name;
         this.address = address;
-        this.postal_code = postal_code;
         this.operating_hours = operating_hours;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     static async getAllBankLocations() {
@@ -21,7 +22,7 @@ class BankLocation{
         connection.close();
     
         return result.recordset.map(
-        (row) => new BankLocation(row.bank_name, row.address, row.postal_code, row.operating_hours)
+        (row) => new BankLocation(row.bank_name, row.address, row.operating_hours, row.latitude, row.longitude)
         ); 
     }
 }

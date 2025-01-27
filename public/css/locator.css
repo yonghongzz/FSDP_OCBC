@@ -1,78 +1,192 @@
 :root {
-    --primary-color: #1a73e8;
-    --secondary-color: #f8f9fa;
-    --text-color: #202124;
-    --border-color: #dadce0;
+  --primary-color: #E02020;
+  --secondary-color: #f8f9fa;
+  --text-color: #202124;
+  --border-color: #dadce0;
+  --max-width: 76.7mm;
+  --max-height: 159.9mm;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-color);
+  background-color: var(--secondary-color);
+  display: flex;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: var(--max-height);
+  width: var(--max-width);
+  padding: 16px;
+  gap: 16px;
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  position: relative;
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.back-button {
+  background: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.search-container {
+  flex: 1;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  padding-right: 44px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.search-button {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-container {
+  display: flex;
+  gap: 8px;
+}
+
+.category-button {
+  flex: 1;
+  padding: 12px;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.category-button.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+#map {
+  flex: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.location-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: white;
+  z-index: 2000;
+  padding: 20px;
+  display: none;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.location-overlay.active {
+  display: block;
+}
+
+.overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.close-overlay {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.location-details {
+  line-height: 1.6;
+}
+
+.location-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.location-info {
+  margin-bottom: 8px;
+}
+
+/* Google Maps style user location marker */
+.user-location-marker {
+  width: 16px !important;
+  height: 16px !important;
+  background-color: #4285f4;
+  border-radius: 50%;
+  position: relative;
+}
+
+.user-location-marker::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid #4285f4;
+  border-radius: 50%;
+  animation: pulse 2s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
   }
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  100% {
+    transform: scale(2);
+    opacity: 0;
   }
-  
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text-color);
-    background-color: var(--secondary-color);
-  }
-  
-  .container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    padding: 16px;
-    gap: 16px;
-  }
-  
-  .search-container {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .search-input {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 16px;
-  }
-  
-  .search-button {
-    padding: 12px 24px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .category-container {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .category-button {
-    flex: 1;
-    padding: 12px;
-    background-color: white;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.2s ease;
-  }
-  
-  .category-button.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-  }
-  
-  #map {
-    flex: 1;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-  }
+}
