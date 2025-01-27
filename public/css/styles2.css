@@ -122,6 +122,7 @@ select.form-control {
 .btn:hover {
     background-color: #b52016;
 }
+
 /* Error message styling */
 #loginError {
     color: red;
