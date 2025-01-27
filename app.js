@@ -269,11 +269,15 @@ app.post('/verify-authentication',async(req,res)=>{
 app.post('/send-email',async(req,res)=>{
     const {user,amount} = req.body;
     const transporter = nodemailer.createTransport({
-        service:'gmail',
-        auth:{
+        host: 'smtp.gmail.com',  // Specify host instead of 'service'
+        port: 587,               // Port for TLS
+        secure: false,           // Set to true for SSL
+        auth: {
             user: process.env.SERVER_EMAIL,
             pass: process.env.SERVER_PASSWORD
-        }
+        },
+        connectionTimeout: 10000, // 10 seconds timeout for connection
+        socketTimeout: 10000, // 10 seconds timeout for socket activity
     });
     const mailOptions = {
         from:process.env.SERVER_EMAIL,

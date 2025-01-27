@@ -262,7 +262,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     async function transaction(){
-        const bal = currentAccount.balance - amount;
+        try{
+            const bal = currentAccount.balance - amount;
 
         //console.log(currentAccount.accId)
         console.log(amount)
@@ -282,34 +283,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 1000); // Adjust the delay time as needed
-    }
-
-    async function sendEmail(user,amount){
-        try {
-            const body = {
-                user:user,
-                amount:amount,
-            }
-            const response = await fetch(`/send-email`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(body)
-            });
-    
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Failed to send email:', errorData);
-                alert(`Error: ${errorData.message}\nDetails: ${errorData.errors.join(', ')}`);
-                return;
-            }
-            
-        } catch (error) {
+        }
+        catch (error) {
             console.error("Error creating transaction:", error);
             alert("There was an error processing your transaction. Please try again.");
         }
+    }
+
+    async function sendEmail(user,amount){
+        const body = {
+            user:user,
+            amount:amount,
+        }
+        const response = await fetch(`/send-email`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Failed to send email:', errorData);
+            alert(`Error: ${errorData.message}\nDetails: ${errorData.errors.join(', ')}`);
+            return;
+        }
+        console.log(response.json());
+        alert("zz");
     }
 
     async function fetchUser(user_id) {

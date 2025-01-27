@@ -33,6 +33,9 @@
                 <button class="btn btn-link button-mic" id="mic" type="button">
                     <i class="bi bi-mic-fill"></i>
                 </button>
+                <button class="btn btn-link button-gesture" id="gesture" type="button">
+                    <i class="bi bi-hand-index-fill"></i>
+                </button>
                 <button class="btn btn-link button-person" id="person" type="button" data-bs-toggle="dropdown">
                     <i class="bi bi-person-fill"></i>
                 </button>
@@ -173,8 +176,18 @@
         </div>
         
     </div>
+
+    <video class="input_video" style="display:none;"></video>
+    <canvas class="output_canvas" style="display: none;"></canvas>
+
+
     <!-- Bootstrap Bundle (includes Popper) -->
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="js/hand-gesture.js"></script>
     <script src="js/indexscript.js"></script>
     <script src="./js/magnifying.js"></script>
     <script src="js/profile.js"></script>
