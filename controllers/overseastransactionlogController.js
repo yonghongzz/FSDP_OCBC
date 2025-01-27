@@ -31,7 +31,7 @@ const getOverseasTransactionLogById = async (req, res) => {
 const createOverseasTransactionLog = async (req, res) => {
     const newLogData = req.body;  // Get log data from request body
     try {
-        const newLog = await OverseasTransactionLog.createLog(newLogData);
+        const newLog = await OverseasTransactionLog.createTransactionLog(newLogData);
         res.status(201).json(newLog);  // Return the newly created log
     } catch (error) {
         console.error(error);

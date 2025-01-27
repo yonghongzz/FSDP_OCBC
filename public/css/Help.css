@@ -94,3 +94,17 @@ details{
     padding: .5em 1em;
   }
 
+  #register{
+    width: 44.7mm;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #da291c;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    display: block; /* Ensure it behaves like a block element */
+    margin: 0 auto; /* Centers the button */
+    margin-top: 100px;
+  }
+

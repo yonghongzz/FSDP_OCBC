@@ -31,6 +31,20 @@ IF OBJECT_ID('dbo.Staffs', 'U') IS NOT NULL
     DROP TABLE dbo.Staffs;
 GO
 */
+CREATE TABLE Passkey (
+    cred_id NVARCHAR(255) PRIMARY KEY, 
+    cred_public_key NVARCHAR(MAX), 
+    internal_user_id INT NOT NULL, 
+    webauthn_user_id NVARCHAR(255) UNIQUE, 
+    counter INT NOT NULL,
+    backup_eligible BIT NOT NULL, 
+    backup_status BIT NOT NULL, 
+    transports NVARCHAR(MAX), 
+    created_at DATETIME DEFAULT GETDATE(), 
+    last_used DATETIME NULL,
+    FOREIGN KEY (internal_user_id) REFERENCES Users(user_id)
+);
+
 
 
 CREATE TABLE Users (

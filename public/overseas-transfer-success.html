@@ -18,7 +18,7 @@
         </div>
 
         <!-- Success Message -->
-        <div class="success-message" style="margin-bottom: -10px; font-size: 18px;">You have successfully transferred 300 MYR to John Doe.</div>
+        <div class="success-message" style="margin-bottom: -10px; font-size: 18px;" id="success-message"></div>
     </div>
 
     <div id="recipient-container">
@@ -27,8 +27,8 @@
             <div class="recipient-left">
                 <img src="path/to/pfp-icon.png" alt="Profile Icon" class="recipient-pfp" />
                 <div class="recipient-info">
-                    <p class="recipient-name">John Doe</p>
-                    <p class="recipient-bank">Bank of Example</p>
+                    <p class="recipient-name" id="recipient-names"></p>
+                    <p class="recipient-bank" id="recipient-banks"></p>
                 </div>
             </div>
         </div>   
@@ -37,8 +37,8 @@
     <div class="recipient-box" style="background-color: rgb(255, 244, 85); border: 1px solid #000000; margin-top: 10px;">
         <div class="recipient-left">
             <div class="recipient-info">
-                <p class="recipient-bank" style="color: rgb(52, 52, 52); margin-bottom: 0px; margin-top: -10px;">John Doe receives:</p>
-                <p class="recipient-name" style="margin-bottom: 0px; color: rgb(0, 0, 0);">300.00 MYR</p>
+                <p class="recipient-bank" style="color: rgb(52, 52, 52); margin-bottom: 0px; margin-top: -10px;" id="will-receive-text"></p>
+                <p class="recipient-name" style="margin-bottom: 0px; color: rgb(0, 0, 0);" id="payee-gets"></p>
             </div>
         </div>
     </div>
@@ -47,7 +47,7 @@
         <div class="recipient-left">
             <div class="recipient-info">
                 <p class="recipient-bank" style="color: rgb(52, 52, 52); margin-bottom: 0px; margin-top: -10px;">Category of transfer:</p>
-                <p class="recipient-name" style="margin-bottom: 0px; color: rgb(0, 0, 0);">Gift</p>
+                <p class="recipient-name" style="margin-bottom: 0px; color: rgb(0, 0, 0);" id="tC"></p>
             </div>
         </div>
     </div>
@@ -56,15 +56,18 @@
         <div class="recipient-left">
             <div class="recipient-info">
                 <p class="recipient-bank" style="margin-bottom: 0px; margin-top: -10px;">Exchange rate</p>
-                <p class="recipient-name" style="margin-bottom: 0px;">1 SGD = 3.00 MYR</p>
+                <p class="recipient-name" style="margin-bottom: 0px;" id="base-to-new"></p>
             </div>
         </div>
     </div>
 
     <!-- Next Button -->
     <div class="next-button-container" style="margin-top: -6px;">
-        <button class="next-button" style="padding: 10px 60px;">Back to Home</button>
+        <button id="back-home" class="next-button" style="padding: 10px 60px;">Back to Home</button>
     </div>   
+
+    <script src="js/overseas-transfer-success.js"></script>
 </body>
+
 
 </html>

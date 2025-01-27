@@ -6,8 +6,16 @@ async function seedDatabase() {
     try {
         await sql.connect(dbConfig);
 
-        // Drop existing tables (optional if you want to recreate them entirely)
+        //Drop existing tables (optional if you want to recreate them entirely)
         await sql.query(`
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.Passkey') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Passkey;
+
+            if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.RecurringTransfers') and sysstat & 0xf = 3)
+            DROP TABLE dbo.RecurringTransfers;
+
             if exists (SELECT * FROM sysobjects 
             WHERE id = object_id('dbo.OverseasTransactionLogs') and sysstat & 0xf = 3)
             DROP TABLE dbo.OverseasTransactionLogs;
@@ -53,7 +61,7 @@ async function seedDatabase() {
             DROP TABLE dbo.ATMLocations;
         `);
 
-        // Create tables
+        //Create tables
         await sql.query(`
             CREATE TABLE Users (
                 user_id INT PRIMARY KEY IDENTITY(1,1),
@@ -62,6 +70,21 @@ async function seedDatabase() {
                 email VARCHAR(100) NOT NULL UNIQUE,
                 phone_number VARCHAR(20)
             );
+
+            CREATE TABLE Passkey (
+                cred_id NVARCHAR(255) PRIMARY KEY, 
+                cred_public_key NVARCHAR(MAX), 
+                internal_user_id INT NOT NULL, 
+                webauthn_user_id NVARCHAR(255) UNIQUE, 
+                counter INT NOT NULL,
+                backup_eligible BIT NOT NULL, 
+                backup_status BIT NOT NULL, 
+                transports NVARCHAR(MAX), 
+                created_at DATETIME DEFAULT GETDATE(), 
+                last_used DATETIME NULL,
+                FOREIGN KEY (internal_user_id) REFERENCES Users(user_id)
+            );
+
 
             CREATE TABLE Accounts (
                 account_id INT PRIMARY KEY IDENTITY(1,1),
@@ -181,19 +204,19 @@ async function seedDatabase() {
         salt = await bcrypt.genSalt(10);
         const hashedPassword6 = await bcrypt.hash('abcd1234', salt);
 
-        // Insert data into User table
+        //Insert data into User table
         await sql.query(`
             INSERT INTO Users(username, password_hash, email, phone_number)
-            VALUES ('Anna', '${hashedPassword1}', 'anna@gmail.com', '12345678'),  
-                   ('Brian','${hashedPassword2}', 'brian@gmail.com', '23456789'),
-                   ('Charlie', '${hashedPassword3}', 'charlie@gmail.com', '34567890');
+            VALUES ('Anna', '${hashedPassword1}', 'fsdpanna123@gmail.com', '12345678'),  
+                   ('Brian','${hashedPassword2}', 'fsdpbrian123@gmail.com', '23456789'),
+                   ('Charlie', '${hashedPassword3}', 'fsdpcharlie123@gmail.com', '34567890');
         `);
 
         // Insert data into Account table
         await sql.query(`
             INSERT INTO Accounts(user_id, account_type, account_number, balance, transaction_limit)
-            VALUES (1, 'Savings Account', '1111111111111111', 500.00, 1000.00),  
-                   (1, 'Current Account', '2222222222222222', 1000.00, 1000.00),
+            VALUES (1, 'Savings Account', '1111111111111111', 5000.00, 1000.00),  
+                   (1, 'Current Account', '2222222222222222', 10000.00, 1000.00),
                    (2, 'Savings Account', '3333333333333333', 2000.00, 1000.00),
                    (3, 'Savings Account', '4444444444444444', 3000.00, 1000.00);
         `);

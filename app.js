@@ -21,6 +21,7 @@ const authenticate = require("./middlewares/authenticate");
 const validateUser = require("./middlewares/validateUser");
 const validateStaff = require("./middlewares/validateStaff");
 const validateAccTransaction = require("./middlewares/validateAccTransaction");
+const biometricController = require("./controllers/biometricController");
 const validateOverseasPayee = require("./middlewares/validateOverseasPayee");
 const validateOverseasTransaction = require("./middlewares/validateOverseasTransaction");
 const validateOverseasTransactionLog = require("./middlewares/validateOverseasTransactionLog");
@@ -30,11 +31,21 @@ const seedDatabase = require("./seed");
 const https = require("https");
 const fs = require("fs");
 const { Server } = require("socket.io");
+const {Buffer} = require("buffer");
+const {Base64} = require("js-base64");
+const nodemailer = require("nodemailer");
+require('dotenv').config();
 const cors = require('cors');
 
+const {generateRegistrationOptions,verifyRegistrationResponse,generateAuthenticationOptions,
+    verifyAuthenticationResponse,} = require("@simplewebauthn/server");
+const cookieParser = require("cookie-parser")
 
 const app = express();
 const port = process.env.PORT || 3000;
+const RPID = "localhost";
+const origin = "https://localhost:3000";
+
 
 // Read the certificate and key files
 const privateKey = fs.readFileSync("key.pem");
@@ -57,6 +68,7 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
 
 // account
 app.get("/accounts", accountController.getAllAccounts);
@@ -76,6 +88,7 @@ app.get("/cards:id", cardController.getCardById);
 // user
 app.get("/users", userController.getAllUsers);
 app.get("/users/:id", userController.getUserById);
+app.get("/userId/:username",userController.getUserId);
 app.post("/users", validateUser.validateCreateUser, userController.createUser);
 app.put("/users/:id", validateUser.validateUpdateUser, userController.updateUser);
 app.post("/users/login", validateUser.validateLoginUser, userController.loginUser);
@@ -90,6 +103,10 @@ app.post("/staffs/login", validateStaff.validateLoginStaff, staffController.logi
 app.post("/staffs/check", authenticate.verifyJWT, staffController.checkPassword);
 app.post("/token", staffController.refreshAccessToken);
 app.delete("/logout", staffController.logout);
+
+app.post("/save-passkey",biometricController.createPasskey);
+app.get("/get-passkey",biometricController.getPasskey);
+app.put("/update-counter",biometricController.updateCounter);
 
 // overseas payee
 app.get("/overseas-payees/:userId", overseaspayeeController.getAllOverseasPayees);
@@ -109,7 +126,7 @@ app.get("/overseas-transaction-logs/id/:id", overseastransactionlogController.ge
 app.post("/overseas-transaction-logs", validateOverseasTransactionLog.validateCreateOverseasTransactionLog, overseastransactionlogController.createOverseasTransactionLog);
 
 // Recurring Transfer
-app.get("/recurring-transfers", recurringTransferController.getAllRecurringTransfers);
+app.get("/recurring-transfers/user/:userId", recurringTransferController.getAllRecurringTransfers);
 app.get("/recurring-transfers/:id", recurringTransferController.getRecurringTransferById);
 app.post("/recurring-transfers", validateRecurringTransfer.validateCreateRecurringTransfer, recurringTransferController.createRecurringTransfer);
 app.put("/recurring-transfers/:id", validateRecurringTransfer.validateUpdateRecurringTransfer, recurringTransferController.updateRecurringTransfer);
@@ -291,3 +308,139 @@ process.on("SIGINT", async () => {
   console.log("Database connection closed");
   process.exit(0); // Exit with code 0 indicating successful shutdown
 });
+
+app.get('/generate-auth',async(req,res)=>{
+    const email = req.query.email;
+    if(!email){
+        return res.status(400).json({error:"Email is required"});
+    }
+    const options = await generateRegistrationOptions({
+        rpID: RPID,
+        rpName: "FSDP",
+        userName: email,
+    });
+    res.cookie(
+        "regInfo",
+        JSON.stringify({
+            userId: options.user.id,
+            email,
+            challenge: options.challenge,
+        }),
+        {httpOnly:true,maxAge:60000,secure:true}
+    );
+    res.json(options);
+});
+
+app.post('/verify-auth',async(req,res)=>{
+    let verification;
+    const regInfo = JSON.parse(req.cookies.regInfo);
+    verification = await verifyRegistrationResponse({
+        response: req.body,
+        expectedChallenge: regInfo.challenge,
+        expectedOrigin: origin,
+        expectedRPID: RPID,
+    });
+    res.json(verification);
+});
+
+app.post('/generate-authentication-options',async(req,res)=>{
+    const passkey = req.body;
+    const options = await generateAuthenticationOptions({
+        rpID: RPID,
+        allowCredentials: [
+            {
+                id: passkey.cred_id,
+                transports: passkey.transports,
+            }
+        ]
+    });
+    res.cookie(
+        "authInfo",
+        JSON.stringify({
+            challenge: options.challenge,
+        }),
+        {httpOnly:true,maxAge:60000,secure:true}
+    );
+    const transports = options.allowCredentials[0].transports;
+    options.allowCredentials[0].transports = JSON.parse(transports);
+    res.json(options);
+});
+
+app.post('/verify-authentication',async(req,res)=>{
+    const authInfo = JSON.parse(req.cookies.authInfo);
+    const { asseResp, passkey } = req.body;
+    console.log(passkey);
+    console.log(asseResp);
+
+    if(!passkey){
+        throw new Error(`Could not find passkey for user`);
+    }
+    let verification;
+    try{
+        verification = await verifyAuthenticationResponse({
+            response: asseResp,
+            expectedChallenge: authInfo.challenge,
+            expectedOrigin: origin,
+            expectedRPID: RPID,
+            credential: {
+                id: passkey.cred_id,
+                publicKey: new Uint8Array(Buffer.from(passkey.cred_public_key, 'base64')),
+                counter: passkey.counter,
+                transports: passkey.transports,
+            },
+        });
+        res.json(verification);
+    }catch(error){
+        console.error(error);
+        return res.status(400).send({error:error.message});
+    }
+});
+
+app.post('/send-email',async(req,res)=>{
+    const {user,amount} = req.body;
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',  // Specify host instead of 'service'
+        port: 587,               // Port for TLS
+        secure: false,           // Set to true for SSL
+        auth: {
+            user: process.env.SERVER_EMAIL,
+            pass: process.env.SERVER_PASSWORD
+        },
+        connectionTimeout: 10000, // 10 seconds timeout for connection
+        socketTimeout: 10000, // 10 seconds timeout for socket activity
+    });
+    const mailOptions = {
+        from:process.env.SERVER_EMAIL,
+        to:user.email,
+        subject: "Your Transaction Was Successfully Processed",
+        text: `
+            Dear ${user.username},
+
+            This is a confirmation that your recent transaction of $${amount} has been successfully processed.
+
+            ---
+
+            If you did not authorize this transaction or if you notice any discrepancies, please contact us immediately. Our team is available to assist you 24/7.
+
+            ---
+
+            **Important Security Reminder:**
+            To ensure the safety of your account, please review your recent transactions and verify that everything is in order. If you believe your account has been compromised, please follow the steps in our [Fraud Protection Center] or contact us directly.
+
+            Thank you for choosing OCBC. We value your trust and are here to support you.
+
+            Best regards,  
+            OCBC  
+            `,
+    };
+    console.log("OK");
+    transporter.sendMail(mailOptions, function(error,info){
+        if(error){
+            console.log(error);
+        }else{
+            console.log('Email sent: '+info.response);
+        }
+    });
+})
+
+
