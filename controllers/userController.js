@@ -25,21 +25,6 @@ const getUserById = async (req, res) => {
     }
 };
 
-const getUserId = async (req, res) => {
-  const username = req.params.username;
-  try {
-    const user = await User.getUserId(username);
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-    console.log(user);
-    res.json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error retrieving id");
-  }
-};
-
 const createUser = async (req, res) => {
     const newUser = req.body;
 
@@ -169,6 +154,5 @@ module.exports = {
     loginUser,
     checkPassword,
     refreshAccessToken,
-    logout,
-    getUserId,
+    logout
 };
