@@ -109,8 +109,12 @@ async function displayOverseasPayees() {
     const overseasPayees = await fetchOverseasPayee(loginUserId);
 
     if (overseasPayees && overseasPayees.length > 0) {
-        const recipientContainer = document.querySelector('.recipient-container');
-        recipientContainer.innerHTML = '';
+        const pinnedContainer = document.createElement('div');
+        const unpinnedContainer = document.createElement('div');
+
+        // Create separate containers for pinned and unpinned payees
+        pinnedContainer.classList.add('recipient-container', 'pinned-container');
+        unpinnedContainer.classList.add('recipient-container', 'unpinned-container');
 
         overseasPayees.forEach(payee => {
             const recipientBox = document.createElement('div');
@@ -131,20 +135,33 @@ async function displayOverseasPayees() {
                 </div>
             `;
 
+            // If the payee is pinned, add to the pinned container, otherwise to the unpinned container
             if (payee.is_pinned) {
                 recipientBox.classList.add('pinned');
+                pinnedContainer.appendChild(recipientBox);
+            } else {
+                unpinnedContainer.appendChild(recipientBox);
             }
 
-            // Add click event listener to the recipient box
+            // Click event for recipient box (navigates to overseas-select-fund.html)
             recipientBox.addEventListener('click', () => {
-                // Store the selected payee information in sessionStorage
                 sessionStorage.setItem('selectedPayee', JSON.stringify(payee));
-                // Navigate to the transfer details page
                 window.location.href = 'overseas-select-fund.html';
             });
 
-            recipientContainer.appendChild(recipientBox);
+            // Click event for info button (navigates to overseas-pin.html)
+            const infoButton = recipientBox.querySelector('.recipient-info-link');
+            infoButton.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent triggering recipientBox click event
+                sessionStorage.setItem('theRecipient', JSON.stringify(payee));
+                window.location.href = 'overseas-pin.html';
+            });
         });
+
+        // Append both containers to the recipient section
+        const recipientSection = document.getElementById('recipient-container');
+        recipientSection.appendChild(pinnedContainer);
+        recipientSection.appendChild(unpinnedContainer);
     }
 }
 
