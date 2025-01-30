@@ -87,19 +87,12 @@ async function refreshToken(rToken) {
 
 async function fetchOverseasPayee(user_id) {
     try {
-        // Adjust the endpoint to fetch overseas payee details
-        const response = await fetch(`/overseas-payees/${user_id}`); // Example endpoint, adjust as needed
+        const response = await fetch(`/overseas-payees/${user_id}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         const overseasPayees = await response.json();
-        console.log(overseasPayees);
-
-        // Filter overseas payees associated with the current user_id
-        const userPayees = overseasPayees.filter(payee => payee.user_id == user_id);
-        console.log(userPayees); // Log the filtered overseas payees
-        return userPayees;
-
+        return overseasPayees.filter(payee => payee.user_id == user_id);
     } catch (error) {
         console.error('Error fetching overseas payee details:', error);
     }
@@ -107,19 +100,16 @@ async function fetchOverseasPayee(user_id) {
 
 async function displayOverseasPayees() {
     const overseasPayees = await fetchOverseasPayee(loginUserId);
-
     if (overseasPayees && overseasPayees.length > 0) {
         const pinnedContainer = document.createElement('div');
         const unpinnedContainer = document.createElement('div');
 
-        // Create separate containers for pinned and unpinned payees
         pinnedContainer.classList.add('recipient-container', 'pinned-container');
         unpinnedContainer.classList.add('recipient-container', 'unpinned-container');
 
         overseasPayees.forEach(payee => {
             const recipientBox = document.createElement('div');
             recipientBox.classList.add('recipient-box');
-
             recipientBox.innerHTML = `
                 <div class="recipient-left">
                     <img src="path/to/pfp-icon.png" alt="Profile Icon" class="recipient-pfp" />
@@ -128,14 +118,8 @@ async function displayOverseasPayees() {
                         <p class="recipient-bank">${payee.bank_name}</p>
                     </div>
                 </div>
-                <div class="recipient-right">
-                    <a href="#" class="recipient-info-link">
-                        <i class="bi bi-info-circle recipient-info-icon"></i>
-                    </a>
-                </div>
             `;
 
-            // If the payee is pinned, add to the pinned container, otherwise to the unpinned container
             if (payee.is_pinned) {
                 recipientBox.classList.add('pinned');
                 pinnedContainer.appendChild(recipientBox);
@@ -143,30 +127,49 @@ async function displayOverseasPayees() {
                 unpinnedContainer.appendChild(recipientBox);
             }
 
-            // Click event for recipient box (navigates to overseas-select-fund.html)
             recipientBox.addEventListener('click', () => {
+                document.querySelectorAll('.recipient-box').forEach(box => {
+                    box.classList.remove('selected');
+                    box.style.boxShadow = 'none';
+                });
+                recipientBox.classList.add('selected');
+                recipientBox.style.boxShadow = '0 0 15px rgba(0, 123, 255, 0.8)';
                 sessionStorage.setItem('selectedPayee', JSON.stringify(payee));
-                window.location.href = 'overseas-select-fund.html';
-            });
-
-            // Click event for info button (navigates to overseas-pin.html)
-            const infoButton = recipientBox.querySelector('.recipient-info-link');
-            infoButton.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent triggering recipientBox click event
-                sessionStorage.setItem('theRecipient', JSON.stringify(payee));
-                window.location.href = 'overseas-pin.html';
             });
         });
 
-        // Append both containers to the recipient section
         const recipientSection = document.getElementById('recipient-container');
+        recipientSection.innerHTML = '';
         recipientSection.appendChild(pinnedContainer);
         recipientSection.appendChild(unpinnedContainer);
+
+        applySelectedPayee();
+    }
+}
+
+function applySelectedPayee() {
+    const selectedPayee = JSON.parse(sessionStorage.getItem('selectedPayee'));
+    if (selectedPayee) {
+        document.querySelectorAll('.recipient-box').forEach(box => {
+            const payeeName = box.querySelector('.recipient-name').textContent;
+            if (payeeName === selectedPayee.payee_name) {
+                box.classList.add('selected');
+                box.style.boxShadow = '0 0 15px rgba(0, 123, 255, 0.8)';
+            }
+        });
     }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await displayOverseasPayees(); // Display the overseas payees when the page loads
+    await displayOverseasPayees();
 });
 
-
+// Next button event listener
+document.getElementById('next-button').addEventListener('click', () => {
+    const selectedPayee = JSON.parse(sessionStorage.getItem('selectedPayee'));
+    if (selectedPayee) {
+        window.location.href = 'overseas-select-fund-recurring.html';
+    } else {
+        alert('Please select a payee to proceed');
+    }
+});
