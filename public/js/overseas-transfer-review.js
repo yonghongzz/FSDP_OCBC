@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const transferCategory = sessionStorage.getItem('transferCategory');
     const accountGetId = sessionStorage.getItem('selectedAccount');
     const userID = JSON.parse(accountGetId);  // Extract user data from session storage
-    const loginUserId = sessionStorage.getItem('loginUserId')
+    const loginUserId = sessionStorage.getItem('loginUserId');
+    const userid = JSON.parse(accountGetId)?.account_id; // Adjust based on actual key
+
 
     // Check if recipient data exists
     if (recipient) {
@@ -40,47 +42,78 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Prepare transaction data
-        const recipientDetails = JSON.parse(recipient);
-        const currency = recipientDetails.currency;
-        const adjustedConversionRate = convertedAmount / transferAmount;
+        // Step 1: Fetch user account balance
+        fetch(`/accounts/${userid}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to retrieve account details');
+                }
+                return response.json();
+            })
+            .then(accountData => {
+                const currentBalance = parseFloat(accountData.balance);
 
-        const transactionData = {
-            payee_id: recipientDetails.payee_id,  // The recipient's ID
-            user_id: loginUserId,  // Only the account ID, not the whole object
-            transaction_type: 'send',  // Assuming 'send' as the transaction type
-            amount: transferAmount,
-            currency: currency,
-            converted_amount: convertedAmount,
-            transaction_fee: 5.00,  // Example fee
-            transaction_date: new Date().toISOString(),  // Current date-time in ISO format
-            tags: transferCategory || 'gift',  // Default to 'gift' if no category is selected
-        };
+                if (currentBalance < transferAmount) {
+                    alert('Insufficient balance for this transfer.');
+                    return;
+                }
 
-        // Send the transaction data to the backend API
-        fetch('/overseas-transactions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(transactionData) // Send the transaction data as JSON
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(errorText => {
-                    console.error('Error response:', errorText);
-                    throw new Error('Failed to save transaction data');
+                // Step 2: Deduct the transfer amount
+                const newBalance = currentBalance - transferAmount;
+
+                // Step 3: Update the user's account balance in the backend
+                return fetch(`/accounts/balance/${userid}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ balance: newBalance })
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update account balance');
+                    }
+
+                    // Step 4: Update session storage with the new balance
+                    sessionStorage.setItem('updatedBalance', newBalance.toFixed(2));
+
+                    // Prepare transaction data
+                    const recipientDetails = JSON.parse(recipient);
+                    const currency = recipientDetails.currency;
+                    const adjustedConversionRate = convertedAmount / transferAmount;
+
+                    const transactionData = {
+                        payee_id: recipientDetails.payee_id,
+                        user_id: loginUserId,
+                        transaction_type: 'send',
+                        amount: transferAmount,
+                        currency: currency,
+                        converted_amount: convertedAmount,
+                        transaction_fee: 5.00,
+                        transaction_date: new Date().toISOString(),
+                        tags: transferCategory || 'gift',
+                    };
+
+                    // Step 5: Save the transaction to the database
+                    return fetch('/overseas-transactions', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(transactionData)
+                    });
                 });
-            }
-            return response.json();  // Parse as JSON if response is valid
-        })
-        .then(data => {
-            console.log('Transaction data saved successfully:', data);
-            // Redirect to another page after success
-            window.location.href = '/overseas-transfer-success.html';  // Adjust URL as needed
-        })
-        .catch(error => {
-            console.error('Error saving transaction data:', error);
-        });
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorText => {
+                        console.error('Error response:', errorText);
+                        throw new Error('Failed to save transaction data');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Transaction saved successfully:', data);
+                window.location.href = '/overseas-transfer-success.html';
+            })
+            .catch(error => {
+                console.error('Transaction failed:', error);
+            });
     });
 });
