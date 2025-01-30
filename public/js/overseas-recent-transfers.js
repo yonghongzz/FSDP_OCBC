@@ -1,4 +1,4 @@
-// token
+// overseas transaction routes
 const token = sessionStorage.getItem('token');
 const loginUserId = sessionStorage.getItem('loginUserId');
 const rToken = getCookie('rToken'); // refresh token
@@ -85,7 +85,7 @@ async function fetchRecentTransfers(userId) {
         }
 
         const transfers = await response.json();
-        console.log('Fetched Recent Transfers:', transfers); // Log the JSON response
+        console.log('Fetched Recent Transfers:', transfers);
         return transfers;
     } catch (error) {
         console.error('Error fetching recent transfers:', error);
@@ -102,34 +102,62 @@ async function fetchPayeeDetails(payeeId) {
         }
 
         const payeeDetails = await response.json();
+        console.log('Fetched payee details:', payeeDetails);
         return payeeDetails;
     } catch (error) {
         console.error('Error fetching payee details:', error);
-        return {};
+        return null;
     }
+}
+
+// Function to handle repeating a transfer
+function repeatTransfer(transfer, payeeDetails) {
+    console.log('Transfer data:', transfer);
+    console.log('Payee details:', payeeDetails);
+
+    const transferData = {
+        payee_id: transfer.payee_id,
+        payee_name: payeeDetails ? payeeDetails.payee_name : 'Unknown Payee',
+        bank_name: payeeDetails ? payeeDetails.bank_name : 'Unknown Bank',
+        account_number: payeeDetails && payeeDetails.account_number ? payeeDetails.account_number : 'XXXX',
+        currency: transfer.currency
+    };
+
+    // Store the data in sessionStorage
+    sessionStorage.setItem('selectedPayee', JSON.stringify(transferData));
+    sessionStorage.setItem('transferAmount', transfer.amount);
+    sessionStorage.setItem('convertedAmount', transfer.converted_amount);
+    sessionStorage.setItem('transferCategory', transfer.tags || '');
+
+    console.log('Stored in sessionStorage:', transferData);
+
+    // Redirect to the overseas repeat review page
+    window.location.href = '/overseas-repeat-review.html';
 }
 
 // Function to display recent transfers
 async function displayRecentTransfers() {
-    const transfers = await fetchRecentTransfers(loginUserId); // Fetch recent transfers
+    const transfers = await fetchRecentTransfers(loginUserId);
 
     const transferContainer = document.querySelector('.recent-transfers');
-    transferContainer.innerHTML = ''; // Clear any existing transfers
+    transferContainer.innerHTML = '';
 
     for (const transfer of transfers) {
         const { transaction_id, payee_id, amount, converted_amount, currency, transaction_fee, transaction_datetime, tags } = transfer;
 
-        // Fetch recipient details for each transfer
         const payeeDetails = await fetchPayeeDetails(payee_id);
-        const recipientName = payeeDetails.payee_name || 'Unknown Payee';
-        const recipientBank = payeeDetails.bank_name || 'Unknown Bank';
-        const recipientAccount = payeeDetails.account_number ? `****${payeeDetails.account_number.slice(-4)}` : 'XXXX';
+        
+        console.log('PayeeDetails for transfer:', transaction_id, payeeDetails);
 
-        // Create the transfer item element
+        const recipientName = payeeDetails?.payee_name ?? 'Unknown Payee';
+        const recipientBank = payeeDetails?.bank_name ?? 'Unknown Bank';
+        const recipientAccount = payeeDetails?.account_number 
+            ? `****${payeeDetails.account_number.slice(-4)}` 
+            : 'XXXX';
+
         const transferItem = document.createElement('div');
         transferItem.classList.add('transfer-item');
 
-        // Hardcoding status as "Completed" since you mentioned it doesn't need to change
         transferItem.innerHTML = `
             <div class="recipient-info-recent">
                 <span class="recipient-name">${recipientName}</span><br>
@@ -141,7 +169,7 @@ async function displayRecentTransfers() {
                 <span class="transfer-date">${transaction_datetime ? new Date(transaction_datetime).toLocaleDateString() : 'N/A'}</span>
             </div>
             <div class="transfer-status">
-                <span class="status completed">Completed</span> <!-- Hardcoded status -->
+                <span class="status completed">Completed</span>
             </div>
             <div class="transfer-actions">
                 <button class="details-button" data-transfer-id="${transaction_id || 'N/A'}">View Details</button>
@@ -149,36 +177,20 @@ async function displayRecentTransfers() {
             </div>
         `;
 
-        // Append the transfer item to the container
         transferContainer.appendChild(transferItem);
+
+        const detailsButton = transferItem.querySelector('.details-button');
+        const repeatButton = transferItem.querySelector('.repeat-button');
+
+        detailsButton.addEventListener('click', () => viewTransferDetails(transaction_id));
+        repeatButton.addEventListener('click', () => repeatTransfer(transfer, payeeDetails));
     }
-
-    // Add event listeners for the buttons
-    document.querySelectorAll('.details-button').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const transferId = e.target.getAttribute('data-transfer-id');
-            viewTransferDetails(transferId);
-        });
-    });
-
-    document.querySelectorAll('.repeat-button').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const transferId = e.target.getAttribute('data-transfer-id');
-            repeatTransfer(transferId);
-        });
-    });
 }
 
 // Function to handle view transfer details
 function viewTransferDetails(transferId) {
     console.log(`Viewing details for transfer ID: ${transferId}`);
-    // Here you can redirect to a detailed page or show more info in a modal.
-}
-
-// Function to handle repeating a transfer
-function repeatTransfer(transferId) {
-    console.log(`Repeating transfer ID: ${transferId}`);
-    // Logic to repeat the transfer, could open a form with pre-filled info or trigger a new transaction.
+    // Implement view details functionality here
 }
 
 // Run the function to display recent transfers when the page loads
