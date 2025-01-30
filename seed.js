@@ -59,6 +59,14 @@ async function seedDatabase() {
             if exists (SELECT * FROM sysobjects
             WHERE id = object_id('dbo.ATMLocations') and sysstat & 0xf = 3)
             DROP TABLE dbo.ATMLocations;
+
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.User_vouchers') and sysstat & 0xf = 3)
+            DROP TABLE dbo.User_vouchers;
+
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.Rewards') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Rewards;
         `);
 
         //Create tables
@@ -68,7 +76,8 @@ async function seedDatabase() {
                 username VARCHAR(50) NOT NULL UNIQUE,
                 password_hash VARCHAR(255) NOT NULL,
                 email VARCHAR(100) NOT NULL UNIQUE,
-                phone_number VARCHAR(20)
+                phone_number VARCHAR(20),
+                points INT
             );
 
             CREATE TABLE Passkey (
@@ -97,14 +106,15 @@ async function seedDatabase() {
             );
 
             CREATE TABLE AccTransactions (
-                transaction_id INT PRIMARY KEY IDENTITY(1,1),
-                account_id INT,
-                transaction_type VARCHAR(50) CHECK (transaction_type IN ('deposit', 'withdrawal', 'transfer', 'payment', 'refund')) NOT NULL,
-                amount DECIMAL(10, 2) NOT NULL,
-                transaction_datetime DATETIME DEFAULT GETDATE(),
-                name VARCHAR(100),
-                FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
-            );
+            transaction_id INT PRIMARY KEY IDENTITY(1,1),
+            account_id INT,
+            transaction_type VARCHAR(50) CHECK (transaction_type IN ('deposit', 'withdrawal', 'transfer', 'payment', 'refund')) NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            points_earned INT,
+            transaction_datetime DATETIME DEFAULT GETDATE(),
+            name VARCHAR(100),
+            FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
+        );
 
             CREATE TABLE Cards (
                 card_id INT PRIMARY KEY IDENTITY(1,1),
@@ -188,6 +198,24 @@ async function seedDatabase() {
                 latitude DECIMAL(9, 4),           -- Latitude of the ATM location
                 longitude DECIMAL(9, 4)           -- Longitude of the ATM location
             );
+            CREATE TABLE Rewards (
+                reward_id VARCHAR(10) PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                image_url VARCHAR(255),
+                points_required INT NOT NULL,
+                expiration_date DATE NOT NULL
+            );
+
+            CREATE TABLE User_vouchers (
+                user_voucher_id INT PRIMARY KEY IDENTITY(1,1), -- Auto-increment ID
+                user_id INT NOT NULL,
+                reward_id VARCHAR(10) NOT NULL,
+                redeemed_at DATETIME DEFAULT GETDATE(),
+                FOREIGN KEY (user_id) REFERENCES Users(user_id),
+                FOREIGN KEY (reward_id) REFERENCES Rewards(reward_id)
+            );
+
+
         `);
 
         // Hash passwords
@@ -206,10 +234,10 @@ async function seedDatabase() {
 
         //Insert data into User table
         await sql.query(`
-            INSERT INTO Users(username, password_hash, email, phone_number)
-            VALUES ('Anna', '${hashedPassword1}', 'fsdpanna123@gmail.com', '12345678'),  
-                   ('Brian','${hashedPassword2}', 'fsdpbrian123@gmail.com', '23456789'),
-                   ('Charlie', '${hashedPassword3}', 'fsdpcharlie123@gmail.com', '34567890');
+            INSERT INTO Users(username, password_hash, email, phone_number, points)
+            VALUES ('Anna', '${hashedPassword1}', 'fsdpanna123@gmail.com', '12345678', 100),  
+                   ('Brian','${hashedPassword2}', 'fsdpbrian123@gmail.com', '23456789', 0),
+                   ('Charlie', '${hashedPassword3}', 'fsdpcharlie123@gmail.com', '34567890', 0);
         `);
 
         // Insert data into Account table
@@ -232,15 +260,15 @@ async function seedDatabase() {
 
         // Insert data into AccTransaction table
         await sql.query(`
-            INSERT INTO AccTransactions(account_id, transaction_type, amount, transaction_datetime, name)
-            VALUES (1, 'deposit', 100.00, '2024-05-25 17:43:00', 'ATM'),  
-                   (1, 'transfer', 200.00, '2024-05-26 13:12:19', 'Sarah Ng'),
-                   (2, 'withdrawal', 50.00, '2024-05-26 16:32:43', 'ATM'),
-                   (2, 'payment', 100.00, '2024-05-27 18:54:34', 'Restaurant X'),
-                   (3, 'deposit', 200.00, '2024-05-28 11:23:56', 'ATM'),
-                   (3, 'payment', 50.00, '2024-05-28 18:43:23', 'Bob Wong'),
-                   (4, 'deposit', 300.00, '2024-05-28 18:43:23', 'ATM'),
-                   (4, 'deposit', 300.00, '2024-05-28 11:23:56', 'ATM');
+            INSERT INTO AccTransactions(account_id, transaction_type, amount, points_earned, transaction_datetime, name)
+            VALUES (1, 'deposit', 100.00, NULL, '2024-05-25 17:43:00', 'ATM'),  
+                   (1, 'transfer', 200.00, NULL, '2024-05-26 13:12:19', 'Sarah Ng'),
+                   (2, 'withdrawal', 50.00, NULL, '2024-05-26 16:32:43', 'ATM'),
+                   (2, 'payment', 100.00, 100, '2024-05-27 18:54:34', 'Restaurant X'),
+                   (3, 'deposit', 200.00, NULL, '2024-05-28 11:23:56', 'ATM'),
+                   (3, 'payment', 50.00, 50, '2024-05-28 18:43:23', 'Bob Wong'),
+                   (4, 'deposit', 300.00, NULL, '2024-05-28 18:43:23', 'ATM'),
+                   (4, 'deposit', 300.00, NULL, '2024-05-28 11:23:56', 'ATM');
         `);
 
         // Insert data into Staff table
@@ -311,6 +339,26 @@ async function seedDatabase() {
                 ('Clementi Avenue 3 - FairPrice', '451 Clementi Avenue 3 #01-307 Singapore 120451', 1.3126, 103.7657),
                 ('Clementi Avenue 5', '325 Clementi Avenue 5 #01-137 Singapore 120325', 1.3152, 103.7668),
                 ('UOB ATM - UOB Clementi Branch', 'Blk 450 #01-287/289 Clementi Avenue 3 #01-287/289 Singapore 120450', 1.3136, 103.7654);
+        `);
+
+        await sql.query(`
+            INSERT INTO Rewards (reward_id, name, image_url, points_required, expiration_date) 
+            VALUES
+                ('r1', 'FairPrice $10 Voucher', 'img/fairprice.png', 100, '2025-12-31'),
+                ('r2', 'Cold Storage $10 Voucher', 'img/coldstorage.png', 100, '2025-12-31'),
+                ('r3', 'Grab $5 Voucher', 'img/grab.png', 60, '2025-06-30')
+
+        `);
+
+        await sql.query(`
+            INSERT INTO User_vouchers (user_id, reward_id, redeemed_at) 
+            VALUES 
+                (1, 'r1', '2025-02-01 10:30:00'),
+                (1, 'r2', '2025-02-05 15:45:00'),
+                (2, 'r1', '2025-03-10 08:20:00'),
+                (2, 'r3', '2025-03-15 12:00:00'),
+                (3, 'r2', '2025-04-20 18:10:00'),
+                (3, 'r3', '2025-05-01 09:30:00')
         `);
         console.log('Sample data inserted successfully.');
 

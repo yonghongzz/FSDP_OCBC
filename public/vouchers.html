@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Vouchers</title>
+  <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/vouchers.css">
+</head>
+
+<body>
+  <div class="rewards-container">
+    <div class="card bankapp">
+      <!--bankapp header-->
+      <div class="bankapp-header">
+          <div class="header-content card-header d-flex justify-content-between align-items-center">
+              <button class="btn btn-link button-magnify" id="magnify" type="button">
+                  <i class="bi bi-zoom-in"></i>
+              </button>
+              <div class="card normal-lite">
+                  <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                      Lite
+                  </div>
+                  <button class="btn btn-link lite-downarrow" type="button">
+                      <i class="bi bi-caret-down-fill"></i>
+                  </button>
+              </div>
+              <button class="btn btn-link button-volume" id="voice" type="button">
+                  <i class="bi bi-volume-up-fill"></i>
+              </button>
+              <button class="btn btn-link button-mic" id="mic" type="button">
+                  <i class="bi bi-mic-fill"></i>
+              </button>
+              <button class="btn btn-link button-gesture" id="gesture" type="button">
+                  <i class="bi bi-hand-index-fill"></i>
+              </button>
+              <button class="btn btn-link button-person" id="person" type="button" data-bs-toggle="dropdown">
+                  <i class="bi bi-person-fill"></i>
+              </button>
+              <div class="dropdown-menu" id="profileMenu">
+                  <button class="dropdown-item" id="logoutBtn">Logout</button>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="header-title-container">
+      <div class="go-back-button">
+        <a href="rewards.html"><i class="bi bi-arrow-left"></i></a>
+      </div>
+      <div class="page-title">
+        <p>My Vouchers</p>
+      </div>
+    </div>
+
+    <!-- Vouchers List -->
+    <div id="vouchers-list"></div>
+</div>
+
+<script src="js/vouchers.js"></script>
+<script src="./js/magnifying.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/tts.js"></script>
+<script src="js/voice.js"></script>
+</body>
+</html>

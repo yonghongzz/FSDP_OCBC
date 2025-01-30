@@ -12,6 +12,8 @@ const overseastransactionlogController = require("./controllers/overseastransact
 const recurringTransferController = require("./controllers/recurringtransferController");
 const atmController = require("./controllers/atmController");
 const bankController = require("./controllers/bankController");
+const rewardsController = require("./controllers/rewardscontroller");
+const vouchersController = require("./controllers/vouchersController");
 
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
@@ -137,6 +139,18 @@ app.get("/atms", atmController.getAllATMs);
 
 // Bank
 app.get("/banks", bankController.getAllBanks);
+
+//rewards available for redemption
+app.get("/rewards", rewardsController.getAllRewards);
+app.post("/redeem", rewardsController.redeemReward);
+
+//user vouchers
+app.get("/user/vouchers/:userId", vouchersController.getUserVouchers);
+app.get("/user/voucher/:userId/:userVoucherId", vouchersController.getVoucherById);
+app.delete("/user/vouchers/remove", vouchersController.removeVoucher);
+
+//fetch user points
+app.get("/user/points/:userId", vouchersController.getUserPoints);
 
 let callQueue = {};
 
