@@ -1,0 +1,123 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Container (Fixed Size: 288x605px) */
+.rewards-container {
+  width: 288px;
+  max-width: 400px; /* Makes the layout responsive */
+  height: 605px;
+  border-radius: 15px;
+  background-color: white;
+  padding: 0; /* Removed padding to prevent offset */
+  box-sizing: border-box;
+  align-items: center;
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+/* Vouchers List (Scrollable) */
+.vouchers-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+.vouchers-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Voucher Item */
+.voucher-item {
+  display: flex;
+  align-items: center;
+  background-color: #fffdd0;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Voucher Image */
+.voucher-image img {
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+/* Voucher Details */
+.voucher-details {
+  flex: 1;
+}
+
+.voucher-details h4 {
+  font-size: 15px;
+  margin: 0;
+  font-weight: bold;
+}
+
+.voucher-details p {
+  font-size: 15px;
+  margin: 3px 0;
+  color: gray;
+}
+
+/* Use Now Button */
+.voucher-action {
+  display: flex;
+  align-items: center;
+}
+
+.use-now {
+  background-color: #da291c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.use-now:hover {
+  background-color: #b2221a;
+}
+
+/* Align Back Button and "My Vouchers" on the Same Line */
+.header-title-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between back button and text */
+  padding-left: 10px; /* Adjust left spacing */
+}
+
+/* Make the Back Button Bigger */
+.go-back-button a {
+  font-size: 24px; /* Increase size */
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+}
+
+.go-back-button a:hover {
+  color: #da291c;
+}
+
+/* Adjust "My Vouchers" Title */
+.page-title {
+  font-size: 20px; /* Adjust size */
+  font-weight: bold;
+  margin-top: 14px;
+  margin-left: 38px;
+}
+

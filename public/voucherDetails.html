@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voucher Details</title>
+    <link rel="stylesheet" href="css/vouchers.css">
+</head>
+
+<body>
+    <div class="voucher-container">
+        <h1 id="voucher-name"></h1>
+        <img id="voucher-image" src="" alt="Voucher Image">
+        <p>Redeemed on: <span id="redeemed-date"></span></p>
+        <p>Scan the barcode below:</p>
+        <img id="barcode" src="" alt="Barcode">
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = sessionStorage.getItem("loginUserId");
+            const userVoucherId = urlParams.get("userVoucherId");
+
+            if (!userId || !userVoucherId) {
+                alert("Invalid voucher.");
+                window.location.href = "vouchers.html";
+                return;
+            }
+
+            // Fetch voucher details
+            const response = await fetch(`/user/voucher/${userId}/${userVoucherId}`);
+            const voucher = await response.json();
+
+            if (!response.ok || !voucher) {
+                alert("Voucher not found.");
+                window.location.href = "vouchers.html";
+                return;
+            }
+
+            // Display voucher details
+            document.getElementById("voucher-name").textContent = voucher.name;
+            document.getElementById("voucher-image").src = voucher.image_url;
+            document.getElementById("redeemed-date").textContent = new Date(voucher.redeemed_at).toLocaleDateString();
+
+            // Generate barcode
+            document.getElementById("barcode").src = `https://barcode.tec-it.com/barcode.ashx?data=${userVoucherId}&code=Code128`;
+
+            // Click on barcode to remove the voucher
+            document.getElementById("barcode").addEventListener("click", async () => {
+                await fetch("/user/vouchers/remove", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId, userVoucherId })
+                });
+
+                alert("Voucher used successfully!");
+                window.location.href = "vouchers.html";
+            });
+        });
+
+
+    </script>
+    <script src="js/vouchers.js"></script>
+</body>
+
+</html>
