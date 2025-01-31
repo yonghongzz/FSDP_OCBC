@@ -28,17 +28,21 @@ const getRecurringTransferById = async (req, res) => {
     }
 };
 
-// Create a new recurring transfer
 const createRecurringTransfer = async (req, res) => {
-    const newTransferData = req.body;  // Get recurring transfer data from request body
+    const newTransferData = req.body;
     try {
-        await RecurringTransfer.createRecurringTransfer(newTransferData);
-        res.status(201).send("Recurring transfer created successfully");  // Return success message
+        // Assuming user_id is already included in the request body or can be obtained from the authenticated user
+        const createdTransfer = await RecurringTransfer.createRecurringTransfer(newTransferData);
+        res.status(201).json({
+            message: "Recurring transfer created successfully",
+            transferId: createdTransfer.recurring_id
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send("Error creating recurring transfer");
     }
 };
+
 
 // Update a recurring transfer's details
 const updateRecurringTransfer = async (req, res) => {
