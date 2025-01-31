@@ -4,16 +4,25 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>overseas transaction help</title>
+    <title>Overseas Transaction Help</title>
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/overseas-style.css" />
+    <style>
+        .faq-image-placeholder {
+            max-width: 250px;
+            margin-bottom: 20px;
+        }
+        .step-title {
+            font-weight: 500;
+        }
+    </style>
 </head>
 
 <body>
-    <!--entire thing-->
+    <!-- Entire Thing -->
     <div class="card bankapp">
-        <!--bankapp header-->
+        <!-- Bank App Header -->
         <div class="bankapp-header">
             <div class="header-content card-header d-flex justify-content-between align-items-center">
                 <!-- Left Icon -->
@@ -41,27 +50,184 @@
         <h2 class="recipients-title" style="padding-top: 0px;">Frequently Asked Questions (FAQs)</h2>
 
         <!-- Explanation under "Select Currency" -->
-        <h2 class="recipients-choose-currency"style="padding-bottom: 10px;">Find out some of the FAQs about overseas transfers here.</h2>
+        <h2 class="recipients-choose-currency" style="padding-bottom: 10px;">Find out some of the FAQs about overseas transfers here.</h2>
         
-        <button class="accordion">Section 1</button>
+        <!-- FAQ Section 1: How to Add a Recipient for Overseas Transfer -->
+        <div class="faq-section border">
+            <button class="accordion">How to Add a Recipient for Overseas Transfer</button>
             <div class="panel">
-            <p>Lorem ipsum...</p>
-            </div>
+                <p><strong>Follow these steps to add a recipient for your overseas transfer:</strong></p>
 
-            <button class="accordion">Section 2</button>
-            <div class="panel">
-            <p>Lorem ipsum...</p>
-            </div>
+                <div class="step">
+                    <div class="step-title">Step 1: Open the Recipient Tab</div>
+                    <p>Go to the "Recipient" tab in your app and press the "Add Recipient" button.</p>
+                    <img src="img/addrecipient-1.png" alt="Recipient Tab" class="faq-image-placeholder">
+                </div>
 
-            <button class="accordion">Section 3</button>
-            <div class="panel">
-            <p>Lorem ipsum...</p>
+                <div class="step">
+                    <div class="step-title">Step 2: Select Currency</div>
+                    <p>Choose the currency you want to send from the dropdown menu.</p>
+                    <img src="img/addrecipient-2.png" alt="Currency Dropdown" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 3: Enter Recipient Details</div>
+                    <p>Fill in the recipient's details: Bank name, account number, full name, and country. Press "Add Recipient" to save recipient details.</p>
+                    <img src="img/addrecipient-3.png" alt="Form Fields" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 4: Add recipient successful</div>
+                    <p>Add recipient successful. Press "Back to Home" to go back to homepage.</p>
+                    <img src="img/addrecipient-4.png" alt="Recipient Added Confirmation" class="faq-image-placeholder">
+                </div>
             </div>
-    </div>    
+        </div>
+
+        <!-- FAQ Section 2: How to View Recipients -->
+        <div class="faq-section border">
+            <button class="accordion">How to View Recipients</button>
+            <div class="panel">
+                <p><strong>Here's how to view your recipients:</strong></p>
+
+                <div class="step">
+                    <div class="step-title">Step 1: Open the Recipient Tab</div>
+                    <p>Go to the "Recipient" tab in the app.</p>
+                    <img src="img/addrecipient-1.png" alt="Recipient Tab" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 2: View Pinned vs. Unpinned Recipients</div>
+                    <p>Recipients with a yellow background are pinned, while those with a grey background are unpinned. Pinned recipients will appear at the top of the list for easy access.</p>
+                    <img src="img/viewrecipient-1.png" alt="Pinned vs Unpinned" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 3: View Details or Pin/Unpin</div>
+                    <p>Tap the info icon on the right of any recipient record to view their details or pin/unpin them as frequent payees. Don’t forget to press “Save Changes” to confirm any updates.</p>
+                    <img src="img/viewrecipient-2.png" alt="Recipient Details" class="faq-image-placeholder">
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section 3: How to Make an Overseas Transfer -->
+        <div class="faq-section border">
+            <button class="accordion">How to Make an Overseas Transfer</button>
+            <div class="panel">
+                <p><strong>Follow these steps to make an overseas transfer:</strong></p>
+
+                <div class="step">
+                    <div class="step-title">Step 1: Choose a Recipient</div>
+                    <p>Go to the "Recipient" tab and select the recipient you want to send money to.</p>
+                    <img src="img/addrecipient-1.png" alt="Recipient Selection" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 2: Select Fund Source</div>
+                    <p>Choose the bank account or payment source from which you want to transfer money. Then press "Next."</p>
+                    <img src="img/transfer-1.png" alt="Fund Source Selection" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 3: Enter Transfer Amount</div>
+                    <p>Enter the amount you want to transfer in SGD and press "Refresh" to update the exchange rate.</p>
+                    <img src="img/transfer-2.png" alt="Amount and Refresh" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 4: Review Exchange Rate</div>
+                    <p>The exchange rate will be shown, and you will see how much the recipient will receive in their local currency.</p>
+                    <img src="img/transfer-3.png" alt="Exchange Rate" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 5: Select Transfer Category</div>
+                    <p>Choose the category for your transfer (e.g., Education, Charity). Then press "Next."</p>
+                    <img src="img/transfer-4.png" alt="Transfer Category" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 6: Review Transfer Details</div>
+                    <p>Double-check your transfer details. If everything looks good, press "Confirm" to complete the transfer.</p>
+                    <img src="img/transfer-5.png" alt="Review Transfer" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 7: Confirm Transfer</div>
+                    <p>After confirming, you’ll be redirected to the "Successful Transfer" page. Press "Back to Home" to return to the main screen.</p>
+                    <img src="img/transfer-6.png" alt="Successful Transfer" class="faq-image-placeholder">
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section 4: How to See Recent Transfers -->
+        <div class="faq-section border">
+            <button class="accordion">How to See Recent Transfers</button>
+            <div class="panel">
+                <p><strong>To view your recent transfers, follow these steps:</strong></p>
+
+                <div class="step">
+                    <div class="step-title">Step 1: Go to the Recent Tab</div>
+                    <p>Navigate to the "Recent" tab in your app. Here, you’ll see all your past transfers.</p>
+                    <img src="img/recent-1.png" alt="Recent Transfers Tab" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 2: Repeat a Transfer</div>
+                    <p>If you want to send money again, you can opt to do a "Repeat Transfer." Simply tap the "Repeat Transfer" button for the transfer you want to repeat.</p>
+                    <img src="img/recent-2.png" alt="Repeat Transfer" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 3: Review and Confirm</div>
+                    <p>You will be taken to the "Review Transfer Details" page. Confirm everything is correct, then press "Confirm" to repeat the transfer.</p>
+                    <img src="img/recent-3.png" alt="Review Transfer Details" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 4: Successful Transfer</div>
+                    <p>Once confirmed, you’ll be redirected to the "Successful Transfer" page. Tap "Back to Home" to return to the main screen.</p>
+                    <img src="img/recent-4.png" alt="Successful Transfer" class="faq-image-placeholder">
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section 5: How to Make a Recurring Transfer -->
+        <div class="faq-section border">
+            <button class="accordion">How to Make a Recurring Transfer</button>
+            <div class="panel">
+                <p><strong>Here’s how to set up a recurring overseas transfer:</strong></p>
+
+                <div class="step">
+                    <div class="step-title">Step 1: Start a Recurring Transfer</div>
+                    <p>In the "Recipient" tab, press "Add Recurring Transfer" to begin.</p>
+                    <img src="img/recurring-1.png" alt="Recurring Transfer Option" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 2: Enter Recipient Details</div>
+                    <p>Enter the recipient's name, account number, and the account you want to transfer from. Enter the transfer amount in SGD.</p>
+                    <img src="img/recurring-2.png" alt="Recurring Transfer Recipient Details" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 3: Set Currency and Frequency</div>
+                    <p>Select the currency and set the frequency of the transfer (e.g., weekly, monthly). Then, choose the start date for the recurring transfer.</p>
+                    <img src="img/recurring-3.png" alt="Currency and Frequency Selection" class="faq-image-placeholder">
+                </div>
+
+                <div class="step">
+                    <div class="step-title">Step 4: Review and Confirm</div>
+                    <p>Review the details of your recurring transfer. Once you’re happy, press "Confirm" to set it up.</p>
+                    <img src="img/recurring-4.png" alt="Recurring Transfer Confirmation" class="faq-image-placeholder">
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <!-- Bootstrap Bundle (includes Popper) -->
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
-    <script src="js/overseas-transaction-menu.js"></script>
     <script src="./js/magnifying.js"></script>
     <script src="js/profile.js"></script>
     <script src="js/tts.js"></script>
@@ -72,37 +238,36 @@
         var i;
 
         for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function() {
-            /* Toggle between adding and removing the "active" class,
-            to highlight the button that controls the panel */
-            this.classList.toggle("active");
+            acc[i].addEventListener("click", function() {
+                /* Toggle between adding and removing the "active" class,
+                to highlight the button that controls the panel */
+                this.classList.toggle("active");
 
-            /* Toggle between hiding and showing the active panel */
-            var panel = this.nextElementSibling;
-            if (panel.style.display === "block") {
-            panel.style.display = "none";
-            } else {
-            panel.style.display = "block";
-            }
-        });
+                /* Toggle between hiding and showing the active panel */
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
         }
 
         var acc = document.getElementsByClassName("accordion");
-var i;
+        var i;
 
-for (i = 0; i < acc.length; i++) {
-  acc[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var panel = this.nextElementSibling;
-    if (panel.style.maxHeight) {
-      panel.style.maxHeight = null;
-    } else {
-      panel.style.maxHeight = panel.scrollHeight + "px";
-    }
-  });
-}
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
     </script>
-
 </body>
 
 </html>
