@@ -39,8 +39,23 @@ const createOverseasTransaction = async (req, res) => {
     }
 };
 
+// Modify this function to accept a month filter
+const getTransactionsByMonth = async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const month = req.params.month;  // Format: YYYY-MM
+
+    try {
+        const transactions = await OverseasTransaction.getTransactionsByMonth(userId, month);
+        res.json(transactions);  // Return the filtered transactions
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error retrieving overseas transactions for the month");
+    }
+};
+
 module.exports = {
     getAllOverseasTransactions,
     getOverseasTransactionById,
-    createOverseasTransaction
+    createOverseasTransaction,
+    getTransactionsByMonth
 };

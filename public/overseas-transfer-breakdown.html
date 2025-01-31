@@ -58,6 +58,12 @@
         text-align: left;
         border: 1px solid #ddd;
     }
+
+    .summary th {
+    background-color: #f4f4f4; /* Optional: Light background for headers */
+    }
+
+    
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -89,11 +95,11 @@
     <div class="filter-section">
       <label for="month-dropdown">Select Month:</label>
       <select id="month-dropdown">
+        <option value="2024-11">November 2024</option>
+        <option value="2024-12">December 2024</option>
         <option value="2025-01">January 2025</option>
-        <option value="2025-02">February 2025</option>
-        <option value="2025-03">March 2025</option>
-        <!-- Add more months dynamically -->
-      </select>
+        <option value="2025-02" selected>February 2025</option>
+    </select>
     </div>
 
     <div class="chart-section">

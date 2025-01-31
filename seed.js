@@ -9,6 +9,14 @@ async function seedDatabase() {
         //Drop existing tables (optional if you want to recreate them entirely)
         await sql.query(`
             if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.User_vouchers') and sysstat & 0xf = 3)
+            DROP TABLE dbo.User_vouchers;
+
+            if exists (SELECT * FROM sysobjects
+            WHERE id = object_id('dbo.Rewards') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Rewards;
+
+            if exists (SELECT * FROM sysobjects
             WHERE id = object_id('dbo.Passkey') and sysstat & 0xf = 3)
             DROP TABLE dbo.Passkey;
 
@@ -60,13 +68,7 @@ async function seedDatabase() {
             WHERE id = object_id('dbo.ATMLocations') and sysstat & 0xf = 3)
             DROP TABLE dbo.ATMLocations;
 
-            if exists (SELECT * FROM sysobjects
-            WHERE id = object_id('dbo.User_vouchers') and sysstat & 0xf = 3)
-            DROP TABLE dbo.User_vouchers;
 
-            if exists (SELECT * FROM sysobjects
-            WHERE id = object_id('dbo.Rewards') and sysstat & 0xf = 3)
-            DROP TABLE dbo.Rewards;
         `);
 
         //Create tables
@@ -293,10 +295,27 @@ async function seedDatabase() {
         await sql.query(`
             INSERT INTO OverseasTransactions (user_id, payee_id, amount, currency, converted_amount, transaction_datetime, transaction_fee, transaction_type, tags)
             VALUES 
-                (1, 1, 200.00, 'USD', 200.00, '2025-01-18 10:00:00', 5.00, 'send', 'gift'),
-                (1, 2, 150.00, 'USD', 140.00, '2025-01-18 11:00:00', 4.50, 'send', 'business'),
-                (2, 3, 100.00, 'GBP', 120.00, '2025-01-18 12:00:00', 3.00, 'send', 'education'),
-                (3, 4, 300.00, 'BRL', 320.00, '2025-01-18 13:00:00', 7.00, 'send', 'charity');
+                (1, 1, 200.00, 'USD', 200.00, '2025-01-18 10:00:00', 5.00, 'send', 'Gift'),
+                (1, 2, 150.00, 'USD', 140.00, '2025-01-18 11:00:00', 4.50, 'send', 'Business'),
+                (2, 3, 100.00, 'GBP', 120.00, '2025-01-18 12:00:00', 3.00, 'send', 'Education'),
+                (3, 4, 300.00, 'BRL', 320.00, '2025-01-18 13:00:00', 7.00, 'send', 'Charity'),
+                (1, 1, 100.00, 'USD', 100.00, '2024-11-05 10:00:00', 3.00, 'send', 'Gift'),
+                (1, 2, 250.00, 'USD', 240.00, '2024-11-07 11:30:00', 5.00, 'send', 'Business'),
+                (1, 1, 150.00, 'USD', 150.00, '2024-11-10 14:45:00', 4.00, 'send', 'Education'),
+                (1, 2, 200.00, 'USD', 190.00, '2024-11-15 09:00:00', 3.50, 'send', 'Charity'),
+                (1, 1, 120.00, 'USD', 120.00, '2024-11-20 13:30:00', 4.50, 'send', 'Gift'),
+                (1, 2, 175.00, 'USD', 170.00, '2024-12-01 16:00:00', 4.00, 'send', 'Business'),
+                (1, 1, 220.00, 'USD', 220.00, '2024-12-03 11:00:00', 5.00, 'send', 'Gift'),
+                (1, 2, 300.00, 'USD', 290.00, '2024-12-05 08:30:00', 6.00, 'send', 'Charity'),
+                (1, 1, 110.00, 'USD', 110.00, '2024-12-08 15:15:00', 3.50, 'send', 'Education'),
+                (1, 2, 180.00, 'USD', 170.00, '2024-12-12 17:00:00', 4.50, 'send', 'Business'),
+                (1, 1, 200.00, 'USD', 200.00, '2025-01-05 10:00:00', 5.00, 'send', 'Gift'),
+                (1, 2, 150.00, 'USD', 140.00, '2025-01-08 12:00:00', 4.50, 'send', 'Business'),
+                (1, 1, 175.00, 'USD', 175.00, '2025-01-11 14:15:00', 4.00, 'send', 'Education'),
+                (1, 2, 300.00, 'USD', 290.00, '2025-01-14 09:30:00', 7.00, 'send', 'Charity'),
+                (1, 1, 220.00, 'USD', 220.00, '2025-01-18 16:45:00', 5.50, 'send', 'Business'),
+                (1, 1, 180.00, 'USD', 180.00, '2025-02-03 11:30:00', 4.00, 'send', 'Gift'),
+                (1, 2, 250.00, 'USD', 240.00, '2025-02-06 09:00:00', 5.50, 'send', 'Business');
         `);
 
         // Insert data into OverseasTransactionLogs table

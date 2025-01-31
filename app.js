@@ -121,6 +121,7 @@ app.patch("/overseas-payees/:id/pin", overseaspayeeController.toggleOverseasPaye
 app.get("/overseas-transactions/:userId", overseastransactionController.getAllOverseasTransactions);
 app.get("/overseas-transactions/id/:id", overseastransactionController.getOverseasTransactionById);
 app.post("/overseas-transactions", validateOverseasTransaction.validateCreateOverseasTransaction, overseastransactionController.createOverseasTransaction);
+app.get("/overseas-transactions/:userId/month/:month", overseastransactionController.getTransactionsByMonth);
 
 // overseas transaction logs
 app.get("/overseas-transaction-logs/:transactionId", overseastransactionlogController.getAllOverseasTransactionLogs);

@@ -97,6 +97,41 @@ class OverseasTransaction {
 
         return this.getTransactionById(result.recordset[0].transaction_id);
     }
+
+    // Get all overseas transactions for a specific user and month
+    static async getTransactionsByMonth(user_id, month) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `
+            SELECT * 
+            FROM OverseasTransactions
+            WHERE user_id = @user_id
+            AND CONVERT(VARCHAR(7), transaction_datetime, 120) = @month;
+        `;
+
+        const request = connection.request();
+        request.input("user_id", user_id);
+        request.input("month", month);
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset.map(
+            (row) => new OverseasTransaction(
+                row.transaction_id,
+                row.user_id,
+                row.payee_id,
+                row.amount,
+                row.currency,
+                row.converted_amount,
+                row.transaction_datetime,
+                row.transaction_fee,
+                row.transaction_type,
+                row.tags
+            )
+        );
+    }
+
 }
 
 module.exports = OverseasTransaction;
