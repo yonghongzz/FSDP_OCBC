@@ -1,0 +1,227 @@
+.rewards-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 15px 0;
+    background-color: #fff3cd; /* Light yellow background */
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ffeeba; /* Border similar to the sections */
+}
+
+.rewards-details {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+    width: 100%;
+}
+
+.rewards-icon {
+    font-size: 1.5rem;
+    color: #ffc107; /* Yellow icon */
+    margin-right: 10px;
+}
+
+.rewards-text {
+    flex-grow: 1;
+}
+
+.rewards-title {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.rewards-points {
+    font-size: 0.9rem;
+    color: #6c757d; /* Subtle gray for points */
+}
+
+.rewards-arrow {
+    font-size: 1.5rem;
+    color: #6c757d; /* Gray arrow */
+}
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Container for Rewards Page */
+.rewards-container {
+    width: 288px;
+    max-width: 400px; /* Makes the layout responsive */
+    height: 605px;
+    border-radius: 15px;
+    background-color: white;
+    padding: 0; /* Removed padding to prevent offset */
+    box-sizing: border-box;
+    align-items: center;
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+/* Points Summary Section */
+.points-summary {
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.points-box {
+    flex: 1;
+    text-align: center;
+    margin: 0 5px;
+    background-color: #fff3cd;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.points-box1 {
+    flex: 1;
+    text-align: center;
+    margin: 5px 5px;
+    background-color: #da291c;
+    color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.points-box p {
+    margin: 5px 0;
+}
+
+/* Reward Items */
+.reward-item {
+    display: flex;
+    flex-direction: column; /* Stack the image on top of the details */
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #fff8e1; /* Light yellow */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reward-image {
+    width: 100%; /* Make the image take the full width */
+    height: 180px; /* Adjust height as needed */
+    margin-bottom: 10px;
+}
+
+.reward-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the image fits nicely */
+    border-radius: 8px;
+}
+
+.reward-content {
+    display: flex;
+    justify-content: space-between; /* Space between details and button */
+    align-items: center; /* Align items vertically */
+}
+
+.reward-details {
+    flex: 1; /* Allow details to take remaining space */
+    margin-right: 10px; /* Add spacing between details and button */
+    font-size: 14px;
+}
+
+.reward-redeem {
+    flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.redeem-button {
+    background-color: #da291c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.redeem-button:hover {
+    background-color: #b2221a;
+}
+
+
+
+.card.bankapp-header {
+    background-color: #da291c; /* Red header background */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    width: 100%; /* Ensure the header spans the full width */
+    position: absolute; /* Fix the header at the top */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure it appears above other elements */
+}
+
+.header-content {
+    display: flex;
+    width: 100%; /* Occupy full width of the header */
+    align-items: center;
+    justify-content: space-between;
+}
+
+.normal-lite {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    padding: 5px 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button-magnify,
+.button-volume,
+.button-mic,
+.button-person {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.button-magnify:hover,
+.button-volume:hover,
+.button-mic:hover,
+.button-person:hover {
+    color: #ffdd00; /* Yellow hover effect */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    touch-action: none;
+}
+
+.go-back-container {
+    display: flex;
+    justify-content: flex-start; /* Align button to the left */
+}
+
+.go-back-button {
+    font-size: 20px; /* Increase font size */
+    padding: 6px 10px; /* Increase padding */
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.go-back-button:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}

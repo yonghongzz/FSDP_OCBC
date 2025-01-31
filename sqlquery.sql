@@ -52,7 +52,8 @@ CREATE TABLE Users (
     username VARCHAR(50) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    phone_number VARCHAR(20)
+    phone_number VARCHAR(20),
+    points INT DEFAULT 0
 );
 
 CREATE TABLE Accounts (
@@ -70,6 +71,7 @@ CREATE TABLE AccTransactions (
     account_id INT,
     transaction_type VARCHAR(50) CHECK (transaction_type IN ('deposit', 'withdrawal', 'transfer', 'payment', 'refund')) NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
+    points_earned INT,
     transaction_datetime DATETIME DEFAULT GETDATE(),
     name VARCHAR(100),
     FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
@@ -161,3 +163,21 @@ CREATE TABLE ATMLocations (
     address VARCHAR(255) NOT NULL,    -- Address of the ATM location
     postal_code VARCHAR(10) NOT NULL  -- Postal code of the ATM location
 )
+
+CREATE TABLE Rewards (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    image_url VARCHAR(255),
+    points_required INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE User_vouchers (
+    user_id INT NOT NULL,
+    reward_id INT NOT NULL,
+    redeemed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (reward_id) REFERENCES rewards(id)
+);
+
