@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,34 +16,34 @@
     <div class="card bankapp">
       <!--bankapp header-->
       <div class="bankapp-header">
-          <div class="header-content card-header d-flex justify-content-between align-items-center">
-              <button class="btn btn-link button-magnify" id="magnify" type="button">
-                  <i class="bi bi-zoom-in"></i>
-              </button>
-              <div class="card normal-lite">
-                  <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
-                      Lite
-                  </div>
-                  <button class="btn btn-link lite-downarrow" type="button">
-                      <i class="bi bi-caret-down-fill"></i>
-                  </button>
-              </div>
-              <button class="btn btn-link button-volume" id="voice" type="button">
-                  <i class="bi bi-volume-up-fill"></i>
-              </button>
-              <button class="btn btn-link button-mic" id="mic" type="button">
-                  <i class="bi bi-mic-fill"></i>
-              </button>
-              <button class="btn btn-link button-gesture" id="gesture" type="button">
-                  <i class="bi bi-hand-index-fill"></i>
-              </button>
-              <button class="btn btn-link button-person" id="person" type="button" data-bs-toggle="dropdown">
-                  <i class="bi bi-person-fill"></i>
-              </button>
-              <div class="dropdown-menu" id="profileMenu">
-                  <button class="dropdown-item" id="logoutBtn">Logout</button>
-              </div>
+        <div class="header-content card-header d-flex justify-content-between align-items-center">
+          <button class="btn btn-link button-magnify" id="magnify" type="button">
+            <i class="bi bi-zoom-in"></i>
+          </button>
+          <div class="card normal-lite">
+            <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+              Lite
+            </div>
+            <button class="btn btn-link lite-downarrow" type="button">
+              <i class="bi bi-caret-down-fill"></i>
+            </button>
           </div>
+          <button class="btn btn-link button-volume" id="voice" type="button">
+            <i class="bi bi-volume-up-fill"></i>
+          </button>
+          <button class="btn btn-link button-mic" id="mic" type="button">
+            <i class="bi bi-mic-fill"></i>
+          </button>
+          <button class="btn btn-link button-gesture" id="gesture" type="button">
+            <i class="bi bi-hand-index-fill"></i>
+          </button>
+          <button class="btn btn-link button-person" id="person" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-person-fill"></i>
+          </button>
+          <div class="dropdown-menu" id="profileMenu">
+            <button class="dropdown-item" id="logoutBtn">Logout</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -57,12 +58,21 @@
 
     <!-- Vouchers List -->
     <div id="vouchers-list"></div>
-</div>
+  </div>
+  <video class="input_video" style="display:none;"></video>
+  <canvas class="output_canvas" style="display: none;"></canvas>
 
-<script src="js/vouchers.js"></script>
-<script src="./js/magnifying.js"></script>
-<script src="js/profile.js"></script>
-<script src="js/tts.js"></script>
-<script src="js/voice.js"></script>
+  <script src="js/vouchers.js"></script>
+  <script src="js/bootstrap/bootstrap.bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="js/hand-gesture.js"></script>
+  <script src="./js/magnifying.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/tts.js"></script>
+  <script src="js/voice.js"></script>
 </body>
+
 </html>
