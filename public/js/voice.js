@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded',()=>{
             window.location.href = "paynow.html";
           }
           else if(data.intents[0].name == "Limit"){
-            window.location.href = "change-transcation-limit.html";
+            window.location.href = "change-transaction-limit.html";
           }
           else if(data.intents[0].name == "Help"){
             window.location.href = "HelpNav.html";
