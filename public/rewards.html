@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rewards</title>
+    <title data-i18n="rewards_title">Rewards</title>
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
@@ -22,7 +22,7 @@
                     </button>
                     <div class="card normal-lite">
                         <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
-                            Lite
+                            <span data-i18n="lite_mode">Lite</span>
                         </div>
                         <button class="btn btn-link lite-downarrow" type="button">
                             <i class="bi bi-caret-down-fill"></i>
@@ -41,7 +41,7 @@
                         <i class="bi bi-person-fill"></i>
                     </button>
                     <div class="dropdown-menu" id="profileMenu">
-                        <button class="dropdown-item" id="logoutBtn">Logout</button>
+                        <button class="dropdown-item" id="logoutBtn" data-i18n="logout">Logout</button>
                     </div>
                 </div>
             </div>
@@ -54,18 +54,18 @@
         <!-- Points Summary Section -->
         <div class="points-summary">
             <div class="points-box">
-                <strong>My Points</strong>
-                <p id="user-points">Loading...</p>
+                <strong data-i18n="my_points">My Points</strong>
+                <p id="user-points" data-i18n="loading">Loading...</p>
                 <div class="points-box1">
                     <a href="vouchers.html">
-                        <p>View My Vouchers</p>
+                        <p data-i18n="view_vouchers">View My Vouchers</p>
                     </a>
                 </div>
             </div>
         </div>
 
         <!-- Redeemable Rewards Section -->
-        <div id="rewards-list"></div>
+        <div id="rewards-list" data-i18n="rewards_list">Loading rewards...</div>
     </div>
 
     <video class="input_video" style="display:none;"></video>
@@ -82,6 +82,70 @@
     <script src="js/profile.js"></script>
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next/dist/umd/i18next.min.js"></script>
+
+    <!-- Translation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            i18next.init({
+                lng: localStorage.getItem('language') || 'en', // Default to English
+                resources: {
+                    en: {
+                        translation: {
+                            "rewards_title": "Rewards",
+                            "lite_mode": "Lite",
+                            "logout": "Logout",
+                            "my_points": "My Points",
+                            "loading": "Loading...",
+                            "view_vouchers": "View My Vouchers",
+                            "rewards_list": "Loading rewards..."
+                        }
+                    },
+                    cn: {
+                        translation: {
+                            "rewards_title": "奖励",
+                            "lite_mode": "简易版",
+                            "logout": "注销",
+                            "my_points": "我的积分",
+                            "loading": "加载中...",
+                            "view_vouchers": "查看我的代金券",
+                            "rewards_list": "加载奖励..."
+                        }
+                    },
+                    my: {
+                        translation: {
+                            "rewards_title": "Ganjaran",
+                            "lite_mode": "Lite",
+                            "logout": "Log Keluar",
+                            "my_points": "Poin Saya",
+                            "loading": "Memuat...",
+                            "view_vouchers": "Lihat Baucar Saya",
+                            "rewards_list": "Memuat ganjaran..."
+                        }
+                    }
+                }
+            }, function (err, t) {
+                updatePageContent();
+            });
+        });
+
+        function updatePageContent() {
+            document.querySelector('[data-i18n="rewards_title"]').innerHTML = i18next.t('rewards_title');
+            document.querySelector('[data-i18n="lite_mode"]').innerHTML = i18next.t('lite_mode');
+            document.querySelector('[data-i18n="logout"]').innerHTML = i18next.t('logout');
+            document.querySelector('[data-i18n="my_points"]').innerHTML = i18next.t('my_points');
+            document.querySelector('[data-i18n="loading"]').innerHTML = i18next.t('loading');
+            document.querySelector('[data-i18n="view_vouchers"]').innerHTML = i18next.t('view_vouchers');
+            document.querySelector('[data-i18n="rewards_list"]').innerHTML = i18next.t('rewards_list');
+        }
+
+        function changeLanguage(lng) {
+            localStorage.setItem('language', lng);
+            i18next.changeLanguage(lng, function (err, t) {
+                updatePageContent();
+            });
+        }
+    </script>
 </body>
 
 </html>

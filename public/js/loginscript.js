@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const result = await response.json();
             alert('Login successful');
+            const audio = new Audio('success.wav');
+            audio.play();
 
             const token = result.token;
             const decodedToken = parseJwt(token);

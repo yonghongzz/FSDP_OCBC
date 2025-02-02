@@ -3,38 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Payment</title>
+    <title data-i18n="confirm_payment">Confirm Payment</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/custSupport.css">
 </head>
 <body>
     <header>
-        <h1>Confirm Payment</h1>
+        <h1 data-i18n="confirm_payment">Confirm Payment</h1>
     </header>
     <main>
         <div class="card steps" id="step1">
             <div class="steps-body">
-                <p>4. You can check your payment details here.</p>
-                <p>Drag the red circle below to the right to <strong>confirm payment</strong>.</p>
-                <button class="okay-button" style="margin-top: 2px;" onclick="showNextStep('step1', 'step2')">Okay</button>
+                <p data-i18n="step_4">4. You can check your payment details here.</p>
+                <p data-i18n="drag_to_confirm">Drag the red circle below to the right to <strong>confirm payment</strong>.</p>
+                <button class="okay-button" style="margin-top: 2px;" onclick="showNextStep('step1', 'step2')" data-i18n="okay_button">Okay</button>
             </div>
         </div>
         <div class="payment-details" style="margin-top: -10px;">
-            <h2>Payment Details</h2>
+            <h2 data-i18n="payment_details">Payment Details</h2>
             <div class="detail-item">
-                <span class="label">Paying to:</span>
+                <span class="label" data-i18n="paying_to">Paying to:</span>
                 <span id="recipient" class="value"></span>
             </div>
             <div class="detail-item">
-                <span class="label">Amount:</span>
+                <span class="label" data-i18n="amount">Amount:</span>
                 <span id="amount" class="value"></span>
             </div>
             <div class="detail-item">
-                <span class="label">Date:</span>
+                <span class="label" data-i18n="date">Date:</span>
                 <span id="date" class="value"></span>
             </div>
             <div class="detail-item">
-                <span class="label">Reference:</span>
+                <span class="label" data-i18n="reference">Reference:</span>
                 <span id="reference" class="value"></span>
             </div>
         </div>
@@ -44,26 +44,122 @@
                 <div id="slider-thumb">
                     <span class="arrow">→</span>
                 </div>
-                <div id="slider-text">Slide to confirm payment</div>
+                <div id="slider-text" data-i18n="slide_to_confirm">Slide to confirm payment</div>
             </div>
         </div>
 
         <div id="success-modal" class="modal hidden">
             <div class="modal-content">
                 <div class="success-icon">✓</div>
-                <h2>Payment Successful!</h2>
+                <h2 data-i18n="payment_successful">Payment Successful!</h2>
                 <div class="success-details">
-                    <p>You have paid</p>
-                    <p class="amount" id="success-amount"></p>
-                    <p>to</p>
-                    <p class="recipient" id="success-recipient"></p>
+                    <p data-i18n="paid_to">You have paid</p>
+                    <p class="amount" id="success-amount" data-i18n="success_amount"></p>
+                    <p data-i18n="to">to</p>
+                    <p class="recipient" id="success-recipient" data-i18n="success_recipient"></p>
                 </div>
-                <button id="done-btn" class="primary-btn">Done</button>
+                <button id="done-btn" class="primary-btn" data-i18n="done">Done</button>
             </div>
         </div>
     </main>
 </body>
+
 <script src="js/paymentDetails.js"></script>
 <script src="js/stp-scanQRscript.js"></script>
 <script src="js/simulationtts.js"></script>
+<script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        i18next.init({
+            lng: localStorage.getItem('language') || 'en', // Default to English
+            resources: {
+                en: {
+                    translation: {
+                        "confirm_payment": "Confirm Payment",
+                        "step_4": "4. You can check your payment details here.",
+                        "drag_to_confirm": "Drag the red circle below to the right to <strong>confirm payment</strong>.",
+                        "okay_button": "Okay",
+                        "payment_details": "Payment Details",
+                        "paying_to": "Paying to:",
+                        "amount": "Amount:",
+                        "date": "Date:",
+                        "reference": "Reference:",
+                        "slide_to_confirm": "Slide to confirm payment",
+                        "payment_successful": "Payment Successful!",
+                        "paid_to": "You have paid",
+                        "success_amount": "Amount",
+                        "success_recipient": "Recipient",
+                        "done": "Done"
+                    }
+                },
+                cn: {
+                    translation: {
+                        "confirm_payment": "确认付款",
+                        "step_4": "4. 你可以在这里查看付款详情。",
+                        "drag_to_confirm": "将下方的红色圆圈拖动到右边以<strong>确认付款</strong>。",
+                        "okay_button": "好的",
+                        "payment_details": "付款详情",
+                        "paying_to": "付款给：",
+                        "amount": "金额：",
+                        "date": "日期：",
+                        "reference": "参考：",
+                        "slide_to_confirm": "滑动以确认付款",
+                        "payment_successful": "付款成功！",
+                        "paid_to": "您已支付",
+                        "success_amount": "金额",
+                        "success_recipient": "收款人",
+                        "done": "完成"
+                    }
+                },
+                my: {
+                    translation: {
+                        "confirm_payment": "Sahkan Pembayaran",
+                        "step_4": "4. Anda boleh semak butiran pembayaran anda di sini.",
+                        "drag_to_confirm": "Seret bulatan merah di bawah ke kanan untuk <strong>mengesahkan pembayaran</strong>.",
+                        "okay_button": "Okay",
+                        "payment_details": "Butiran Pembayaran",
+                        "paying_to": "Pembayaran kepada:",
+                        "amount": "Jumlah:",
+                        "date": "Tarikh:",
+                        "reference": "Rujukan:",
+                        "slide_to_confirm": "Seret untuk mengesahkan pembayaran",
+                        "payment_successful": "Pembayaran Berjaya!",
+                        "paid_to": "Anda telah membayar",
+                        "success_amount": "Jumlah",
+                        "success_recipient": "Penerima",
+                        "done": "Selesai"
+                    }
+                }
+            }
+        }, function (err, t) {
+            updatePageContent();
+        });
+    });
+
+    function updatePageContent() {
+        document.querySelector('[data-i18n="confirm_payment"]').innerHTML = i18next.t('confirm_payment');
+        document.querySelector('[data-i18n="step_4"]').innerHTML = i18next.t('step_4');
+        document.querySelector('[data-i18n="drag_to_confirm"]').innerHTML = i18next.t('drag_to_confirm');
+        document.querySelector('[data-i18n="okay_button"]').innerHTML = i18next.t('okay_button');
+        document.querySelector('[data-i18n="payment_details"]').innerHTML = i18next.t('payment_details');
+        document.querySelector('[data-i18n="paying_to"]').innerHTML = i18next.t('paying_to');
+        document.querySelector('[data-i18n="amount"]').innerHTML = i18next.t('amount');
+        document.querySelector('[data-i18n="date"]').innerHTML = i18next.t('date');
+        document.querySelector('[data-i18n="reference"]').innerHTML = i18next.t('reference');
+        document.querySelector('[data-i18n="slide_to_confirm"]').innerHTML = i18next.t('slide_to_confirm');
+        document.querySelector('[data-i18n="payment_successful"]').innerHTML = i18next.t('payment_successful');
+        document.querySelector('[data-i18n="paid_to"]').innerHTML = i18next.t('paid_to');
+        document.querySelector('[data-i18n="success_amount"]').innerHTML = i18next.t('success_amount');
+        document.querySelector('[data-i18n="success_recipient"]').innerHTML = i18next.t('success_recipient');
+        document.querySelector('[data-i18n="done"]').innerHTML = i18next.t('done');
+    }
+
+    function changeLanguage(lng) {
+        localStorage.setItem('language', lng);
+        i18next.changeLanguage(lng, function (err, t) {
+            updatePageContent();
+        });
+    }
+</script>
+
 </html>

@@ -44,136 +44,87 @@
           <blockquote class="blockquote mb-0">
             <div class="card steps" id="step1">
                 <div class="steps-body">
-                    <p>1. Press <strong>"Scan QR"</strong> to begin.</p>
-                    <button class="okay-button" style="margin-top: 2px;" onclick="showNextStep('step1', 'step2')">Okay</button>
+                    <p data-i18n="step_1">1. Press <strong>"Scan QR"</strong> to begin.</p>
+                    <button class="okay-button" style="margin-top: 2px;" onclick="showNextStep('step1', 'step2')" data-i18n="okay_button">Okay</button>
                 </div>
             </div>
+            
             <div class="welcome-back" style="margin-bottom: -6px; margin-top: -4px; font-weight: bold">
-                <p><!--something should be here--></p>
+                <p data-i18n="welcome_message"></p>
             </div>
-
+            
             <div class="payment">
                 <a href="#" class="payment-button" style="margin-left: 10px;">
                     <div class="payment-button-icon">
                         <img src="https://thewhisky.sg/wp-content/uploads/2021/10/paynow-logo-2-01.png" alt="PayNow">
                     </div>
-                    <div class="payment-button-text" style="margin-top: -2.2rem;">
-                        PayNow
-                    </div>
+                    <div class="payment-button-text" style="margin-top: -2.2rem;" data-i18n="pay_now">PayNow</div>
                 </a>
                 <a href="stp-scanQR.html" class="payment-button">
                     <div class="payment-button-icon">
                         <i class="bi bi-qr-code-scan"></i>
                     </div>
-                    <div class="payment-button-text">
-                        Scan QR
-                    </div>
+                    <div class="payment-button-text" data-i18n="scan_qr">Scan QR</div>
                 </a>
                 <a href="#" class="payment-button" style="margin-right: 10px;">
                     <div class="payment-button-icon">
                         <i class="bi bi-journals"></i>
                     </div>
-                    <div class="payment-button-text">
-                        Pay Bills
-                    </div>
+                    <div class="payment-button-text" data-i18n="pay_bills">Pay Bills</div>
                 </a>
             </div>
-
-            <div class="account">
-                <a href="account.html" class="account-details">
-                    <div class="pfp">
-                        <i class="bi bi-person-circle"></i>
-                    </div>
-                    <div class="account-details-text">
-                        <div class="account-type"><!--something here--></div>
-                        <div class="account-number"><!--something here too--></div>
-                    </div>
-                    <div class="account-expand">
-                        <i class="bi bi-caret-right-fill"></i>
-                    </div>
-                </a>
-                
-                <div class="account-balance">
-                    <div class="balance-text">
-                        A/C Balance
-                    </div>
-
-                    <div class="balance-amount">
-                        <!--something here-->
-                    </div>
+            
+            <div class="account-balance">
+                <div class="balance-text" data-i18n="account_balance">A/C Balance</div>
+                <div class="balance-amount" data-i18n="balance_amount"></div>
+            </div>
+            
+            <div class="account-debit">
+                <div class="debit-text" data-i18n="debit">Debit</div>
+                <div class="debit-cardnum" data-i18n="debit_card_number"></div>
+            </div>
+            
+            <div class="transaction-current">
+                <div class="tc-text" data-i18n="daily_transaction_limit">Daily transaction limit</div>
+                <div class="tc-amt" data-i18n="transaction_limit"></div>
+            </div>
+            
+            <a href="change-transaction-limit.html" class="transaction-change">
+                <div class="tchange-text" data-i18n="change_transaction_limit">Change transaction limit</div>
+                <div class="tchange-arrow">
+                    <i class="bi bi-caret-right-fill"></i>
                 </div>
-
-                <div class="account-debit">
-                    <div class="debit-text">
-                        Debit
-                    </div>
-
-                    <div class="debit-cardnum">
-                        <!--something here-->
-                    </div>
-                </div>
-            </div>
-
-            <div class="transaction">
-                <div class="transaction-current">
-                    <div class="tc-text">
-                        Daily transaction limit
-                    </div>
-                    
-                    <div class="tc-amt">
-                        <!--something here-->
-                    </div>
-                </div>
-
-                <a href="change-transaction-limit.html" class="transaction-change">
-                    <div class="tchange-text">
-                        Change transaction limit
-                    </div>
-                    <div class="tchange-arrow">
-                        <i class="bi bi-caret-right-fill"></i>
-                    </div>
-                </a>
-            </div>
-        </div>
-        
-        <div class="bottom-nav">
-            <div class="walkthrough">
-                <a href="guide.html">
-                    <div class="walkthrough-icon">
-                        <i class="bi bi-person-walking"></i>
-                    </div>
-    
-                    <div class="walkthrough-text">
-                        guide
-                    </div>
-                </a>
-            </div>
-
-            <div class="payandtransfer">
-                <div class="pat-icon">
-                    <a href="#">
-                        <img src="img/pay-icon.png" >
+            </a>
+            
+            <div class="bottom-nav">
+                <div class="walkthrough">
+                    <a href="guide.html">
+                        <div class="walkthrough-icon">
+                            <i class="bi bi-person-walking"></i>
+                        </div>
+                        <div class="walkthrough-text" data-i18n="guide">guide</div>
                     </a>
                 </div>
-
-                <div class="pat-text">
-                    pay and transfer
+            
+                <div class="payandtransfer">
+                    <div class="pat-icon">
+                        <a href="#">
+                            <img src="img/pay-icon.png" >
+                        </a>
+                    </div>
+                    <div class="pat-text" data-i18n="pay_and_transfer">pay and transfer</div>
+                </div>
+            
+                <div class="needhelp">
+                    <a href="video-call.html">
+                        <div class="needhelp-icon">
+                            <i class="bi bi-question-circle-fill"></i>
+                        </div>
+                        <div class="needhelp-text" data-i18n="help">help</div>
+                    </a>
                 </div>
             </div>
-
-            <div class="needhelp">
-                <a href="video-call.html">
-                    <div class="needhelp-icon">
-                        <i class="bi bi-question-circle-fill"></i>
-                    </div>
-    
-                    <div class="needhelp-text">
-                        help
-                    </div>
-                </a>
-                
-            </div>
-        </div>
+            
         
     </div>
     <!-- Bootstrap Bundle (includes Popper) -->
@@ -182,6 +133,117 @@
     <script src="/js/magnifying.js"></script>
     <script src="js/profile.js"></script>
     <script src="js/simulationtts.js"></script>
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            i18next.init({
+                lng: localStorage.getItem('language') || 'en', // Default to English
+                resources: {
+                    en: {
+                        translation: {
+                            "scan_qr": "Scan QR",
+                            "pay_now": "PayNow",
+                            "pay_bills": "Pay Bills",
+                            "account_balance": "A/C Balance",
+                            "debit": "Debit",
+                            "daily_transaction_limit": "Daily transaction limit",
+                            "change_transaction_limit": "Change transaction limit",
+                            "guide": "Guide",
+                            "pay_and_transfer": "Pay and Transfer",
+                            "help": "Help",
+                            "step_1": "1. Press <strong>\"Scan QR\"</strong> to begin.",
+                            "okay_button": "Okay",
+                            "welcome_message": "Welcome back, <strong>User!</strong>",
+                            "account_details": "Account Details",
+                            "account_number": "Account Number: 123-456-789",
+                            "transaction_limit": "$5000",
+                            "account_type": "Savings",
+                            "balance_amount": "$1200.00",
+                            "debit_card_number": "XXXX-XXXX-XXXX-1234"
+                        }
+                    },
+                    cn: {
+                        translation: {
+                            "scan_qr": "扫描二维码",
+                            "pay_now": "PayNow",
+                            "pay_bills": "支付账单",
+                            "account_balance": "账户余额",
+                            "debit": "借记卡",
+                            "daily_transaction_limit": "每日交易限额",
+                            "change_transaction_limit": "更改交易限额",
+                            "guide": "指南",
+                            "pay_and_transfer": "支付和转账",
+                            "help": "帮助",
+                            "step_1": "1. 按下<strong>\"扫描二维码\"</strong>开始。",
+                            "okay_button": "好的",
+                            "welcome_message": "欢迎回来，<strong>用户！</strong>",
+                            "account_details": "账户详情",
+                            "account_number": "账户号码: 123-456-789",
+                            "transaction_limit": "5000美元",
+                            "account_type": "储蓄",
+                            "balance_amount": "1200.00美元",
+                            "debit_card_number": "XXXX-XXXX-XXXX-1234"
+                        }
+                    },
+                    my: {
+                        translation: {
+                            "scan_qr": "Imbas QR",
+                            "pay_now": "PayNow",
+                            "pay_bills": "Bayar Bil",
+                            "account_balance": "Baki A/C",
+                            "debit": "Debit",
+                            "daily_transaction_limit": "Had transaksi harian",
+                            "change_transaction_limit": "Tukar had transaksi",
+                            "guide": "Panduan",
+                            "pay_and_transfer": "Bayar dan Pemindahan",
+                            "help": "Bantuan",
+                            "step_1": "1. Tekan <strong>\"Imbas QR\"</strong> untuk memulakan.",
+                            "okay_button": "Baiklah",
+                            "welcome_message": "Selamat datang kembali, <strong>Pengguna!</strong>",
+                            "account_details": "Butiran Akaun",
+                            "account_number": "Nombor Akaun: 123-456-789",
+                            "transaction_limit": "RM5000",
+                            "account_type": "Simpanan",
+                            "balance_amount": "RM1200.00",
+                            "debit_card_number": "XXXX-XXXX-XXXX-1234"
+                        }
+                    }
+                }
+            }, function (err, t) {
+                updatePageContent();
+            });
+        });
+    
+        function updatePageContent() {
+            document.querySelector('[data-i18n="scan_qr"]').innerHTML = i18next.t('scan_qr');
+            document.querySelector('[data-i18n="pay_now"]').innerHTML = i18next.t('pay_now');
+            document.querySelector('[data-i18n="pay_bills"]').innerHTML = i18next.t('pay_bills');
+            document.querySelector('[data-i18n="account_balance"]').innerHTML = i18next.t('account_balance');
+            document.querySelector('[data-i18n="debit"]').innerHTML = i18next.t('debit');
+            document.querySelector('[data-i18n="daily_transaction_limit"]').innerHTML = i18next.t('daily_transaction_limit');
+            document.querySelector('[data-i18n="change_transaction_limit"]').innerHTML = i18next.t('change_transaction_limit');
+            document.querySelector('[data-i18n="guide"]').innerHTML = i18next.t('guide');
+            document.querySelector('[data-i18n="pay_and_transfer"]').innerHTML = i18next.t('pay_and_transfer');
+            document.querySelector('[data-i18n="help"]').innerHTML = i18next.t('help');
+            document.querySelector('[data-i18n="step_1"]').innerHTML = i18next.t('step_1');
+            document.querySelector('[data-i18n="okay_button"]').innerHTML = i18next.t('okay_button');
+            document.querySelector('[data-i18n="welcome_message"]').innerHTML = i18next.t('welcome_message');
+            document.querySelector('[data-i18n="account_details"]').innerHTML = i18next.t('account_details');
+            document.querySelector('[data-i18n="account_number"]').innerHTML = i18next.t('account_number');
+            document.querySelector('[data-i18n="transaction_limit"]').innerHTML = i18next.t('transaction_limit');
+            document.querySelector('[data-i18n="account_type"]').innerHTML = i18next.t('account_type');
+            document.querySelector('[data-i18n="balance_amount"]').innerHTML = i18next.t('balance_amount');
+            document.querySelector('[data-i18n="debit_card_number"]').innerHTML = i18next.t('debit_card_number');
+        }
+    
+        function changeLanguage(lng) {
+            localStorage.setItem('language', lng);
+            i18next.changeLanguage(lng, function (err, t) {
+                updatePageContent();
+            });
+        }
+    </script>
+    
 
 </body>
 

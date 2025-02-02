@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayNow - Transaction Successful</title>
+    <title data-i18n="paynow_success_title">PayNow - Transaction Successful</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/simulation.css"> <!-- Link to your external CSS file -->
 </head>
 <body>
     <div class="app-container">
+        <audio id="arrivalSound" src="js/success.wav" preload="auto"></audio>
         <!-- Top Header -->
         <div class="top-header">
             <div class="icon zoom"><i class="bi bi-zoom-in" id="magnify"></i></div>
             <div class="mode">
-                <span>Lite</span>
+                <span data-i18n="lite_mode">Lite</span>
                 <span class="dropdown"><i class="bi bi-caret-down-fill"></i></span>
             </div>
             <div class="icon sound"><i class="bi bi-volume-up-fill"></i></div>
@@ -23,21 +24,21 @@
         <!-- Success Message Section -->
         <div class="success-message">
             <div class="check-icon"><i class="bi bi-check-circle-fill"></i></div>
-            <h2>Successful!</h2>
-            <p class="reference">Ref. No: 1234 5678 9012</p>
+            <h2 data-i18n="transaction_successful">Successful!</h2>
+            <p class="reference" data-i18n="reference">Ref. No: 1234 5678 9012</p>
         </div>
 
         <!-- Transaction Details Section -->
         <div class="amount-section">
-            <h1 id="displayAmount"></h1>
-            <div class="transaction-date">20/10/2024 18:00:00</div>
+            <h1 id="displayAmount" data-i18n="amount">Loading...</h1>
+            <div class="transaction-date" data-i18n="transaction_date">20/10/2024 18:00:00</div>
         </div>
 
         <div class="transfer-box">
             <div class="detail-section">
                 <div class="icon"><i class="bi bi-wallet2"></i></div>
                 <div class="info">
-                    <span class="label">To</span>
+                    <span class="label" data-i18n="to">To</span>
                     <span>John</span>
                     <span id="displayMobile"></span>
                 </div>
@@ -48,7 +49,7 @@
             <div class="detail-section">
                 <div class="icon"><i class="bi bi-bank"></i></div>
                 <div class="info">
-                    <span class="label">From</span>
+                    <span class="label" data-i18n="from">From</span>
                     <span class="name">OCBC Account1</span>
                     <span class="account-number">123-12345678-123</span>
                 </div>
@@ -56,26 +57,115 @@
         </div>
 
         <div class="comments-section">
-            <span class="label">Comments</span>
+            <span class="label" data-i18n="comments">Comments</span>
             <p id="displayComments"></p>
         </div>
 
         <div class="card" id="step1">
             <div class="card-body">
-              <p>You are now all done! You can return back to home :)</p>
+              <p data-i18n="done_message">You are now all done! You can return back to home :)</p>
             </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="button-container">
-            <button class="action-button"><a href="paynow.html">New Transfer</a></button>
-            <button class="action-button"><a href="#">Share</a></button>
+            <button class="action-button"><a href="paynow.html" data-i18n="new_transfer">New Transfer</a></button>
+            <button class="action-button"><a href="#" data-i18n="share">Share</a></button>
         </div>
-        <button class="back-home-btn"><a href="index.html">Back To Home</a></button>
+        <button class="back-home-btn"><a href="index.html" data-i18n="back_to_home">Back To Home</a></button>
     </div>
+    
     <script src="js/review-handler.js"></script>
     <script src="js/simulationtts.js"></script>
     <script src="js/voice.js"></script>
     <script src="js/magnifying.js"></script>
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+
+    <!-- Translation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            i18next.init({
+                lng: localStorage.getItem('language') || 'en', // Default to English
+                resources: {
+                    en: {
+                        translation: {
+                            "paynow_success_title": "PayNow - Transaction Successful",
+                            "lite_mode": "Lite",
+                            "transaction_successful": "Successful!",
+                            "reference": "Ref. No: 1234 5678 9012",
+                            "amount": "Amount",
+                            "transaction_date": "20/10/2024 18:00:00",
+                            "to": "To",
+                            "from": "From",
+                            "comments": "Comments",
+                            "done_message": "You are now all done! You can return back to home :)",
+                            "new_transfer": "New Transfer",
+                            "share": "Share",
+                            "back_to_home": "Back To Home"
+                        }
+                    },
+                    cn: {
+                        translation: {
+                            "paynow_success_title": "PayNow - 交易成功",
+                            "lite_mode": "简易版",
+                            "transaction_successful": "成功！",
+                            "reference": "参考编号：1234 5678 9012",
+                            "amount": "金额",
+                            "transaction_date": "20/10/2024 18:00:00",
+                            "to": "收款人",
+                            "from": "付款人",
+                            "comments": "评论",
+                            "done_message": "您已完成！可以返回首页 :)",
+                            "new_transfer": "新转账",
+                            "share": "分享",
+                            "back_to_home": "返回首页"
+                        }
+                    },
+                    my: {
+                        translation: {
+                            "paynow_success_title": "PayNow - Transaksi Berjaya",
+                            "lite_mode": "Lite",
+                            "transaction_successful": "Berjaya!",
+                            "reference": "No. Rujukan: 1234 5678 9012",
+                            "amount": "Jumlah",
+                            "transaction_date": "20/10/2024 18:00:00",
+                            "to": "Kepada",
+                            "from": "Dari",
+                            "comments": "Komen",
+                            "done_message": "Anda telah selesai! Anda boleh kembali ke halaman utama :)",
+                            "new_transfer": "Pemindahan Baru",
+                            "share": "Kongsi",
+                            "back_to_home": "Kembali ke Laman Utama"
+                        }
+                    }
+                }
+            }, function (err, t) {
+                updatePageContent();
+            });
+        });
+
+        function updatePageContent() {
+            document.querySelector('[data-i18n="paynow_success_title"]').innerHTML = i18next.t('paynow_success_title');
+            document.querySelector('[data-i18n="lite_mode"]').innerHTML = i18next.t('lite_mode');
+            document.querySelector('[data-i18n="transaction_successful"]').innerHTML = i18next.t('transaction_successful');
+            document.querySelector('[data-i18n="reference"]').innerHTML = i18next.t('reference');
+            document.querySelector('[data-i18n="amount"]').innerHTML = i18next.t('amount');
+            document.querySelector('[data-i18n="transaction_date"]').innerHTML = i18next.t('transaction_date');
+            document.querySelector('[data-i18n="to"]').innerHTML = i18next.t('to');
+            document.querySelector('[data-i18n="from"]').innerHTML = i18next.t('from');
+            document.querySelector('[data-i18n="comments"]').innerHTML = i18next.t('comments');
+            document.querySelector('[data-i18n="done_message"]').innerHTML = i18next.t('done_message');
+            document.querySelector('[data-i18n="new_transfer"]').innerHTML = i18next.t('new_transfer');
+            document.querySelector('[data-i18n="share"]').innerHTML = i18next.t('share');
+            document.querySelector('[data-i18n="back_to_home"]').innerHTML = i18next.t('back_to_home');
+        }
+
+        function changeLanguage(lng) {
+            localStorage.setItem('language', lng);
+            i18next.changeLanguage(lng, function (err, t) {
+                updatePageContent();
+            });
+        }
+    </script>
 </body>
 </html>

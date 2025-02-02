@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OCBC Lite - Scan to Pay</title>
+    <title data-i18n="scan_to_pay">OCBC Lite - Scan to Pay</title>
     <link rel="stylesheet" href="./css/custSupport.css">
 </head>
 <body>
@@ -13,21 +13,21 @@
     <main>
         <div class="card steps" id="step1">
             <div class="steps-body">
-                <p>2. Select <strong>"Scan & Pay"</strong> to pay via scanning QR code.</p>
-                <p>Select <strong>"Receive Payment"</strong> to receive incoming transfers.</p>
-                <button class="okay-button" onclick="showNextStep('step1', 'step2')">Okay</button>
+                <p data-i18n="step_2">2. Select <strong>"Scan & Pay"</strong> to pay via scanning QR code.</p>
+                <p data-i18n="receive_payment">Select <strong>"Receive Payment"</strong> to receive incoming transfers.</p>
+                <button class="okay-button" onclick="showNextStep('step1', 'step2')" data-i18n="okay_button">Okay</button>
             </div>
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="scan">Scan & Pay</button>
-            <button class="tab-btn" data-tab="receive">Receive Payment</button>
+            <button class="tab-btn active" data-tab="scan" data-i18n="tab_scan">Scan & Pay</button>
+            <button class="tab-btn" data-tab="receive" data-i18n="tab_receive">Receive Payment</button>
         </div>
 
         <div class="card steps" id="step2" style="display: none">
             <div class="steps-body">
-                <p>3. Align QR code within the frame and press <strong>"Scan QR Code"</strong>.</p>
-                <a href="stp-paymentDetails.html"><button class="okay-button" onclick="showNextStep('step2', 'step3')">Okay</button></a>
+                <p data-i18n="step_3">3. Align QR code within the frame and press <strong>"Scan QR Code"</strong>.</p>
+                <a href="stp-paymentDetails.html"><button class="okay-button" onclick="showNextStep('step2', 'step3')" data-i18n="okay_button">Okay</button></a>
             </div>
         </div>
 
@@ -37,39 +37,38 @@
                 <canvas id="qr-canvas"></canvas>
                 <div id="scan-overlay">
                     <div class="scan-frame"></div>
-                    <p>Align QR code within the frame</p>
+                    <p data-i18n="scan_qr_code">Align QR code within the frame</p>
                 </div>
             </div>
             
-            <a href="stp-paymentDetails.html"><button id="scan-btn" class="primary-btn">Scan QR Code</button></a>
+            <a href="stp-paymentDetails.html"><button id="scan-btn" class="primary-btn" data-i18n="scan_qr_code">Scan QR Code</button></a>
         </div>
 
         <div id="receive-section" class="tab-content">
-            <h2>Your Payment QR Code</h2>
+            <h2 data-i18n="payment_qr_code">Your Payment QR Code</h2>
             <div id="qr-display">
                 <div id="user-qr"></div>
-                <p>Your ID: <span id="user-id">USER123</span></p>
-                <p class="qr-instructions">Share this QR code with others to receive payment</p>
+                <p data-i18n="user_id">Your ID: <span id="user-id">USER123</span></p>
+                <p class="qr-instructions" data-i18n="qr_instructions">Share this QR code with others to receive payment</p>
             </div>
-            <button id="generate-qr" class="primary-btn">Show My QR Code</button>
+            <button id="generate-qr" class="primary-btn" data-i18n="show_qr_code">Show My QR Code</button>
         </div>
         
-        <!-- Update the amount-input div in the scan section -->
         <div id="amount-input" class="hidden">
             <div class="input-group">
-                <span>Pay with:</span>
+                <span data-i18n="pay_with">Pay with:</span>
                 <select id="payment-method" style="flex: 1; border: none; font-size: 1.2rem; outline: none; background: transparent;">
                     <option value="balance">PayLah!/ NETS QR</option>
                     <option value="credit">PayNow QR</option>
                 </select>
             </div>
-            <h2>Enter Amount</h2>
-            <p class="payment-to">Paying to: <span id="payment-recipient"></span></p>
+            <h2 data-i18n="enter_amount">Enter Amount</h2>
+            <p class="payment-to" data-i18n="paying_to">Paying to: <span id="payment-recipient"></span></p>
             <div class="input-group">
                 <span>S$</span>
                 <input type="number" id="payment-amount" placeholder="0.00" step="0.01">
             </div>
-            <button id="confirm-payment" class="primary-btn">Confirm Payment</button>
+            <button id="confirm-payment" class="primary-btn" data-i18n="confirm_payment">Confirm Payment</button>
         </div>
     </main>
     
@@ -78,5 +77,104 @@
     <script src="js/script.js"></script>
     <script src="js/stp-scanQRscript.js"></script>
     <script src="js/simulationtts.js"></script>
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            i18next.init({
+                lng: localStorage.getItem('language') || 'en', // Default to English
+                resources: {
+                    en: {
+                        translation: {
+                            "scan_to_pay": "Scan to Pay",
+                            "step_2": "2. Select <strong>'Scan & Pay'</strong> to pay via scanning QR code.",
+                            "receive_payment": "Select <strong>'Receive Payment'</strong> to receive incoming transfers.",
+                            "okay_button": "Okay",
+                            "tab_scan": "Scan & Pay",
+                            "tab_receive": "Receive Payment",
+                            "step_3": "3. Align QR code within the frame and press <strong>'Scan QR Code'</strong>.",
+                            "scan_qr_code": "Scan QR Code",
+                            "payment_qr_code": "Your Payment QR Code",
+                            "user_id": "Your ID: ",
+                            "qr_instructions": "Share this QR code with others to receive payment",
+                            "show_qr_code": "Show My QR Code",
+                            "pay_with": "Pay with:",
+                            "paying_to": "Paying to:",
+                            "enter_amount": "Enter Amount",
+                            "confirm_payment": "Confirm Payment"
+                        }
+                    },
+                    cn: {
+                        translation: {
+                            "scan_to_pay": "扫码支付",
+                            "step_2": "2. 选择 <strong>'扫码支付'</strong> 通过扫描二维码付款。",
+                            "receive_payment": "选择 <strong>'接收付款'</strong> 接收转账。",
+                            "okay_button": "好的",
+                            "tab_scan": "扫码支付",
+                            "tab_receive": "接收付款",
+                            "step_3": "3. 将二维码对准框架并点击 <strong>'扫描二维码'</strong>。",
+                            "scan_qr_code": "扫描二维码",
+                            "payment_qr_code": "您的付款二维码",
+                            "user_id": "您的ID：",
+                            "qr_instructions": "将此二维码分享给他人以接收付款",
+                            "show_qr_code": "显示我的二维码",
+                            "pay_with": "付款方式：",
+                            "paying_to": "付款给：",
+                            "enter_amount": "输入金额",
+                            "confirm_payment": "确认付款"
+                        }
+                    },
+                    my: {
+                        translation: {
+                            "scan_to_pay": "Scan untuk Bayar",
+                            "step_2": "2. Pilih <strong>'Scan & Pay'</strong> untuk membayar melalui imbasan kod QR.",
+                            "receive_payment": "Pilih <strong>'Terima Pembayaran'</strong> untuk menerima pemindahan.",
+                            "okay_button": "Okay",
+                            "tab_scan": "Scan & Pay",
+                            "tab_receive": "Terima Pembayaran",
+                            "step_3": "3. Sesuaikan kod QR dalam bingkai dan tekan <strong>'Imbas Kod QR'</strong>.",
+                            "scan_qr_code": "Imbas Kod QR",
+                            "payment_qr_code": "Kod QR Pembayaran Anda",
+                            "user_id": "ID Anda: ",
+                            "qr_instructions": "Kongsi kod QR ini dengan orang lain untuk menerima pembayaran",
+                            "show_qr_code": "Tunjukkan Kod QR Saya",
+                            "pay_with": "Bayar dengan:",
+                            "paying_to": "Bayar kepada:",
+                            "enter_amount": "Masukkan Jumlah",
+                            "confirm_payment": "Sahkan Pembayaran"
+                        }
+                    }
+                }
+            }, function (err, t) {
+                updatePageContent();
+            });
+        });
+    
+        function updatePageContent() {
+            document.querySelector('[data-i18n="scan_to_pay"]').innerHTML = i18next.t('scan_to_pay');
+            document.querySelector('[data-i18n="step_2"]').innerHTML = i18next.t('step_2');
+            document.querySelector('[data-i18n="receive_payment"]').innerHTML = i18next.t('receive_payment');
+            document.querySelector('[data-i18n="okay_button"]').innerHTML = i18next.t('okay_button');
+            document.querySelector('[data-i18n="tab_scan"]').innerHTML = i18next.t('tab_scan');
+            document.querySelector('[data-i18n="tab_receive"]').innerHTML = i18next.t('tab_receive');
+            document.querySelector('[data-i18n="step_3"]').innerHTML = i18next.t('step_3');
+            document.querySelector('[data-i18n="scan_qr_code"]').innerHTML = i18next.t('scan_qr_code');
+            document.querySelector('[data-i18n="payment_qr_code"]').innerHTML = i18next.t('payment_qr_code');
+            document.querySelector('[data-i18n="user_id"]').innerHTML = i18next.t('user_id');
+            document.querySelector('[data-i18n="qr_instructions"]').innerHTML = i18next.t('qr_instructions');
+            document.querySelector('[data-i18n="show_qr_code"]').innerHTML = i18next.t('show_qr_code');
+            document.querySelector('[data-i18n="pay_with"]').innerHTML = i18next.t('pay_with');
+            document.querySelector('[data-i18n="paying_to"]').innerHTML = i18next.t('paying_to');
+            document.querySelector('[data-i18n="enter_amount"]').innerHTML = i18next.t('enter_amount');
+            document.querySelector('[data-i18n="confirm_payment"]').innerHTML = i18next.t('confirm_payment');
+        }
+    
+        function changeLanguage(lng) {
+            localStorage.setItem('language', lng);
+            i18next.changeLanguage(lng, function (err, t) {
+                updatePageContent();
+            });
+        }
+    </script>
+    
 </body>
 </html>

@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayNow - Transaction Successful</title>
+    <title data-i18n="transaction_successful">PayNow - Transaction Successful</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/paynow.css"> <!-- Link to your external CSS file -->
 </head>
 <body>
     <div class="app-container">
+        <audio id="arrivalSound" src="js/success.wav" preload="auto"></audio>
         <!-- Top Header -->
         <div class="top-header">
             <div class="icon zoom"><i class="bi bi-zoom-in"></i></div>
             <div class="mode">
-                <span>Lite</span>
+                <span data-i18n="lite_mode">Lite</span>
                 <span class="dropdown"><i class="bi bi-caret-down-fill"></i></span>
             </div>
             <div class="icon sound"><i class="bi bi-volume-up-fill"></i></div>
@@ -23,23 +24,23 @@
         <!-- Success Message Section -->
         <div class="success-message">
             <div class="check-icon"><i class="bi bi-check-circle-fill"></i></div>
-            <h2>Successful!</h2>
-            <p class="reference">Ref. No: 1234 5678 9012</p>
+            <h2 data-i18n="successful">Successful!</h2>
+            <p class="reference" data-i18n="ref_no">Ref. No: 1234 5678 9012</p>
         </div>
 
         <!-- Transaction Details Section -->
         <div class="amount-section">
-            <h1 id="displayAmount"></h1>
-            <div class="transaction-date">20/10/2024 18:00:00</div>
+            <h1 id="displayAmount" data-i18n="transaction_amount">S$ 100.00</h1>
+            <div class="transaction-date" data-i18n="transaction_date">20/10/2024 18:00:00</div>
         </div>
 
         <div class="transfer-box">
             <div class="detail-section">
                 <div class="icon"><i class="bi bi-wallet2"></i></div>
                 <div class="info">
-                    <span class="label">To</span>
-                    <span>John</span>
-                    <span id="displayMobile"></span>
+                    <span class="label" data-i18n="to">To</span>
+                    <span data-i18n="recipient_name">John</span>
+                    <span id="displayMobile" data-i18n="recipient_mobile"></span>
                 </div>
             </div>
             
@@ -48,24 +49,24 @@
             <div class="detail-section">
                 <div class="icon"><i class="bi bi-bank"></i></div>
                 <div class="info">
-                    <span class="label">From</span>
-                    <span class="name">OCBC Account1</span>
-                    <span class="account-number">123-12345678-123</span>
+                    <span class="label" data-i18n="from">From</span>
+                    <span class="name" data-i18n="sender_account">OCBC Account1</span>
+                    <span class="account-number" data-i18n="account_number">123-12345678-123</span>
                 </div>
             </div>
         </div>
 
         <div class="comments-section">
-            <span class="label">Comments</span>
-            <p id="displayComments"></p>
+            <span class="label" data-i18n="comments">Comments</span>
+            <p id="displayComments" data-i18n="no_comments">No comments available</p>
         </div>
 
         <!-- Action Buttons -->
         <div class="button-container">
-            <button class="action-button"><a href="paynow.html">New Transfer</a></button>
-            <button class="action-button"><a href="#">Share</a></button>
+            <button class="action-button"><a href="paynow.html" data-i18n="new_transfer">New Transfer</a></button>
+            <button class="action-button"><a href="#" data-i18n="share">Share</a></button>
         </div>
-        <button class="back-home-btn"><a href="index.html">Back To Home</a></button>
+        <button class="back-home-btn"><a href="index.html" data-i18n="back_to_home">Back To Home</a></button>
     </div>
 
     <video class="input_video" style="display:none;"></video>
@@ -79,5 +80,109 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="js/hand-gesture.js"></script>
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+
+    <!-- Translation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            i18next.init({
+                lng: localStorage.getItem('language') || 'en', // Default to English
+                resources: {
+                    en: {
+                        translation: {
+                            "transaction_successful": "PayNow - Transaction Successful",
+                            "lite_mode": "Lite",
+                            "successful": "Successful!",
+                            "ref_no": "Ref. No: 1234 5678 9012",
+                            "transaction_amount": "S$ 100.00",
+                            "transaction_date": "20/10/2024 18:00:00",
+                            "to": "To",
+                            "recipient_name": "John",
+                            "recipient_mobile": "(+65) 98765432",
+                            "from": "From",
+                            "sender_account": "OCBC Account1",
+                            "account_number": "123-12345678-123",
+                            "comments": "Comments",
+                            "no_comments": "No comments available",
+                            "new_transfer": "New Transfer",
+                            "share": "Share",
+                            "back_to_home": "Back To Home"
+                        }
+                    },
+                    cn: {
+                        translation: {
+                            "transaction_successful": "PayNow - 交易成功",
+                            "lite_mode": "简易版",
+                            "successful": "成功!",
+                            "ref_no": "参考号: 1234 5678 9012",
+                            "transaction_amount": "S$ 100.00",
+                            "transaction_date": "20/10/2024 18:00:00",
+                            "to": "收款人",
+                            "recipient_name": "John",
+                            "recipient_mobile": "(+65) 98765432",
+                            "from": "付款人",
+                            "sender_account": "OCBC账户1",
+                            "account_number": "123-12345678-123",
+                            "comments": "评论",
+                            "no_comments": "无评论",
+                            "new_transfer": "新转账",
+                            "share": "分享",
+                            "back_to_home": "返回首页"
+                        }
+                    },
+                    my: {
+                        translation: {
+                            "transaction_successful": "PayNow - Transaksi Berjaya",
+                            "lite_mode": "Lite",
+                            "successful": "Berjaya!",
+                            "ref_no": "No. Rujukan: 1234 5678 9012",
+                            "transaction_amount": "S$ 100.00",
+                            "transaction_date": "20/10/2024 18:00:00",
+                            "to": "Kepada",
+                            "recipient_name": "John",
+                            "recipient_mobile": "(+65) 98765432",
+                            "from": "Dari",
+                            "sender_account": "OCBC Akaun1",
+                            "account_number": "123-12345678-123",
+                            "comments": "Komen",
+                            "no_comments": "Tiada komen",
+                            "new_transfer": "Pemindahan Baru",
+                            "share": "Kongsi",
+                            "back_to_home": "Kembali Ke Laman Utama"
+                        }
+                    }
+                }
+            }, function (err, t) {
+                updatePageContent();
+            });
+        });
+
+        function updatePageContent() {
+            document.querySelector('[data-i18n="transaction_successful"]').innerHTML = i18next.t('transaction_successful');
+            document.querySelector('[data-i18n="lite_mode"]').innerHTML = i18next.t('lite_mode');
+            document.querySelector('[data-i18n="successful"]').innerHTML = i18next.t('successful');
+            document.querySelector('[data-i18n="ref_no"]').innerHTML = i18next.t('ref_no');
+            document.querySelector('[data-i18n="transaction_amount"]').innerHTML = i18next.t('transaction_amount');
+            document.querySelector('[data-i18n="transaction_date"]').innerHTML = i18next.t('transaction_date');
+            document.querySelector('[data-i18n="to"]').innerHTML = i18next.t('to');
+            document.querySelector('[data-i18n="recipient_name"]').innerHTML = i18next.t('recipient_name');
+            document.querySelector('[data-i18n="recipient_mobile"]').innerHTML = i18next.t('recipient_mobile');
+            document.querySelector('[data-i18n="from"]').innerHTML = i18next.t('from');
+            document.querySelector('[data-i18n="sender_account"]').innerHTML = i18next.t('sender_account');
+            document.querySelector('[data-i18n="account_number"]').innerHTML = i18next.t('account_number');
+            document.querySelector('[data-i18n="comments"]').innerHTML = i18next.t('comments');
+            document.querySelector('[data-i18n="no_comments"]').innerHTML = i18next.t('no_comments');
+            document.querySelector('[data-i18n="new_transfer"]').innerHTML = i18next.t('new_transfer');
+            document.querySelector('[data-i18n="share"]').innerHTML = i18next.t('share');
+            document.querySelector('[data-i18n="back_to_home"]').innerHTML = i18next.t('back_to_home');
+        }
+
+        function changeLanguage(lng) {
+            localStorage.setItem('language', lng);
+            i18next.changeLanguage(lng, function (err, t) {
+                updatePageContent();
+            });
+        }
+    </script>
 </body>
 </html>
