@@ -189,7 +189,7 @@ async function refreshToken(rToken) {
        console.log(accounts[0]);
        if(amount > accounts[0].transaction_limit){
         console.log("Amount exceed transaction limit!");
-        text = "Amount excees transcation limit!";
+        text = "Amount excees transaction limit!";
         performTTS(text);
         alert(`Amount exceed transaction limit!`);
        } 
