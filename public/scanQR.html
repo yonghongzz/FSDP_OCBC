@@ -12,50 +12,50 @@
     </header>
     <main>
         <div class="tabs">
-            <button class="tab-btn active" data-tab="scan">Scan & Pay</button>
-            <button class="tab-btn" data-tab="receive">Receive Payment</button>
+            <button class="tab-btn active" data-tab="scan" data-i18n="scan_pay">Scan & Pay</button>
+            <button class="tab-btn" data-tab="receive" data-i18n="receive_payment">Receive Payment</button>
         </div>
-
+        
         <div id="scan-section" class="tab-content active">
             <div id="camera-container">
                 <video id="qr-video" autoplay playsinline></video>
                 <canvas id="qr-canvas"></canvas>
                 <div id="scan-overlay">
                     <div class="scan-frame"></div>
-                    <p>Align QR code within the frame</p>
+                    <p data-i18n="qr_instructions">Align QR code within the frame</p>
                 </div>
             </div>
             
-            <button id="scan-btn" class="primary-btn">Scan QR Code</button>
-        </div>
-
-        <div id="receive-section" class="tab-content">
-            <h2>Your Payment QR Code</h2>
-            <div id="qr-display">
-                <div id="user-qr"></div>
-                <p>Your ID: <span id="user-id">USER123</span></p>
-                <p class="qr-instructions">Share this QR code with others to receive payment</p>
-            </div>
-            <button id="generate-qr" class="primary-btn">Show My QR Code</button>
+            <button id="scan-btn" class="primary-btn" data-i18n="scan_qr_button">Scan QR Code</button>
         </div>
         
-        <!-- Update the amount-input div in the scan section -->
+        <div id="receive-section" class="tab-content">
+            <h2 data-i18n="your_payment_qr">Your Payment QR Code</h2>
+            <div id="qr-display">
+                <div id="user-qr"></div>
+                <p data-i18n="user_id_label">Your ID: <span id="user-id">USER123</span></p>
+                <p class="qr-instructions" data-i18n="qr_instructions">Share this QR code with others to receive payment</p>
+            </div>
+            <button id="generate-qr" class="primary-btn" data-i18n="show_qr_button">Show My QR Code</button>
+        </div>
+        
         <div id="amount-input" class="hidden">
             <div class="input-group">
-                <span>Pay with:</span>
+                <span data-i18n="payment_method_label">Pay with:</span>
                 <select id="payment-method" style="flex: 1; border: none; font-size: 1.2rem; outline: none; background: transparent;">
-                    <option value="balance">PayLah!/ NETS QR</option>
-                    <option value="credit">PayNow QR</option>
+                    <option value="balance" data-i18n="payment_method_balance">PayLah!/ NETS QR</option>
+                    <option value="credit" data-i18n="payment_method_credit">PayNow QR</option>
                 </select>
             </div>
-            <h2>Enter Amount</h2>
-            <p class="payment-to">Paying to: <span id="payment-recipient"></span></p>
+            <h2 data-i18n="amount_label">Enter Amount</h2>
+            <p class="payment-to" data-i18n="payment_to">Paying to: <span id="payment-recipient"></span></p>
             <div class="input-group">
                 <span>S$</span>
                 <input type="number" id="payment-amount" placeholder="0.00" step="0.01">
             </div>
-            <button id="confirm-payment" class="primary-btn">Confirm Payment</button>
+            <button id="confirm-payment" class="primary-btn" data-i18n="confirm_payment">Confirm Payment</button>
         </div>
+        
     </main>
     
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
@@ -63,5 +63,90 @@
     <script src="js/script.js"></script>
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            i18next.init({
+                lng: localStorage.getItem('language') || 'en', // Default to English
+                resources: {
+                    en: {
+                        translation: {
+                            "scan_pay": "Scan & Pay",
+                            "receive_payment": "Receive Payment",
+                            "qr_instructions": "Align QR code within the frame",
+                            "scan_qr_button": "Scan QR Code",
+                            "payment_to": "Paying to:",
+                            "amount_label": "Enter Amount",
+                            "payment_method_label": "Pay with:",
+                            "payment_method_balance": "PayLah!/ NETS QR",
+                            "payment_method_credit": "PayNow QR",
+                            "confirm_payment": "Confirm Payment",
+                            "your_payment_qr": "Your Payment QR Code",
+                            "show_qr_button": "Show My QR Code",
+                            "user_id_label": "Your ID:"
+                        }
+                    },
+                    cn: {
+                        translation: {
+                            "scan_pay": "扫码支付",
+                            "receive_payment": "接收付款",
+                            "qr_instructions": "将二维码对齐框架",
+                            "scan_qr_button": "扫描二维码",
+                            "payment_to": "支付给:",
+                            "amount_label": "输入金额",
+                            "payment_method_label": "支付方式:",
+                            "payment_method_balance": "PayLah!/ NETS QR",
+                            "payment_method_credit": "PayNow QR",
+                            "confirm_payment": "确认支付",
+                            "your_payment_qr": "您的支付二维码",
+                            "show_qr_button": "显示我的二维码",
+                            "user_id_label": "您的ID:"
+                        }
+                    },
+                    my: {
+                        translation: {
+                            "scan_pay": "Imbas & Bayar",
+                            "receive_payment": "Terima Pembayaran",
+                            "qr_instructions": "Serasikan kod QR dalam bingkai",
+                            "scan_qr_button": "Imbas Kod QR",
+                            "payment_to": "Bayar kepada:",
+                            "amount_label": "Masukkan Jumlah",
+                            "payment_method_label": "Bayar dengan:",
+                            "payment_method_balance": "PayLah!/ NETS QR",
+                            "payment_method_credit": "PayNow QR",
+                            "confirm_payment": "Sahkan Pembayaran",
+                            "your_payment_qr": "Kod QR Pembayaran Anda",
+                            "show_qr_button": "Paparkan Kod QR Saya",
+                            "user_id_label": "ID Anda:"
+                        }
+                    }
+                }
+            }, function (err, t) {
+                updatePageContent();
+            });
+        });
+    
+        function updatePageContent() {
+            document.querySelector('[data-i18n="scan_pay"]').innerHTML = i18next.t('scan_pay');
+            document.querySelector('[data-i18n="receive_payment"]').innerHTML = i18next.t('receive_payment');
+            document.querySelector('[data-i18n="qr_instructions"]').innerHTML = i18next.t('qr_instructions');
+            document.querySelector('[data-i18n="scan_qr_button"]').innerHTML = i18next.t('scan_qr_button');
+            document.querySelector('[data-i18n="payment_to"]').innerHTML = i18next.t('payment_to');
+            document.querySelector('[data-i18n="amount_label"]').innerHTML = i18next.t('amount_label');
+            document.querySelector('[data-i18n="payment_method_label"]').innerHTML = i18next.t('payment_method_label');
+            document.querySelector('[data-i18n="payment_method_balance"]').innerHTML = i18next.t('payment_method_balance');
+            document.querySelector('[data-i18n="payment_method_credit"]').innerHTML = i18next.t('payment_method_credit');
+            document.querySelector('[data-i18n="confirm_payment"]').innerHTML = i18next.t('confirm_payment');
+            document.querySelector('[data-i18n="your_payment_qr"]').innerHTML = i18next.t('your_payment_qr');
+            document.querySelector('[data-i18n="show_qr_button"]').innerHTML = i18next.t('show_qr_button');
+            document.querySelector('[data-i18n="user_id_label"]').innerHTML = i18next.t('user_id_label');
+        }
+    
+        function changeLanguage(lng) {
+            localStorage.setItem('language', lng);
+            i18next.changeLanguage(lng, function (err, t) {
+                updatePageContent();
+            });
+        }
+    </script>
 </body>
 </html>

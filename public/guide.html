@@ -71,6 +71,42 @@
     <script src="./js/magnifying.js"></script>
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
+    <script>
+        i18next.init({
+          lng: localStorage.getItem('language') || 'en', // Get the language from localStorage
+          resources: {
+            en: { translation: {
+              "guide_title": "Simulations",
+              "guide_select": "Please select one to start Simulations",
+              "paynow_simulation": "PayNow",
+              "scan_to_pay_simulation": "Scan to Pay"
+            }},
+            cn: { translation: {
+              "guide_title": "模拟教程",
+              "guide_select": "请选择一个选项来开始模拟教程",
+              "paynow_simulation": "PayNow",
+              "scan_to_pay_simulation": "扫描支付"
+            }},
+            my: { translation: {
+              "guide_title": "Simulasi",
+              "guide_select": "Sila pilih satu untuk memulakan Simulasi",
+              "paynow_simulation": "PayNow",
+              "scan_to_pay_simulation": "Imbas untuk Bayar"
+            }}
+          },
+        }, function(err, t) {
+          updateGuideContent();
+        });
+        
+            
+                
+                function updateGuideContent() {
+                  document.querySelector('.guide p').innerHTML = i18next.t('guide_title');
+                  document.querySelector('.guide-selectone p').innerHTML = i18next.t('guide_select');
+                  document.querySelectorAll('.guide-btns .card-body')[0].innerHTML = i18next.t('paynow_simulation');
+                  document.querySelectorAll('.guide-btns .card-body')[1].innerHTML = i18next.t('scan_to_pay_simulation');
+                }
+                </script>
 
 </body>
 

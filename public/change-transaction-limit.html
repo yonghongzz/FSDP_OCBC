@@ -29,9 +29,9 @@
         <div class="card-body account-space">
           <blockquote class="blockquote mb-0">
             <div style="margin-bottom: -6px; margin-top: -4px; font-weight: bold; font-size: larger;">
-                <p>Change daily transaction limit</p>
+                <p class="change-limit-title">Change daily transaction limit</p>
             </div>
-            <div class="acc-num">
+            <div class="acc-num select-limit-text">
                 Please select your preferred daily transaction limit below.
             </div>
 
@@ -67,6 +67,53 @@
     <script src="js/magnifying.js"></script>
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+    <script>
+      // Initialize i18next with language stored in localStorage, or default to English
+      document.addEventListener('DOMContentLoaded', function () {
+        i18next.init({
+          lng: localStorage.getItem('language') || 'en', // Get the language from localStorage
+          resources: {
+            en: { translation: {  
+              "change_limit_title": "Change daily transaction limit",
+              "select_limit_text": "Please select your preferred daily transaction limit below.",
+              "select_limit_button": "Select transaction limit (SGD)",
+              "confirm_button": "Confirm"
+            } },
+            cn: { translation: {  
+              "change_limit_title": "更改每日交易限额",
+              "select_limit_text": "请选择您喜欢的每日交易限额。",
+              "select_limit_button": "选择交易限额 (SGD)",
+              "confirm_button": "确认"
+            } },
+            my: { translation: {  
+              "change_limit_title": "Tukar had transaksi harian",
+              "select_limit_text": "Sila pilih had transaksi harian yang anda inginkan di bawah.",
+              "select_limit_button": "Pilih had transaksi (SGD)",
+              "confirm_button": "Sahkan"
+            } }
+          }
+        }, function(err, t) {
+          updatePageContent();
+        });
+      });
+
+      // Function to update page content based on the selected language
+      function updatePageContent() {
+        document.querySelector('.change-limit-title').innerHTML = i18next.t('change_limit_title');
+        document.querySelector('.select-limit-text').innerHTML = i18next.t('select_limit_text');
+        document.querySelector('.dropdown-limitselect').innerHTML = i18next.t('select_limit_button');
+        document.querySelector('.confirm-limit').innerHTML = i18next.t('confirm_button');
+      }
+
+      // Function to change language and update content
+      function changeLanguage(lng) {
+        localStorage.setItem('language', lng);
+        i18next.changeLanguage(lng, function(err, t) {
+          updatePageContent();
+        });
+      }
+    </script>
 </body>
 
 </html>

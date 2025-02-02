@@ -57,10 +57,11 @@
             <a href="#" class="estatement">
                 <div class="es-text">
                     <i class="bi bi-journal-text"></i>
-                    &nbsp;&nbsp;&nbsp;&nbsp;View e-statements&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="view-estatement-text">View e-statements</span>&nbsp;&nbsp;&nbsp;&nbsp;
                     <i class="bi bi-caret-right-fill"></i>
                 </div>
             </a>
+            
 
             <div id="transaction-logs">
                 <!--something here-->
@@ -83,6 +84,66 @@
     <script src="js/magnifying.js"></script>
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+
+    <script>
+      // Initialize i18next with language stored in localStorage, or default to English
+      document.addEventListener('DOMContentLoaded', function () {
+        i18next.init({
+          lng: localStorage.getItem('language') || 'en', // Get the language from localStorage
+          resources: {
+            en: { translation: {  
+              "other_accounts": "Other accounts",
+              "available_balance": "Available balance",
+              "transactions": "Transactions",
+              "view_estatement": "View e-statements",
+              "account_type": "Account Type",
+              "account_number": "Account Number"
+            } },
+            cn: { translation: {  
+              "other_accounts": "其他账户",
+              "available_balance": "可用余额",
+              "transactions": "交易记录",
+              "view_estatement": "查看电子账单",
+              "account_type": "账户类型",
+              "account_number": "账号"
+            } },
+            my: { translation: {  
+              "other_accounts": "Akaun lain",
+              "available_balance": "Baki yang ada",
+              "transactions": "Transaksi",
+              "view_estatement": "Lihat e-penyata ",
+              "account_type": "Jenis Akaun",
+              "account_number": "Nombor Akaun"
+            } }
+          }
+        }, function(err, t) {
+          updatePageContent();
+        });
+      });
+
+// Function to update page content based on the selected language
+function updatePageContent() {
+    document.querySelector('.oa-text').innerHTML = i18next.t('other_accounts') + '&nbsp;&nbsp;&nbsp;<i class="bi bi-arrow-left-right"></i>';
+    document.querySelector('.ab-text').innerHTML = i18next.t('available_balance');
+    document.querySelector('.et-header').innerHTML = i18next.t('transactions');
+    if (document.querySelector('.view-estatement-text')) {
+        document.querySelector('.view-estatement-text').innerHTML = i18next.t('view_estatement');
+    }
+    document.querySelector('.acc-type-text').innerHTML = i18next.t('account_type');
+    document.querySelector('.acc-num-text').innerHTML = i18next.t('account_number');
+}
+
+
+      // Function to change language and update content
+      function changeLanguage(lng) {
+        localStorage.setItem('language', lng);
+        i18next.changeLanguage(lng, function(err, t) {
+          updatePageContent();
+        });
+      }
+    </script>
+
 </body>
 
 </html>

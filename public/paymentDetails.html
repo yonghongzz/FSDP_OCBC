@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,27 +8,28 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/custSupport.css">
 </head>
+
 <body>
     <header>
-        <h1>Confirm Payment</h1>
+        <h1 class="confirm-payment-title">Confirm Payment</h1>
     </header>
     <main>
         <div class="payment-details">
-            <h2>Payment Details</h2>
+            <h2 class="payment-details-title">Payment Details</h2>
             <div class="detail-item">
-                <span class="label">Paying to:</span>
+                <span class="label" data-i18n="paying_to">Paying to:</span>
                 <span id="recipient" class="value"></span>
             </div>
             <div class="detail-item">
-                <span class="label">Amount:</span>
+                <span class="label" data-i18n="amount_label">Amount:</span>
                 <span id="amount" class="value"></span>
             </div>
             <div class="detail-item">
-                <span class="label">Date:</span>
+                <span class="label" data-i18n="date_label">Date:</span>
                 <span id="date" class="value"></span>
             </div>
             <div class="detail-item">
-                <span class="label">Reference:</span>
+                <span class="label" data-i18n="reference_label">Reference:</span>
                 <span id="reference" class="value"></span>
             </div>
         </div>
@@ -37,35 +39,107 @@
                 <div id="slider-thumb">
                     <span class="arrow">→</span>
                 </div>
-                <div id="slider-text">Slide to confirm payment</div>
+                <div id="slider-text" data-i18n="slider_text">Slide to confirm payment</div>
             </div>
         </div>
 
         <div id="success-modal" class="modal hidden">
             <div class="modal-content">
                 <div class="success-icon">✓</div>
-                <h2>Payment Successful!</h2>
+                <h2 class="success-title" data-i18n="payment_successful">Payment Successful!</h2>
                 <div class="success-details">
-                    <p>You have paid</p>
+                    <p data-i18n="you_have_paid">You have paid</p>
                     <p class="amount" id="success-amount"></p>
-                    <p>to</p>
+                    <p data-i18n="to">to</p>
                     <p class="recipient" id="success-recipient"></p>
                 </div>
-                <button id="done-btn" class="primary-btn">Done</button>
+                <button id="done-btn" class="primary-btn" data-i18n="done_button">Done</button>
             </div>
         </div>
     </main>
+
+    <video class="input_video" style="display:none;"></video>
+    <canvas class="output_canvas" style="display: none;"></canvas>
+
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            i18next.init({
+                lng: localStorage.getItem('language') || 'en', // Default to English
+                resources: {
+                    en: {
+                        translation: {
+                            "confirm_payment_title": "Confirm Payment",
+                            "payment_details_title": "Payment Details",
+                            "paying_to": "Paying to:",
+                            "amount_label": "Amount:",
+                            "date_label": "Date:",
+                            "reference_label": "Reference:",
+                            "slider_text": "Slide to confirm payment",
+                            "payment_successful": "Payment Successful!",
+                            "you_have_paid": "You have paid",
+                            "to": "to",
+                            "done_button": "Done"
+                        }
+                    },
+                    cn: {
+                        translation: {
+                            "confirm_payment_title": "确认付款",
+                            "payment_details_title": "付款详情",
+                            "paying_to": "支付给：",
+                            "amount_label": "金额：",
+                            "date_label": "日期：",
+                            "reference_label": "参考：",
+                            "slider_text": "滑动以确认付款",
+                            "payment_successful": "付款成功！",
+                            "you_have_paid": "您已付款",
+                            "to": "给",
+                            "done_button": "完成"
+                        }
+                    },
+                    my: {
+                        translation: {
+                            "confirm_payment_title": "Sahkan Pembayaran",
+                            "payment_details_title": "Butiran Pembayaran",
+                            "paying_to": "Membayar kepada:",
+                            "amount_label": "Jumlah:",
+                            "date_label": "Tarikh:",
+                            "reference_label": "Rujukan:",
+                            "slider_text": "Geser untuk sahkan pembayaran",
+                            "payment_successful": "Pembayaran Berjaya!",
+                            "you_have_paid": "Anda telah membayar",
+                            "to": "kepada",
+                            "done_button": "Selesai"
+                        }
+                    }
+                }
+            }, function (err, t) {
+                updatePageContent();
+            });
+        });
+
+        function updatePageContent() {
+            document.querySelector('.confirm-payment-title').innerHTML = i18next.t('confirm_payment_title');
+            document.querySelector('.payment-details-title').innerHTML = i18next.t('payment_details_title');
+            document.querySelector('#slider-text').innerHTML = i18next.t('slider_text');
+            document.querySelector('.success-title').innerHTML = i18next.t('payment_successful');
+            document.querySelector('[data-i18n="paying_to"]').innerHTML = i18next.t('paying_to');
+            document.querySelector('[data-i18n="amount_label"]').innerHTML = i18next.t('amount_label');
+            document.querySelector('[data-i18n="date_label"]').innerHTML = i18next.t('date_label');
+            document.querySelector('[data-i18n="reference_label"]').innerHTML = i18next.t('reference_label');
+            document.querySelector('[data-i18n="you_have_paid"]').innerHTML = i18next.t('you_have_paid');
+            document.querySelector('[data-i18n="to"]').innerHTML = i18next.t('to');
+            document.querySelector('[data-i18n="done_button"]').innerHTML = i18next.t('done_button');
+        }
+
+        function changeLanguage(lng) {
+            localStorage.setItem('language', lng);
+            i18next.changeLanguage(lng, function (err, t) {
+                updatePageContent();
+            });
+        }
+    </script>
+
 </body>
 
-<video class="input_video" style="display:none;"></video>
-<canvas class="output_canvas" style="display: none;"></canvas>
-
-<script src="js/paymentDetails.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-<script src="js/hand-gesture.js"></script>
-<script src="js/tts.js"></script>
-<script src="js/voice.js"></script>
 </html>

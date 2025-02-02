@@ -12,71 +12,70 @@
 <body>
     <div class="app-container">
         <div class="top-header">
-            <div class="icon zoom"><i class="bi bi-zoom-in" id="magnify"></i></div>
+            <div class="icon zoom" data-i18n="zoom"><i class="bi bi-zoom-in" id="magnify"></i></div>
             <div class="mode">
-                <span>Lite</span>
+                <span data-i18n="lite_mode">Lite</span>
                 <span class="dropdown"><i class="bi bi-caret-down-fill"></i></span>
             </div>
-            <div class="icon sound"><i class="bi bi-volume-up-fill"></i></div>
-            <div class="icon profile"><i class="bi bi-person-fill"></i></div>
+            <div class="icon sound" data-i18n="sound"><i class="bi bi-volume-up-fill"></i></div>
+            <div class="icon profile" data-i18n="profile"><i class="bi bi-person-fill"></i></div>
         </div>
         <div class="content">
             <header class="header">
-                <a href="index.html" class="icon back">X</a>
-                <div class="help">
+                <a href="index.html" class="icon back" data-i18n="back">X</a>
+                <div class="help" data-i18n="need_help">
                     <u>Need help?</u>
                 </div>
             </header>
-            <div class="titlep">PayNow</div>
+            <div class="titlep" data-i18n="paynow_title">PayNow</div>
             <div class="selection">
                 <a href="paynow.html">
-                    <div class="option active">Mobile</div>
+                    <div class="option active" data-i18n="mobile_option">Mobile</div>
                 </a>
                 <a href="#">
-                    <div class="option">NRIC/FIN</div>
+                    <div class="option" data-i18n="nric_option">NRIC/FIN</div>
                 </a>
                 <a href="#">
-                    <div class="option">UEN</div>
+                    <div class="option" data-i18n="uen_option">UEN</div>
                 </a>
                 <a href="#">
-                    <div class="option">VPA</div>
+                    <div class="option" data-i18n="vpa_option">VPA</div>
                 </a>
             </div>
 
             <div class="alert">
-                <p>Be aware of scams</p>
-                <p>Do not make unknown transactions</p>
+                <p data-i18n="be_aware_of_scams">Be aware of scams</p>
+                <p data-i18n="do_not_make_unknown_transactions">Do not make unknown transactions</p>
             </div>
-
 
             <form class="form">
                 <div class="form-group">
-                    <label for="mobile">Mobile no.</label>
+                    <label for="mobile" data-i18n="mobile_label">Mobile no.</label>
                     <input type="text" id="mobile" placeholder="Enter mobile number">
                     <div class="icon contact"><i class="bi bi-person-fill"></i></div>
                 </div>
 
                 <div class="form-group little-words">
-                    <label for="amount">Amount (SGD)</label>
+                    <label for="amount" data-i18n="amount_label">Amount (SGD)</label>
                     <input type="number" id="amount" placeholder="Enter amount">
-                    <small class="tll"></small>
-                    <small>Want to change your transfer limit? Manage your limits here.</small>
+                    <small class="tll" data-i18n="transfer_limit_left">Transfer limit left: 1,000 SGD</small>
+                    <small data-i18n="manage_limits">Want to change your transfer limit? Manage your limits here.</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="comments">Comments (optional)</label>
+                    <label for="comments" data-i18n="comments_label">Comments (optional)</label>
                     <input type="text" id="comments" placeholder="Comments(optional)">
                 </div>
 
                 <a href="reviewconf.html">
-                    <div class="next-button" id="next">Next</div>
+                    <div class="next-button" id="next" data-i18n="next_button">Next</div>
                 </a>
             </form>
         </div>
     </div>
 
     <video class="input_video" style="display:none;"></video>
-<canvas class="output_canvas" style="display: none;"></canvas>
+    <canvas class="output_canvas" style="display: none;"></canvas>
 
     <script src="js/review-handler.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
@@ -88,6 +87,107 @@
     <script src="js/tts.js"></script>
     <script src="js/voice.js"></script>
     <script src="js/paynow-handler.js"></script>
+    <script src="https://unpkg.com/i18next@latest/dist/umd/i18next.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            i18next.init({
+                lng: localStorage.getItem('language') || 'en', // Default to English
+                resources: {
+                    en: {
+                        translation: {
+                            "paynow_interface": "PayNow Interface",
+                            "lite_mode": "Lite",
+                            "need_help": "Need help?",
+                            "paynow_title": "PayNow",
+                            "next_button": "Next",
+                            "mobile_option": "Mobile",
+                            "nric_option": "NRIC/FIN",
+                            "uen_option": "UEN",
+                            "vpa_option": "VPA",
+                            "be_aware_of_scams": "Be aware of scams",
+                            "do_not_make_unknown_transactions": "Do not make unknown transactions",
+                            "mobile_label": "Mobile no.",
+                            "amount_label": "Amount (SGD)",
+                            "transfer_limit_left": "Transfer limit left: 1,000 SGD",
+                            "manage_limits": "Want to change your transfer limit? Manage your limits here.",
+                            "comments_label": "Comments (optional)",
+                        }
+                    },
+                    cn: {
+                        translation: {
+                            "paynow_interface": "PayNow 界面",
+                            "lite_mode": "简易",
+                            "need_help": "需要帮助？",
+                            "paynow_title": "PayNow",
+                            "next_button": "下一步",
+                            "mobile_option": "手机",
+                            "nric_option": "NRIC/FIN",
+                            "uen_option": "UEN",
+                            "vpa_option": "VPA",
+                            "be_aware_of_scams": "警惕诈骗",
+                            "do_not_make_unknown_transactions": "不要进行未知的交易",
+                            "mobile_label": "手机号码",
+                            "amount_label": "金额 (SGD)",
+                            "transfer_limit_left": "剩余转账限额: 1,000 新元",
+                            "manage_limits": "想要更改转账限额？在这里管理您的限额。",
+                            "comments_label": "评论（可选）",
+                        }
+                    },
+                    my: {
+                        translation: {
+                            "paynow_interface": "Antaramuka PayNow",
+                            "lite_mode": "Lite",
+                            "need_help": "Perlu bantuan?",
+                            "paynow_title": "PayNow",
+                            "next_button": "Seterusnya",
+                            "mobile_option": "Mobile",
+                            "nric_option": "NRIC/FIN",
+                            "uen_option": "UEN",
+                            "vpa_option": "VPA",
+                            "be_aware_of_scams": "Berhati-hati dengan penipuan",
+                            "do_not_make_unknown_transactions": "Jangan membuat transaksi yang tidak dikenali",
+                            "mobile_label": "Nombor telefon",
+                            "amount_label": "Jumlah (SGD)",
+                            "transfer_limit_left": "Baki had pemindahan: 1,000 SGD",
+                            "manage_limits": "Ingin menukar had pemindahan? Uruskan had anda di sini.",
+                            "comments_label": "Komen (pilihan)",
+                        }
+                    }
+                }
+            }, function (err, t) {
+                updatePageContent();
+            });
+        });
+
+        function updatePageContent() {
+            document.querySelector('[data-i18n="zoom"]').innerHTML = i18next.t('zoom');
+            document.querySelector('[data-i18n="lite_mode"]').innerHTML = i18next.t('lite_mode');
+            document.querySelector('[data-i18n="sound"]').innerHTML = i18next.t('sound');
+            document.querySelector('[data-i18n="profile"]').innerHTML = i18next.t('profile');
+            document.querySelector('[data-i18n="back"]').innerHTML = i18next.t('back');
+            document.querySelector('[data-i18n="need_help"]').innerHTML = i18next.t('need_help');
+            document.querySelector('[data-i18n="paynow_title"]').innerHTML = i18next.t('paynow_title');
+            document.querySelector('[data-i18n="mobile_option"]').innerHTML = i18next.t('mobile_option');
+            document.querySelector('[data-i18n="nric_option"]').innerHTML = i18next.t('nric_option');
+            document.querySelector('[data-i18n="uen_option"]').innerHTML = i18next.t('uen_option');
+            document.querySelector('[data-i18n="vpa_option"]').innerHTML = i18next.t('vpa_option');
+            document.querySelector('[data-i18n="be_aware_of_scams"]').innerHTML = i18next.t('be_aware_of_scams');
+            document.querySelector('[data-i18n="do_not_make_unknown_transactions"]').innerHTML = i18next.t('do_not_make_unknown_transactions');
+            document.querySelector('[data-i18n="mobile_label"]').innerHTML = i18next.t('mobile_label');
+            document.querySelector('[data-i18n="amount_label"]').innerHTML = i18next.t('amount_label');
+            document.querySelector('[data-i18n="transfer_limit_left"]').innerHTML = i18next.t('transfer_limit_left');
+            document.querySelector('[data-i18n="manage_limits"]').innerHTML = i18next.t('manage_limits');
+            document.querySelector('[data-i18n="comments_label"]').innerHTML = i18next.t('comments_label');
+            document.querySelector('[data-i18n="next_button"]').innerHTML = i18next.t('next_button');
+        }
+
+        function changeLanguage(lng) {
+            localStorage.setItem('language', lng);
+            i18next.changeLanguage(lng, function (err, t) {
+                updatePageContent();
+            });
+        }
+    </script>
 </body>
 
 </html>

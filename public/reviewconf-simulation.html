@@ -90,5 +90,87 @@
     <script src="js/simulation-ok.js"></script>
     <script src="js/simulationtts.js"></script>
     <script src="js/magnifying.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            i18next.init({
+                lng: localStorage.getItem('language') || 'en', // Default to English
+                resources: {
+                    en: {
+                        translation: {
+                            "review_confirm_interface": "Review and Confirm",
+                            "step1_text": "4. Now you can double-check the details below",
+                            "next_button": "Next",
+                            "amount_label": "Amount:",
+                            "to_label": "To",
+                            "from_label": "From",
+                            "change_account": "Change account",
+                            "comments_label": "Comments",
+                            "warning_text": "Make sure to double check the number you are transferring to and the amount!",
+                            "step2_text": "5. If the information is all correct, you can now click transfer!",
+                            "cancel_button": "Cancel",
+                            "confirm_button": "Confirm"
+                        }
+                    },
+                    cn: {
+                        translation: {
+                            "review_confirm_interface": "审核并确认",
+                            "step1_text": "4. 现在，您可以检查以下详细信息",
+                            "next_button": "下一步",
+                            "amount_label": "金额：",
+                            "to_label": "收款人",
+                            "from_label": "付款人",
+                            "change_account": "更换账户",
+                            "comments_label": "评论",
+                            "warning_text": "请确保核对您要转账的号码和金额！",
+                            "step2_text": "5. 如果信息正确，您可以点击转账！",
+                            "cancel_button": "取消",
+                            "confirm_button": "确认"
+                        }
+                    },
+                    my: {
+                        translation: {
+                            "review_confirm_interface": "Semak dan Sahkan",
+                            "step1_text": "4. Sekarang anda boleh semak butiran di bawah",
+                            "next_button": "Seterusnya",
+                            "amount_label": "Jumlah:",
+                            "to_label": "Kepada",
+                            "from_label": "Dari",
+                            "change_account": "Tukar akaun",
+                            "comments_label": "Komen",
+                            "warning_text": "Pastikan anda menyemak nombor yang akan anda pindahkan dan jumlahnya!",
+                            "step2_text": "5. Jika maklumat semuanya betul, anda kini boleh klik pindah!",
+                            "cancel_button": "Batal",
+                            "confirm_button": "Sahkan"
+                        }
+                    }
+                }
+            }, function (err, t) {
+                updatePageContent();
+            });
+        });
+    
+        function updatePageContent() {
+            document.querySelector('[data-i18n="review_confirm_interface"]').innerHTML = i18next.t('review_confirm_interface');
+            document.querySelector('[data-i18n="step1_text"]').innerHTML = i18next.t('step1_text');
+            document.querySelector('[data-i18n="next_button"]').innerHTML = i18next.t('next_button');
+            document.querySelector('[data-i18n="amount_label"]').innerHTML = i18next.t('amount_label');
+            document.querySelector('[data-i18n="to_label"]').innerHTML = i18next.t('to_label');
+            document.querySelector('[data-i18n="from_label"]').innerHTML = i18next.t('from_label');
+            document.querySelector('[data-i18n="change_account"]').innerHTML = i18next.t('change_account');
+            document.querySelector('[data-i18n="comments_label"]').innerHTML = i18next.t('comments_label');
+            document.querySelector('[data-i18n="warning_text"]').innerHTML = i18next.t('warning_text');
+            document.querySelector('[data-i18n="step2_text"]').innerHTML = i18next.t('step2_text');
+            document.querySelector('[data-i18n="cancel_button"]').innerHTML = i18next.t('cancel_button');
+            document.querySelector('[data-i18n="confirm_button"]').innerHTML = i18next.t('confirm_button');
+        }
+    
+        function changeLanguage(lng) {
+            localStorage.setItem('language', lng);
+            i18next.changeLanguage(lng, function (err, t) {
+                updatePageContent();
+            });
+        }
+    </script>
+    
 </body>
 </html>
